@@ -6,7 +6,7 @@
     "prepare": "husky install",
     "dev": "next dev",
     "build": "next build",
-    "start": "node server.js",
+    "start": "next start -p 8080",
     "postinstall": "next build",
     "lint": "eslint . -f table",
     "lint:fix": "eslint --fix . -f table",
