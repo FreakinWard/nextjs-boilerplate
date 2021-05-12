@@ -3,7 +3,22 @@ import Image from 'next/image';
 
 import styles from '../styles/Home.module.css';
 
-export default function Home() {
+export async function getStaticProps() {
+  // Call an external API endpoint to get posts
+  // const res = await fetch('https://.../posts')
+  // const posts = await res.json()
+  const serverValue = 'myServerValue';
+
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  return {
+    props: {
+      serverValue,
+    },
+  };
+}
+
+export default function Home({ serverValue }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -16,6 +31,8 @@ export default function Home() {
         <h1 className={styles.title}>
           UpdatedText - Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
+
+        <span>{serverValue}</span>
 
         <p className={styles.description}>
           Get started by editing <code className={styles.code}>pages/index.js</code>
