@@ -41,16 +41,16 @@ stages:
         npm run test --if-present
       displayName: 'npm install, build and test'
 
-    - script: zip -r --symlinks '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' .
+#    - script: zip -r --symlinks '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' .
 
-#    - task: ArchiveFiles@2
-#      displayName: 'Archive files'
-#      inputs:
-#        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-#        includeRootFolder: false
-#        archiveType: zip
-#        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-#        replaceExistingArchive: true
+    - task: ArchiveFiles@2
+      displayName: 'Archive files'
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+        replaceExistingArchive: true
 
     - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
