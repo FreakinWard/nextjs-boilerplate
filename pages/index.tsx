@@ -18,12 +18,17 @@ interface Props {
 }
 
 export async function getStaticProps(): Promise<Props> {
+  // Call an external API endpoint to get posts
+
+  // TODO: async fetch some data, send back as serverProps
   const url = 'http://my-json-server.typicode.com/typicode/demo/comments';
   const res = await fetch(url);
   const comments = await res.json();
 
   const comment = comments[1];
 
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
   return {
     props: {
       comment,

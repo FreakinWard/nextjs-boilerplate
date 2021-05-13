@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-interface Response {
+interface Posts {
   posts: [
     {
       id: number;
@@ -9,7 +9,7 @@ interface Response {
   ];
 }
 
-export default async (req: NextApiRequest, res: NextApiResponse<Response>) => {
+export default async (req: NextApiRequest, res: NextApiResponse<Posts>) => {
   const url = 'http://my-json-server.typicode.com/typicode/demo/posts';
   const response = await fetch(url);
   const posts = await response.json();
