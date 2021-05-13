@@ -5,20 +5,24 @@ import styles from '../styles/Home.module.css';
 
 export async function getStaticProps() {
   // Call an external API endpoint to get posts
-  // const res = await fetch('https://.../posts')
-  // const posts = await res.json()
-  const serverValue = 'myServerValue';
+
+  // TODO: async fetch some data, send back as serverProps
+  const url = 'http://my-json-server.typicode.com/typicode/demo/comments';
+  const res = await fetch(url);
+  const comments = await res.json();
+
+  const comment = comments[0].body;
 
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
   return {
     props: {
-      serverValue,
+      comment,
     },
   };
 }
 
-export default function Home({ serverValue }) {
+export default function Home({ comment }) {
   return (
     <div className={styles.container}>
       <Head>
@@ -32,7 +36,7 @@ export default function Home({ serverValue }) {
           UpdatedText - Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <span>{serverValue}</span>
+        <span>{`Server-rendered comment: ${comment}`}</span>
 
         <p className={styles.description}>
           Get started by editing <code className={styles.code}>pages/index.js</code>
