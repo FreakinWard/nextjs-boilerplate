@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
+import Username from '../components/Username';
 import styles from '../styles/Home.module.css';
 
 export async function getStaticProps() {
@@ -41,6 +42,7 @@ export default function Home({ comment }) {
       </Head>
 
       <main className={styles.main}>
+        <Username />
         <strong>Server-rendered comment: </strong>
         <span>{`id: ${comment?.id} - body: ${comment?.body}`}</span>
 
