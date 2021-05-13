@@ -1,10 +1,10 @@
 import { InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
 
 import Username from '../../components/Username';
 import styles from '../../styles/Home.module.css';
+import usePosts from '../hooks/usePosts';
 
 interface Comment {
   id: number;
@@ -34,13 +34,7 @@ export async function getStaticProps(): Promise<Props> {
 export default function Home({
   comment,
 }: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
-  const [posts, setPosts] = useState([]);
-
-  useEffect(() => {
-    fetch('/api/posts')
-      .then((response) => response.json())
-      .then((data) => setPosts(data));
-  }, []);
+  const { data: posts } = usePosts();
 
   return (
     <div className={styles.container}>
@@ -51,6 +45,10 @@ export default function Home({
       </Head>
 
       <main className={styles.main}>
+        <h3 className={styles.title}>
+          Welcome to <a href="https://nextjs.org">Next.js!</a>
+        </h3>
+
         <Username />
         <strong>Server-rendered comment: </strong>
         <span>{`id: ${comment?.id} - body: ${comment?.body}`}</span>
@@ -58,11 +56,7 @@ export default function Home({
         <br />
 
         <strong>Fetched post count:</strong>
-        <span>{`Length: ${posts.length}`}</span>
-
-        <h3 className={styles.title}>
-          UpdatedText - Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h3>
+        <span>{`Length: ${posts?.length}`}</span>
 
         <p className={styles.description}>
           Get started by editing <code className={styles.code}>pages/index.js</code>
