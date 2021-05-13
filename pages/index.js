@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 import styles from '../styles/Home.module.css';
 
@@ -11,7 +12,7 @@ export async function getStaticProps() {
   const res = await fetch(url);
   const comments = await res.json();
 
-  const comment = comments[0].body;
+  const comment = comments[1];
 
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
@@ -23,6 +24,14 @@ export async function getStaticProps() {
 }
 
 export default function Home({ comment }) {
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    fetch('/api/posts')
+      .then((response) => response.json())
+      .then((data) => setPosts(data));
+  }, []);
+
   return (
     <div className={styles.container}>
       <Head>
@@ -32,11 +41,17 @@ export default function Home({ comment }) {
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          UpdatedText - Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <strong>Server-rendered comment: </strong>
+        <span>{`id: ${comment?.id} - body: ${comment?.body}`}</span>
 
-        <span>{`Server-rendered comment: ${comment}`}</span>
+        <br />
+
+        <strong>Fetched post count:</strong>
+        <span>{`Length: ${posts.length}`}</span>
+
+        <h3 className={styles.title}>
+          UpdatedText - Welcome to <a href="https://nextjs.org">Next.js!</a>
+        </h3>
 
         <p className={styles.description}>
           Get started by editing <code className={styles.code}>pages/index.js</code>
