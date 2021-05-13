@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-interface Post {
-  id: number;
-  title: string;
-}
-
 interface Posts {
-  posts: Post[];
+  posts: [
+    {
+      id: number;
+      title: string;
+    }
+  ];
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse<Posts>) => {

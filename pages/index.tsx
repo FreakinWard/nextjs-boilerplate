@@ -1,3 +1,4 @@
+import { InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
@@ -5,7 +6,18 @@ import { useEffect, useState } from 'react';
 import Username from '../components/Username';
 import styles from '../styles/Home.module.css';
 
-export async function getStaticProps() {
+interface Comment {
+  id: number;
+  body: string;
+}
+
+interface Props {
+  props: {
+    comment: Comment;
+  };
+}
+
+export async function getStaticProps(): Promise<Props> {
   // Call an external API endpoint to get posts
 
   // TODO: async fetch some data, send back as serverProps
@@ -24,7 +36,9 @@ export async function getStaticProps() {
   };
 }
 
-export default function Home({ comment }) {
+export default function Home({
+  comment,
+}: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
