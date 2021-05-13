@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="nextjs pages" pattern="file:pages/*.tsx" />
+</component>
