@@ -50,7 +50,7 @@ stages:
       inputs:
         testResultsFiles: 'coverage/jest-junit/junit.xml'
 
-    - task: PublishTestResults@2
+    - task: PublishHtmlReport@1
       displayName: 'Publish test results'
       condition: succeededOrFailed()
       inputs:
