@@ -1,34 +1,129 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# NextJs Boilerplate
+
+The purpose of this repo is to accelerate startup time when creating a new [NextJs](https://nextjs.org/docs) app.
 
 ## Getting Started
 
-First, run the development server:
+First, install npm packages
+
+```bash
+npm install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to start.
 
-You can start editing the page by modifying `pages/index.test.tsx`. The page auto-updates as you edit the file.
+## Directory Structure
+```
+📦 src
+┣ 📂 __tests__               # tests for pages
+┃ ┗ 📜 index.test.tsx
+┣ 📂 components              # components used within the app
+┃ ┗ 📜 Posts.tsx
+┣ 📂 context                 # application context providers 
+┃ ┗ 📜 AppState.tsx
+┣ 📂 core                    # non-feature related core services
+┃ ┣ 📂 mocks
+┃ ┃ ┣ 📂 seed
+┃ ┃ ┃ ┣ 📜 seedPosts.js
+┃ ┃ ┃ ┗ 📜 seedStyleMedia.js
+┃ ┃ ┣ 📜 mswHandlers.js
+┃ ┃ ┗ 📜 mswServer.js
+┃ ┗ 📜 test.utils.tsx
+┣ 📂 hooks                   # hooks used within the app
+┃ ┣ 📂 __tests__
+┃ ┃ ┗ 📜 usePosts.test.ts
+┃ ┗ 📜 usePosts.ts
+┣ 📂 pages                   # pages directory - drives navigation
+┃ ┣ 📂 api
+┃ ┃ ┗ 📜 posts.ts
+┃ ┣ 📜 _app.tsx
+┃ ┗ 📜 index.tsx
+┗ 📂 services                # feature-related services
+┃ ┣ 📂 __tests__
+┃ ┃ ┗ 📜 postsService.test.ts
+┃ ┗ 📜 postsService.ts
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/posts.ts`.
+## Features
+The setup and configuration includes a number of opinionated best-practices in attempt to keep the code clean, safe, and free of bugs.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+Code is formatted and linted with each save, if [configured](#ide-configuration), or at least before each commit with the help of husky. 
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Tests are configured for both unit and integration tests. Unit tests are performed with jest where msw helps avoid mocking http requests, both server and client, which allows for easier integration tests. 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Libraries
+- Application
+  - [react](https://reactjs.org/docs/getting-started.html)
+  - [nextjs](https://nextjs.org/docs)
+  - [typescript](https://github.com/typescript-cheatsheets/react)
+  - [react-query](https://react-query.tanstack.com/overview)
+- Static code analysis
+  - [eslint](https://www.npmjs.com/package/eslint)
+  - [prettier](https://www.npmjs.com/package/prettier)
+- Testing
+  - [msw](https://www.npmjs.com/package/msw)
+  - [testing-library-react](https://www.npmjs.com/package/@testing-library/react)
+  - [testing-library-react-hooks](https://www.npmjs.com/package/@testing-library/react-hooks)
+  - [jest-junit](https://www.npmjs.com/package/jest-junit)
+  - [jest-html-reporters](https://www.npmjs.com/package/jest-html-reporters)
+- Git Hooks
+  - [husky](https://www.npmjs.com/package/husky)
+  - [lint-staged](https://www.npmjs.com/package/lint-staged)
+  - [validate-branch-name](https://www.npmjs.com/package/validate-branch-name)
+  
+## Scripts
 
-## Deploy on Vercel
+```bash
+npm run test    # runs all tests, creating test report
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npm run test:open    # opens the test report
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```bash
+npm run test:cover    # runs all tests, creating coverage report
+```
+
+```bash
+npm run test:cover:open    # opens the coverage report
+```
+
+```bash
+npm run lint    # runs lint check, produces report
+```
+
+
+```bash
+npm run lint:fix    # runs lint and fixes, produces report
+```
+
+
+### Utility scripts
+
+```bash
+npm run prepare   # installs husky hook - this lints the app before each commit
+```
+
+```bash
+npm run format   # run code format check
+```
+
+```bash
+npm run format:fix   # run fix code formatting
+```
+
+```bash
+npm run pre-commit   # this is ran prior to a git commit - runs lint and checks branch name
+```
+
+# IDE-configuration
+Prettier is an opinionated formatting tool. It will need to be configured to format on each code save. Thankfully, they provide [IDE-specific documentation](https://prettier.io/docs/en/editors.html) to configure yours.
