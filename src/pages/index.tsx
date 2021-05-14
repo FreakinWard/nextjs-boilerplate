@@ -2,39 +2,29 @@ import { InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 
-import Username from '../../components/Username';
 import styles from '../../styles/Home.module.css';
+import Posts from '../components/Posts';
 import usePosts from '../hooks/usePosts';
-
-interface Comment {
-  id: number;
-  body: string;
-}
+import { fetchPosts, Post } from '../services/postsService';
 
 interface Props {
   props: {
-    comment: Comment;
+    posts: Post[];
   };
 }
 
 export async function getStaticProps(): Promise<Props> {
-  const url = 'http://my-json-server.typicode.com/typicode/demo/comments';
-  const res = await fetch(url);
-  const comments = await res.json();
-
-  const comment = comments[1];
+  const posts = await fetchPosts();
 
   return {
     props: {
-      comment,
+      posts,
     },
   };
 }
 
-export default function Home({
-  comment,
-}: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
-  const { data: posts } = usePosts();
+export default function Home({ posts }: InferGetStaticPropsType<typeof getStaticProps>) {
+  const { data: clientPosts } = usePosts();
 
   return (
     <div className={styles.container}>
@@ -45,18 +35,12 @@ export default function Home({
       </Head>
 
       <main className={styles.main}>
-        <h3 className={styles.title}>
+        <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h3>
+        </h1>
 
-        <Username />
-        <strong>Server-rendered comment: </strong>
-        <span>{`id: ${comment?.id} - body: ${comment?.body}`}</span>
-
-        <br />
-
-        <strong>Fetched post count:</strong>
-        <span>{`Length: ${posts?.length}`}</span>
+        <Posts title="Server render" posts={posts} />
+        <Posts title="Client render" posts={clientPosts} />
 
         <p className={styles.description}>
           Get started by editing <code className={styles.code}>pages/index.js</code>

@@ -1,18 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
+import { fetchPosts, Post } from '../../services/postsService';
+
 interface Response {
-  posts: [
-    {
-      id: number;
-      title: string;
-    }
-  ];
+  posts: Post[];
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse<Response>) => {
-  const url = 'http://my-json-server.typicode.com/typicode/demo/posts';
-  const response = await fetch(url);
-  const posts = await response.json();
+  const posts = await fetchPosts();
 
   res.status(200).json(posts);
 };

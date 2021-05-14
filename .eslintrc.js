@@ -17,18 +17,21 @@ module.exports = {
     browser: true, // Enables browser globals like window and document
     amd: true, // Enables require() and define() as global variables as per the amd spec.
     node: true, // Enables Node.js global variables and Node.js scoping.
+    jest: true,
   },
-  plugins: ['simple-import-sort'],
+  plugins: ['simple-import-sort', 'prettier'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:jsx-a11y/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended',
+    'plugin:jest/style',
     'plugin:prettier/recommended', // Make this the last element so prettier config overrides other formatting rules
   ],
   rules: {
-    'prettier/prettier': ['error', {}, { usePrettierrc: true }], // Use our .prettierrc file as source
+    'prettier/prettier': 'error', // Use our prettier.config.js file as source
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -43,5 +46,10 @@ module.exports = {
         aspects: ['invalidHref', 'preferButton'],
       },
     ],
+    'jest/no-disabled-tests': 'warn',
+    'jest/no-focused-tests': 'error',
+    'jest/no-identical-title': 'error',
+    'jest/prefer-to-have-length': 'warn',
+    'jest/valid-expect': 'error',
   },
 };
