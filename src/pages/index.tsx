@@ -6,7 +6,7 @@ import Username from '../../components/Username';
 import styles from '../../styles/Home.module.css';
 import usePosts from '../hooks/usePosts';
 
-interface Comment {
+export interface Comment {
   id: number;
   body: string;
 }
@@ -31,9 +31,7 @@ export async function getStaticProps(): Promise<Props> {
   };
 }
 
-export default function Home({
-  comment,
-}: InferGetStaticPropsType<typeof getStaticProps>): JSX.Element {
+export default function Home({ comment }: InferGetStaticPropsType<typeof getStaticProps>) {
   const { data: posts } = usePosts();
 
   return (
