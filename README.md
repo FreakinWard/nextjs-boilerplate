@@ -2,15 +2,44 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+First, install npm packages
+
+```bash
+npm install
+```
+
+
+Then, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to start.
+
+## Features
+The purpose of this repo is to accelerate the configuration for starting a new nextjs app. It's configured with opinionated best-practice features to enable faster development.
+
+This application implements the following libraries:
+- Application
+    - [react](https://reactjs.org/docs/getting-started.html)
+    - [nextjs](https://nextjs.org/docs)
+    - [typescript](https://github.com/typescript-cheatsheets/react)
+    - [react-query](https://react-query.tanstack.com/overview)
+- Static code analysis
+  - [eslint](https://www.npmjs.com/package/eslint)
+  - [prettier](https://www.npmjs.com/package/prettier)
+- Testing
+    - [msw](https://www.npmjs.com/package/msw)
+    - [testing-library-react](https://www.npmjs.com/package/@testing-library/react)
+    - [testing-library-react-hooks](https://www.npmjs.com/package/@testing-library/react-hooks)
+    - [jest-junit](https://www.npmjs.com/package/jest-junit)
+    - [jest-html-reporters](https://www.npmjs.com/package/jest-html-reporters)
+- Git Hooks
+    - [husky](https://www.npmjs.com/package/husky)
+    - [lint-staged](https://www.npmjs.com/package/lint-staged)
+    - [validate-branch-name](https://www.npmjs.com/package/validate-branch-name)
+    
 
 You can start editing the page by modifying `pages/index.test.tsx`. The page auto-updates as you edit the file.
 
