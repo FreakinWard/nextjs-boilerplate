@@ -45,10 +45,16 @@ stages:
       displayName: 'npm install, build, lint and test'
 
     - task: PublishTestResults@2
-      displayName: 'supply npm test results to pipelines'
-      condition: succeededOrFailed() # because otherwise we won't know what tests failed
+      displayName: 'Publish test coverage'
+      condition: succeededOrFailed()
       inputs:
         testResultsFiles: 'coverage/jest-junit/junit.xml'
+
+    - task: PublishTestResults@2
+      displayName: 'Publish test results'
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFiles: 'html-report/report.html'
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
