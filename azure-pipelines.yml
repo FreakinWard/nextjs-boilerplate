@@ -45,13 +45,13 @@ stages:
       displayName: 'npm install, build, lint and test'
 
     - task: PublishTestResults@2
-      displayName: 'Publish test coverage'
+      displayName: 'Publish test coverage report'
       condition: succeededOrFailed()
       inputs:
         testResultsFiles: 'coverage/jest-junit/junit.xml'
 
     - task: PublishHtmlReport@1
-      displayName: 'Publish test results'
+      displayName: 'Publish tests html report'
       condition: succeededOrFailed()
       inputs:
         reportDir: 'html-report/report.html'
