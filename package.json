@@ -11,8 +11,8 @@
     "lint": "eslint . -f table",
     "lint:fix": "eslint --fix . -f table",
     "test": "jest",
-    "format": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
-    "format:fix": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
+    "format": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}' --config prettier.config.js",
+    "format:fix": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config prettier.config.js",
     "pre-commit": "lint-staged",
     "analyze": "cross-env ANALYZE=true next build"
   },

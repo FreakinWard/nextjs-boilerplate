@@ -28,7 +28,7 @@ describe('index', () => {
     // assert
     expect(screen.getByText(postLength)).toBeInTheDocument();
 
-    posts.forEach((post) => {
+    posts.forEach(post => {
       expect(screen.getByText(`${post.id} - ${post.title}`)).toBeInTheDocument();
     });
   });
@@ -43,7 +43,7 @@ describe('index', () => {
     // assert
     expect(await screen.findByText(postLength)).toBeInTheDocument();
 
-    seedPosts.forEach((post) => {
+    seedPosts.forEach(post => {
       expect(screen.getByText(`${post.id} - ${post.title}`)).toBeInTheDocument();
     });
   });
