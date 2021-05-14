@@ -127,3 +127,18 @@ npm run pre-commit   # this is ran prior to a git commit - runs lint and checks 
 
 # IDE-configuration
 Prettier is an opinionated formatting tool. It will need to be configured to format on each code save. Thankfully, they provide [IDE-specific documentation](https://prettier.io/docs/en/editors.html) to configure yours.
+
+### Committing Changes
+[Husky](https://typicode.github.io/husky/) makes [git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) sharable within a project while also ensuring code conventions are enforced. The hook is installed during `npm install` and should require no further setup.
+
+Husky pre-commit is configured to run the npm task `pre-commit` which does the following:
+- Avoid commits to master/main
+- Format staged code
+- Lint staged code
+
+Should the need arise to ignore the hook, manually commit using `--no-verify`
+
+```shell
+# Example
+git commit -m "commit message" --no-verify
+```
