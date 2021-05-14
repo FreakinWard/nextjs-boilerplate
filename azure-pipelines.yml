@@ -39,9 +39,22 @@ stages:
 
     - script: |
         npm install
+        npm run lint --if-present
         npm run build --if-present
-        npm run test --if-present
-      displayName: 'npm install, build and test'
+        npm run test:cover --if-present
+      displayName: 'npm install, build, lint and test'
+
+    - task: PublishTestResults@2
+      displayName: 'Publish test coverage report'
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFiles: 'coverage/jest-junit/junit.xml'
+
+    - task: PublishHtmlReport@1
+      displayName: 'Publish tests html report'
+      condition: succeededOrFailed()
+      inputs:
+        reportDir: 'html-report/report.html'
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
