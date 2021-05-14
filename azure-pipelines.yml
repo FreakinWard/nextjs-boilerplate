@@ -54,7 +54,7 @@ stages:
       displayName: 'Publish test results'
       condition: succeededOrFailed()
       inputs:
-        testResultsFiles: 'html-report/report.html'
+        reportDir: 'html-report/report.html'
 
     - task: ArchiveFiles@2
       displayName: 'Archive files'
