@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks';
 
-import seedPosts from '../../utils/mocks/seed/seedPosts';
-import { queryWrapper as wrapper } from '../../utils/test.utils';
+import seedPosts from '../../core/mocks/seed/seedPosts';
+import { queryWrapper as wrapper } from '../../core/test.utils';
 import usePosts from '../usePosts';
 
 describe('usePosts', () => {

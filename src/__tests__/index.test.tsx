@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 
+import seedPosts from '../core/mocks/seed/seedPosts';
+import { queryWrapper as wrapper } from '../core/test.utils';
 import Home, { Comment } from '../pages/index';
-import seedPosts from '../utils/mocks/seed/seedPosts';
-import { queryWrapper as wrapper } from '../utils/test.utils';
 
 describe('index', () => {
   const comment: Comment = {

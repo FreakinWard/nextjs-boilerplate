@@ -2,8 +2,8 @@ import { InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 
-import Username from '../../components/Username';
 import styles from '../../styles/Home.module.css';
+import Username from '../components/Username';
 import usePosts from '../hooks/usePosts';
 
 export interface Comment {
