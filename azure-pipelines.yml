@@ -7,7 +7,6 @@ trigger:
 - main
 
 variables:
-
   # Azure Resource Manager connection created during pipeline creation
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
 
@@ -19,6 +18,9 @@ variables:
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
+
+  # Is running on main branch
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
 stages:
 - stage: Build
@@ -41,8 +43,6 @@ stages:
         npm run test --if-present
       displayName: 'npm install, build and test'
 
-#    - script: zip -r --symlinks '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip' .
-
     - task: ArchiveFiles@2
       displayName: 'Archive files'
       inputs:
@@ -58,7 +58,7 @@ stages:
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
-  condition: succeeded()
+  condition: and(succeeded(), eq(variables.isMain, true))
   jobs:
   - deployment: Deploy
     displayName: Deploy
