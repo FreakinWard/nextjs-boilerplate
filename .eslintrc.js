@@ -17,6 +17,7 @@ module.exports = {
     browser: true, // Enables browser globals like window and document
     amd: true, // Enables require() and define() as global variables as per the amd spec.
     node: true, // Enables Node.js global variables and Node.js scoping.
+    jest: true,
   },
   plugins: ['simple-import-sort'],
   extends: [
@@ -25,6 +26,7 @@ module.exports = {
     'plugin:jsx-a11y/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended',
     'plugin:prettier/recommended', // Make this the last element so prettier config overrides other formatting rules
   ],
   rules: {
