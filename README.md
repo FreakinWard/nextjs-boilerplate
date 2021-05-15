@@ -2,7 +2,16 @@
 
 The purpose of this repo is to accelerate startup time when creating a new [NextJs](https://nextjs.org/docs) app.
 
-## Getting Started
+## Contents
+- [Getting Started](#getting-started)
+- [Directory Structure](#directory-structure)
+- [Features](#features)
+- [Libraries](#libraries)
+- [Scripts](#scripts)
+- [IDE Configurations](#ide-configuration)
+- [Committing Changes](#committing-changes)
+
+# Getting Started
 
 First, install npm packages
 
@@ -18,7 +27,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to start.
 
-## Directory Structure
+# Directory Structure
 ```
 📦 src
 ┣ 📂 __tests__               # tests for pages
@@ -50,7 +59,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to start.
 ┃ ┗ 📜 postsService.ts
 ```
 
-## Features
+# Features
 The setup and configuration includes a number of opinionated best-practices in attempt to keep the code clean, safe, and free of bugs.
 
 
@@ -59,7 +68,7 @@ Code is formatted and linted with each save, if [configured](#ide-configuration)
 
 Tests are configured for both unit and integration tests. Unit tests are performed with jest where msw helps avoid mocking http requests, both server and client, which allows for easier integration tests. 
 
-## Libraries
+# Libraries
 - Application
   - [react](https://reactjs.org/docs/getting-started.html)
   - [nextjs](https://nextjs.org/docs)
@@ -79,7 +88,7 @@ Tests are configured for both unit and integration tests. Unit tests are perform
   - [lint-staged](https://www.npmjs.com/package/lint-staged)
   - [validate-branch-name](https://www.npmjs.com/package/validate-branch-name)
   
-## Scripts
+# Scripts
 
 ```bash
 npm run test    # runs all tests, creating test report
@@ -107,7 +116,7 @@ npm run lint:fix    # runs lint and fixes, produces report
 ```
 
 
-### Utility scripts
+## Utility scripts
 
 ```bash
 npm run prepare   # installs husky hook - this lints the app before each commit
@@ -128,7 +137,7 @@ npm run pre-commit   # this is ran prior to a git commit - runs lint and checks 
 # IDE-configuration
 Prettier is an opinionated formatting tool. It will need to be configured to format on each code save. Thankfully, they provide [IDE-specific documentation](https://prettier.io/docs/en/editors.html) to configure yours.
 
-### Committing Changes
+# Committing Changes
 [Husky](https://typicode.github.io/husky/) makes [git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) sharable within a project while also ensuring code conventions are enforced. The hook is installed during `npm install` and should require no further setup.
 
 Husky pre-commit is configured to run the npm task `pre-commit` which does the following:
