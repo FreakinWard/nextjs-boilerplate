@@ -39,10 +39,15 @@ stages:
 
     - script: |
         npm install
+      displayName: 'install & build'
+
+    - script: |
         npm run lint --if-present
-        npm run build --if-present
+      displayName: 'lint'
+
+    - script: |
         npm run test:cover --if-present
-      displayName: 'npm install, build, lint and test'
+      displayName: 'test coverage'
 
     - task: PublishTestResults@2
       displayName: 'Publish test coverage report'
