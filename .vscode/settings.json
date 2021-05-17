@@ -1,0 +1,4 @@
+{
+  "eslint.validate": ["typescript", "typescriptreact"],
+  "typescript.suggest.paths": false
+}

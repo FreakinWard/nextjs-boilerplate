@@ -135,7 +135,39 @@ npm run pre-commit   # this is ran prior to a git commit - runs lint and checks 
 ```
 
 # IDE-configuration
-Prettier is an opinionated formatting tool. It will need to be configured to format on each code save. Thankfully, they provide [IDE-specific documentation](https://prettier.io/docs/en/editors.html) to configure yours.
+
+## VS Code
+The `.vscode` directory is checked into this repo and serves to share common settings and defaults. 
+
+[Recommended Extensions](https://code.visualstudio.com/docs/editor/extension-marketplace#_recommended-extensions) are configured, be sure to install.
+
+- Settings
+  - eslint.validate
+    - Validate and fixes eslint errors. This also fixes prettier issues
+  - typescript.suggest.paths
+    - turns off 
+
+- Recommended Extensions
+  - code-spell-checker
+    - checks spelling errors withing the code
+  - vscode-icons
+    - directory icons
+  - vscode-jest
+    - Inline jest test helpers
+  - auto-rename-tag
+    - Helps renaming tags
+  - vscode-eslint
+    - Integrate with lint rules
+
+## Webstorm
+The `.idea` directory is checked into this repo and serves to share common [run configurations](https://www.jetbrains.com/help/webstorm/run-debug-configuration.html)
+
+- Run Configurations
+  - All Tests
+    - Execute and watch all tests
+  - Dev
+    - Run application
+
 
 # Committing Changes
 [Husky](https://typicode.github.io/husky/) makes [git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) sharable within a project while also ensuring code conventions are enforced. The hook is installed during `npm install` and should require no further setup.
