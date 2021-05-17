@@ -8,6 +8,7 @@ const queryConfig = {
   },
 };
 
+// eslint-disable-next-line import/prefer-default-export
 export const queryWrapper = ({ children }: { children: JSX.Element }) => (
   <QueryClientProvider client={new QueryClient(queryConfig)}>{children}</QueryClientProvider>
 );
