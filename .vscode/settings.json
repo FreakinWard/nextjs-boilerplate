@@ -1,4 +1,8 @@
 {
-  "eslint.validate": ["typescript", "typescriptreact"],
-  "typescript.suggest.paths": false
+  "window.zoomLevel": 1,
+  "workbench.iconTheme": "vscode-icons",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "eslint.validate": ["typescript", "typescriptreact"]
 }
