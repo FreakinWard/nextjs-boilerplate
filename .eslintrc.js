@@ -19,7 +19,7 @@ module.exports = {
     node: true, // Enables Node.js global variables and Node.js scoping.
     jest: true,
   },
-  plugins: ['simple-import-sort', 'prettier'],
+  plugins: ['simple-import-sort', 'prettier', 'import'],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
@@ -32,6 +32,7 @@ module.exports = {
   ],
   rules: {
     'prettier/prettier': 'error', // Use our prettier.config.js file as source
+    'import/prefer-default-export': 'error',
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',

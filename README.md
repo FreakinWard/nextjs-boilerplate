@@ -158,6 +158,47 @@ The `.vscode` directory is checked into this repo and serves to share common set
     - Helps renaming tags
   - vscode-eslint
     - Integrate with lint rules
+### Snippets
+```javascript
+// entering: desc
+describe('', () => {
+  
+});
+```
+
+```javascript
+// entering: it
+it('should ', () => {
+  // arrange
+  // act
+
+  // assert
+});
+```
+
+```javascript
+// entering: ita
+it('should ', async () => {
+  // arrange
+  // act
+  
+  // assert
+});
+```
+
+```javascript
+// entering: func
+export default function () {
+
+}
+```
+
+```javascript
+// entering: hook
+export default function use() {
+
+}
+```
 
 ## Webstorm
 The `.idea` directory is checked into this repo and serves to share common [run configurations](https://www.jetbrains.com/help/webstorm/run-debug-configuration.html)

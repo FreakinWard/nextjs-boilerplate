@@ -17,6 +17,6 @@ describe('usePosts', () => {
     await waitForNextUpdate();
 
     // assert
-    expect(result.current.data).toEqual(seedPosts)
+    expect(result.current.data).toEqual(seedPosts);
   });
 });
