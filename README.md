@@ -69,25 +69,32 @@ Code is formatted and linted with each save, if [configured](#ide-configuration)
 Tests are configured for both unit and integration tests. Unit tests are performed with jest where msw helps avoid mocking http requests, both server and client, which allows for easier integration tests. 
 
 # Libraries
-- Application
-  - [react](https://reactjs.org/docs/getting-started.html)
-  - [nextjs](https://nextjs.org/docs)
-  - [typescript](https://github.com/typescript-cheatsheets/react)
-  - [react-query](https://react-query.tanstack.com/overview)
-- Static code analysis
-  - [eslint](https://www.npmjs.com/package/eslint)
-  - [prettier](https://www.npmjs.com/package/prettier)
-- Testing
-  - [msw](https://www.npmjs.com/package/msw)
-  - [testing-library-react](https://www.npmjs.com/package/@testing-library/react)
-  - [testing-library-react-hooks](https://www.npmjs.com/package/@testing-library/react-hooks)
-  - [jest-junit](https://www.npmjs.com/package/jest-junit)
-  - [jest-html-reporters](https://www.npmjs.com/package/jest-html-reporters)
-- Git Hooks
-  - [husky](https://www.npmjs.com/package/husky)
-  - [lint-staged](https://www.npmjs.com/package/lint-staged)
-  - [validate-branch-name](https://www.npmjs.com/package/validate-branch-name)
+| Application | Description
+| --- | --- |
+| [react](https://reactjs.org/docs/getting-started.html) | react framework |
+| [nextJs](https://nextjs.org/docs) | nextjs framework | 
+| [typescript](https://github.com/typescript-cheatsheets/react) | Enabling typescript | 
+| [react-query](https://react-query.tanstack.com/overview) | Data-fetching library |
+
+| Static-code Analysis | Description
+| --- | --- |
+| [eslint](https://www.npmjs.com/package/eslint) | Helps identify code issues |
+| [prettier](https://www.npmjs.com/package/prettier) | code formatting tool |
+
+| Testing | Description
+| --- | --- |
+| [jest-junit](https://www.npmjs.com/package/jest-junit) | Testing Library |
+| [msw](https://www.npmjs.com/package/msw) | Used to intercept and mock http requests |
+| [testing-library-react](https://www.npmjs.com/package/@testing-library/react) | Helper for UI component tests |
+| [testing-library-react-hooks](https://www.npmjs.com/package/@testing-library/react-hooks) | Helper for react-hook tests |
+| [jest-html-reporters](https://www.npmjs.com/package/jest-html-reporters) | Test reporter for visualizing tests |
   
+| Git Hooks | Description |
+| --- | --- |
+| [husky](https://www.npmjs.com/package/husky) | Creates sharable git-commit hooks | 
+| [lint-staged](https://www.npmjs.com/package/lint-staged) | Ensure code is linted before committing to branch |
+| [validate-branch-name](https://www.npmjs.com/package/validate-branch-name) | Ensures a branch is created before committing to master/main |
+
 # Scripts
 
 ```bash
@@ -141,23 +148,19 @@ The `.vscode` directory is checked into this repo and serves to share common set
 
 [Recommended Extensions](https://code.visualstudio.com/docs/editor/extension-marketplace#_recommended-extensions) are configured, be sure to install.
 
-- Settings
-  - eslint.validate
-    - Validate and fixes eslint errors. This also fixes prettier issues
-  - typescript.suggest.paths
-    - turns off 
+| Setting | Description
+| --- | --- |
+| eslint.validate | Validate and fixes eslint errors. This also fixes prettier issues |
+| typescript.suggest.paths | Turned off to enable correct usage within auto-rename-tag | 
 
-- Recommended Extensions
-  - code-spell-checker
-    - checks spelling errors withing the code
-  - vscode-icons
-    - directory icons
-  - vscode-jest
-    - Inline jest test helpers
-  - auto-rename-tag
-    - Helps renaming tags
-  - vscode-eslint
-    - Integrate with lint rules
+| Extension | Description
+| --- | --- |
+| code-spell-checker | checks spelling errors withing the code |
+| vscode-icons | Directory icons |
+| vscode-jest | Helps renaming tags |
+| auto-rename-tag | Helps renaming tags |
+| vscode-eslint | Integrate with lint rules |
+
 ### Snippets
 ```javascript
 // entering: desc
@@ -203,11 +206,10 @@ export default function use() {
 ## Webstorm
 The `.idea` directory is checked into this repo and serves to share common [run configurations](https://www.jetbrains.com/help/webstorm/run-debug-configuration.html)
 
-- Run Configurations
-  - All Tests
-    - Execute and watch all tests
-  - Dev
-    - Run application
+| Setting | Description
+| --- | --- |
+| All Tests | Execute and watch all tests |
+| Dev | Run application |
 
 
 # Committing Changes
