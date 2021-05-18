@@ -7,6 +7,7 @@ const appConfig = require('@azure/app-configuration');
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+  const env = process.env;
   // const appConfig = { foo: 'bar' };
 
   // const endpoint = 'https://nextjs-app-configuration.azconfig.io';
@@ -21,7 +22,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const setting = await client.getConfigurationSetting({ key: 'APPINSIGHTS_INSTRUMENTATIONKEY' });
 
-    value = { key: setting.key, value: setting.value };
+    value = { key: setting.key, value: setting.value, env };
   } catch (e) {
     console.log({ e });
     value = e.message;
