@@ -4,6 +4,7 @@ import Image from 'next/image';
 
 import styles from '../../styles/Home.module.css';
 import Posts from '../components/Posts';
+import useAppConfig from '../hooks/useAppConfig';
 import usePosts from '../hooks/usePosts';
 import { fetchPosts, Post } from '../services/postsService';
 
@@ -25,6 +26,7 @@ export async function getStaticProps(): Promise<Props> {
 
 export default function Home({ posts }: InferGetStaticPropsType<typeof getStaticProps>) {
   const { data: clientPosts } = usePosts();
+  const { data: appConfig } = useAppConfig();
 
   return (
     <div className={styles.container}>
@@ -41,6 +43,11 @@ export default function Home({ posts }: InferGetStaticPropsType<typeof getStatic
 
         <Posts title="Server render" posts={posts} />
         <Posts title="Client render" posts={clientPosts} />
+
+        <h3>App Configs</h3>
+        <div style={{ width: 650 }}>
+          <pre>{JSON.stringify(appConfig, 0, 2)}</pre>
+        </div>
 
         <p className={styles.description}>
           Get started by editing <code className={styles.code}>pages/index.js</code>
