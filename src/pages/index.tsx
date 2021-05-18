@@ -46,7 +46,7 @@ export default function Home({ posts }: InferGetStaticPropsType<typeof getStatic
 
         <h3>App Configs</h3>
         <div style={{ width: 650 }}>
-          <pre>{JSON.stringify(appConfig, 0, 2)}</pre>
+          <pre>{JSON.stringify(appConfig, null, 2)}</pre>
         </div>
 
         <p className={styles.description}>
