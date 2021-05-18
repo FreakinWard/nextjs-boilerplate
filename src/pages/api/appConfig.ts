@@ -22,7 +22,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const setting = await client.getConfigurationSetting({ key: 'my-new-key' });
 
-    value = setting;
+    value = { key: setting.key, value: setting.value, setting };
   } catch (e) {
     console.log({ e });
     value = e.message;
