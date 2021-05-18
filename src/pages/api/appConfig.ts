@@ -1,4 +1,3 @@
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const azureIdentity = require('@azure/identity');
 
@@ -20,9 +19,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       'Endpoint=https://nextjs-app-configuration.azconfig.io;Id=+dYc-l6-s0:tz1EJzjKbE0iBPyFP3Rs;Secret=2p8EEiyvMfPhfff1sMH+WzSjZD2bPgjY1Vwotu2XPKg=';
     const client = new appConfig.AppConfigurationClient(connectionString);
 
-    const setting = await client.getConfigurationSetting({ key: 'my-new-key' });
+    const setting = await client.getConfigurationSetting({ key: 'APPINSIGHTS_INSTRUMENTATIONKEY' });
 
-    value = { key: setting.key, value: setting.value, setting };
+    value = { key: setting.key, value: setting.value };
   } catch (e) {
     console.log({ e });
     value = e.message;
