@@ -45,7 +45,7 @@ export default function Home({ posts }: InferGetStaticPropsType<typeof getStatic
         <Posts title="Client render" posts={clientPosts} />
 
         <h3>App Configs</h3>
-        <div style={{ width: 650 }}>
+        <div style={{ width: 750, overflow: 'scroll', height: 850 }}>
           <pre>{JSON.stringify(appConfig, null, 2)}</pre>
         </div>
 
