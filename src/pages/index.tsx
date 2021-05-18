@@ -45,7 +45,7 @@ export default function Home({ posts }: InferGetStaticPropsType<typeof getStatic
         <Posts title="Client render" posts={clientPosts} />
 
         <h3>App Configs</h3>
-        <div>
+        <div style={{ width: 650 }}>
           <pre>{JSON.stringify(appConfig, 0, 2)}</pre>
         </div>
 
