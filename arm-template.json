@@ -60,8 +60,8 @@
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
-        "[resourceId('Microsoft.OperationalInsights/workspaces',variables('logAnalyticsName'))]"
+        "[concat('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
+        "microsoft.insights/components/AppMonitoredSite"
       ],
       "kind": "app,linux",
       "properties": {
@@ -102,45 +102,14 @@
     },
 
     {
+      "apiVersion": "2015-05-01",
+      "name": "AppMonitoredSite",
       "type": "microsoft.insights/components",
-      "apiVersion": "2020-02-02-preview",
-      "name": "[variables('appInsightsName')]",
       "location": "[resourceGroup().location]",
-      "kind": "web",
       "properties": {
-        "Application_Type": "web",
-        "Flow_Type": "Redfield",
-        "Request_Source": "IbizaWebAppExtensionCreate",
-        "publicNetworkAccessForIngestion": "Enabled",
-        "publicNetworkAccessForQuery": "Enabled",
         "applicationId": "[variables('appInsightsName')]",
-        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
-        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
-      ]
-    },
-    {
-      "type": "Microsoft.OperationalInsights/workspaces",
-      "apiVersion": "2020-08-01",
-      "name": "[variables('logAnalyticsName')]",
-      "location": "[resourceGroup().location]",
-      "tags": {
-        "displayName": "Log Analytics",
-        "ProjectName": "[variables('webSiteName')]"
-      },
-      "properties": {
-        "sku": {
-          "name": "pergb2018"
-        },
-        "retentionInDays": 120,
-        "features": {
-          "searchVersion": 1,
-          "legacy": 0,
-          "enableLogAccessUsingOnlyResourcePermissions": true
-        }
+        "Request_Source": "IbizaWebAppExtensionCreate"
       }
-    }
+    },
   ]
 }
