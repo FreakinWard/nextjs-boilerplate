@@ -37,6 +37,13 @@
         "description": "Describes plan's pricing tier and capacity. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
       }
     },
+    "skuTier": {
+      "type": "string",
+      "defaultValue": "PremiumV2",
+      "metadata": {
+        "description": "Sku-tier. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
+      }
+    },
     "skuCapacity": {
       "type": "int",
       "defaultValue": 1,
@@ -51,7 +58,6 @@
     "webSiteName": "[concat('Website-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
     "appInsightsName": "[concat('AppInsights-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
     "linuxFxVersion": "NODE|14-lts",
-    "skuTier": "PremiumV2",
     "appStartCommand": "npm run start"
   },
   "resources": [
@@ -96,7 +102,7 @@
       "name": "[variables('hostingPlanName')]",
       "location": "[resourceGroup().location]",
       "sku": {
-        "Tier": "[variables('skuTier')]",
+        "Tier": "[parameters('skuTier')]",
         "Name": "[parameters('skuName')]"
       },
       "kind": "linux",
