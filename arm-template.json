@@ -62,7 +62,7 @@
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
-        "[resourceId('microsoft.insights/components/', 'AppMonitoredSite')]"
+        "[resourceId('microsoft.insights/components/', variables('appInsightsName'))]"
       ],
       "kind": "linux",
       "properties": {
@@ -71,11 +71,11 @@
           "appSettings": [
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-              "value": "[reference('microsoft.insights/components/AppMonitoredSite', '2015-05-01').InstrumentationKey]"
+              "value": "[reference(concat('microsoft.insights/components/', variables('appInsightsName')), '2015-05-01').InstrumentationKey]"
             },
             {
               "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-              "value": "[reference('microsoft.insights/components/AppMonitoredSite', '2015-05-01').ConnectionString]"
+              "value": "[reference(concat('microsoft.insights/components/', variables('appInsightsName')), '2015-05-01').InstrumentationKey]"
             },
             {
               "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
@@ -109,7 +109,7 @@
     {
       "type": "microsoft.insights/components",
       "apiVersion": "2015-05-01",
-      "name": "AppMonitoredSite",
+      "name": "[variables('appInsightsName')]",
       "location": "[resourceGroup().location]",
       "properties": {
         "ApplicationId": "[variables('webSiteName')]",
