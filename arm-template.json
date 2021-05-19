@@ -56,10 +56,17 @@
   },
   "resources": [
     {
+      "apiVersion": "2016-03-01",
       "name": "[variables('webSiteName')]",
       "type": "Microsoft.Web/sites",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
+        "[resourceId('microsoft.insights/components/', 'AppMonitoredSite')]"
+      ],
       "kind": "linux",
       "properties": {
+        "name": "[variables('webSiteName')]",
         "siteConfig": {
           "appSettings": [
             {
@@ -72,41 +79,37 @@
             },
             {
               "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
-              "value": "~2"
+              "value": "~3"
             }
-          ]
+          ],
+          "linuxFxVersion": "[variables('linuxFxVersion')]",
+          "alwaysOn": false
         },
-        "name": "[variables('webSiteName')]",
         "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
         "clientAffinityEnabled": false
-      },
-      "dependsOn": [
-        "[concat('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
-        "microsoft.insights/components/AppMonitoredSite"
-      ],
-      "apiVersion": "2016-03-01",
-      "location": "[resourceGroup().location]"
-    },
-    {
-      "apiVersion": "2016-09-01",
-      "name": "[variables('hostingPlanName')]",
-      "type": "Microsoft.Web/serverfarms",
-      "location": "[resourceGroup().location]",
-      "kind": "linux",
-      "properties": {
-        "name": "[variables('hostingPlanName')]",
-        "workerSizeId": 1,
-        "numberOfWorkers": "1"
-      },
-      "sku": {
-        "Tier": "[variables('skuTier')]",
-        "Name": "[parameters('skuName')]"
       }
     },
     {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2016-09-01",
+      "name": "[variables('hostingPlanName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "Tier": "[variables('skuTier')]",
+        "Name": "[parameters('skuName')]"
+      },
+      "kind": "linux",
+      "properties": {
+        "name": "[variables('hostingPlanName')]",
+        "reserved": true,
+        "workerSizeId": 1,
+        "numberOfWorkers": "1"
+      }
+    },
+    {
+      "type": "microsoft.insights/components",
       "apiVersion": "2015-05-01",
       "name": "AppMonitoredSite",
-      "type": "microsoft.insights/components",
       "location": "[resourceGroup().location]",
       "properties": {
         "ApplicationId": "[variables('webSiteName')]",
