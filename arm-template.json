@@ -50,9 +50,9 @@
     "hostingPlanName": "[concat('HostingPlan-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
     "webSiteName": "[concat('Website-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
     "appInsightsName": "[concat('AppInsights-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
-    "logAnalyticsName": "[concat('LogAnalytics-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
     "linuxFxVersion": "NODE|14-lts",
-    "skuTier": "PremiumV2"
+    "skuTier": "PremiumV2",
+    "appStartCommand": "npm run start"
   },
   "resources": [
     {
@@ -60,14 +60,19 @@
       "name": "[variables('webSiteName')]",
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
+      "kind": "linux",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
         "[resourceId('microsoft.insights/components/', variables('appInsightsName'))]"
       ],
-      "kind": "linux",
       "properties": {
         "name": "[variables('webSiteName')]",
+        "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
+        "clientAffinityEnabled": false,
         "siteConfig": {
+          "linuxFxVersion": "[variables('linuxFxVersion')]",
+          "alwaysOn": false,
+          "appCommandLine": "[variables('appStartCommand')]",
           "appSettings": [
             {
               "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
@@ -81,12 +86,8 @@
               "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
               "value": "~3"
             }
-          ],
-          "linuxFxVersion": "[variables('linuxFxVersion')]",
-          "alwaysOn": false
-        },
-        "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
-        "clientAffinityEnabled": false
+          ]
+        }
       }
     },
     {
