@@ -2,20 +2,36 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "hostingPlanName": {
+    "appNamePrefix": {
       "type": "string",
-      "minLength": 1
+      "minLength": 1,
+      "defaultValue": "node-linux"
     },
     "skuName": {
       "type": "string",
-      "defaultValue": "B1",
+      "defaultValue": "P1V2",
       "allowedValues": [
+        "D1",
         "F1",
         "B1",
         "B2",
         "B3",
+        "S1",
+        "S2",
+        "S3",
         "P1",
-        "P2"
+        "P2",
+        "P3",
+        "P1V2",
+        "P2V2",
+        "P3V2",
+        "I1",
+        "I2",
+        "I3",
+        "Y1",
+        "EP1",
+        "EP2",
+        "EP3"
       ],
       "metadata": {
         "description": "Describes plan's pricing tier and capacity. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
@@ -28,84 +44,102 @@
       "metadata": {
         "description": "Describes plan's instance count"
       }
-    },
-    "webSiteNamePrefix": {
-      "type": "string"
-    },
-    "appInsightsNamePrefix": {
-      "type": "string"
     }
   },
   "variables": {
-    "webSiteName": "[concat(parameters('webSiteNamePrefix'), uniqueString(resourceGroup().id))]",
-    "appInsightsName": "[concat(parameters('appInsightsNamePrefix'), uniqueString(resourceGroup().id))]"
+    "hostingPlanName": "[concat('HostingPlan-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
+    "webSiteName": "[concat('Website-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
+    "appInsightsName": "[concat('AppInsights-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
+    "logAnalyticsName": "[concat('LogAnalytics-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
+    "linuxFxVersion": "NODE|14-lts"
   },
   "resources": [
     {
-    "apiVersion": "2015-08-01",
-    "name": "[parameters('hostingPlanName')]",
-    "type": "Microsoft.Web/serverfarms",
-    "location": "[resourceGroup().location]",
-    "sku": {
-      "name": "[parameters('skuName')]",
-      "capacity": "[parameters('skuCapacity')]"
-    },
-    "properties": {
-      "name": "[parameters('hostingPlanName')]"
-    }
-  },
-    {
-      "apiVersion": "2015-08-01",
+      "apiVersion": "2018-11-01",
       "name": "[variables('webSiteName')]",
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
-      "tags": {
-        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]": "Resource"
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
+        "[resourceId('Microsoft.OperationalInsights/workspaces',variables('logAnalyticsName'))]"
+      ],
+      "kind": "app,linux",
+      "properties": {
+        "name": "[variables('webSiteName')]",
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+              "value": "~3"
+            },
+            {
+              "name": "XDT_MicrosoftApplicationInsights_Mode",
+              "value": "default"
+            }
+          ],
+          "linuxFxVersion": "[variables('linuxFxVersion')]",
+          "alwaysOn": false
+        },
+        "serverFarmId": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
+        "clientAffinityEnabled": false
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2018-02-01",
+      "name": "[variables('hostingPlanName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('skuName')]",
+        "capacity": "[parameters('skuCapacity')]"
+      },
+      "kind": "linux",
+      "tags": {},
+      "properties": {
+        "name": "[variables('hostingPlanName')]",
+        "reserved": true
+      }
+    },
+
+    {
+      "type": "microsoft.insights/components",
+      "apiVersion": "2020-02-02-preview",
+      "name": "[variables('appInsightsName')]",
+      "location": "[resourceGroup().location]",
+      "kind": "web",
+      "properties": {
+        "Application_Type": "web",
+        "Flow_Type": "Redfield",
+        "Request_Source": "IbizaWebAppExtensionCreate",
+        "publicNetworkAccessForIngestion": "Enabled",
+        "publicNetworkAccessForQuery": "Enabled",
+        "applicationId": "[variables('appInsightsName')]",
+        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
-      ],
-      "properties": {
-        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('hostingPlanName'))]"
-      },
-      "resources": [{
-        "name": "appsettings",
-        "type": "config",
-        "apiVersion": "2015-08-01",
-        "dependsOn": [
-          "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]",
-          "[resourceId('Microsoft.Insights/components', variables('appInsightsName'))]",
-          "Microsoft.ApplicationInsights.AzureWebSites"
-        ],
-        "properties": {
-          "APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('Microsoft.Insights/components', variables('appInsightsName')), '2014-04-01').InstrumentationKey]"
-        }
-      },
-        {
-          "apiVersion": "2015-08-01",
-          "name": "Microsoft.ApplicationInsights.AzureWebSites",
-          "type": "siteextensions",
-          "dependsOn": [
-            "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]"
-          ],
-          "properties": {}
-        }
+        "[resourceId('Microsoft.Web/Sites', variables('webSiteName'))]",
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
       ]
     },
     {
-      "apiVersion": "2014-04-01",
-      "name": "[variables('appInsightsName')]",
-      "type": "Microsoft.Insights/components",
-      "kind": "web",
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2020-08-01",
+      "name": "[variables('logAnalyticsName')]",
       "location": "[resourceGroup().location]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/', variables('webSiteName'))]"
-      ],
       "tags": {
-        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]": "Resource"
+        "displayName": "Log Analytics",
+        "ProjectName": "[variables('webSiteName')]"
       },
       "properties": {
-        "applicationId": "[variables('webSiteName')]"
+        "sku": {
+          "name": "pergb2018"
+        },
+        "retentionInDays": 120,
+        "features": {
+          "searchVersion": 1,
+          "legacy": 0,
+          "enableLogAccessUsingOnlyResourcePermissions": true
+        }
       }
     }
   ]
