@@ -49,11 +49,11 @@ stages:
         npm run test:cover --if-present
       displayName: 'test coverage'
 
-    - task: PublishTestResults@2
+    - task: PublishCodeCoverageResults@2
       displayName: 'Publish test coverage report'
       condition: succeededOrFailed()
       inputs:
-        testResultsFiles: 'coverage/jest-junit/junit.xml'
+        summaryFileLocation: 'coverage/cobertura-coverage.xml'
 
     - task: PublishHtmlReport@1
       displayName: 'Publish tests html report'
