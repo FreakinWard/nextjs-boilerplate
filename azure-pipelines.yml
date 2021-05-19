@@ -49,7 +49,7 @@ stages:
         npm run test:cover --if-present
       displayName: 'test coverage'
 
-    - task: PublishCodeCoverageResults@2
+    - task: PublishCodeCoverageResults@1
       displayName: 'Publish test coverage report'
       condition: succeededOrFailed()
       inputs:
