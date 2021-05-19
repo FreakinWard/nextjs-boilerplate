@@ -51,65 +51,67 @@
     "webSiteName": "[concat('Website-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
     "appInsightsName": "[concat('AppInsights-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
     "logAnalyticsName": "[concat('LogAnalytics-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
-    "linuxFxVersion": "NODE|14-lts"
+    "linuxFxVersion": "NODE|14-lts",
+    "skuTier": "PremiumV2"
   },
   "resources": [
     {
-      "apiVersion": "2018-11-01",
       "name": "[variables('webSiteName')]",
       "type": "Microsoft.Web/sites",
-      "location": "[resourceGroup().location]",
+      "kind": "linux",
+      "properties": {
+        "siteConfig": {
+          "appSettings": [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference('microsoft.insights/components/AppMonitoredSite', '2015-05-01').InstrumentationKey]"
+            },
+            {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference('microsoft.insights/components/AppMonitoredSite', '2015-05-01').ConnectionString]"
+            },
+            {
+              "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+              "value": "~2"
+            }
+          ]
+        },
+        "name": "[variables('webSiteName')]",
+        "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
+        "clientAffinityEnabled": false
+      },
       "dependsOn": [
         "[concat('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
         "microsoft.insights/components/AppMonitoredSite"
       ],
-      "kind": "app,linux",
-      "properties": {
-        "name": "[variables('webSiteName')]",
-        "siteConfig": {
-          "appSettings": [
-            {
-              "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
-              "value": "~3"
-            },
-            {
-              "name": "XDT_MicrosoftApplicationInsights_Mode",
-              "value": "default"
-            }
-          ],
-          "linuxFxVersion": "[variables('linuxFxVersion')]",
-          "alwaysOn": false
-        },
-        "serverFarmId": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
-        "clientAffinityEnabled": false
-      }
+      "apiVersion": "2016-03-01",
+      "location": "[resourceGroup().location]"
     },
     {
-      "type": "Microsoft.Web/serverfarms",
-      "apiVersion": "2018-02-01",
+      "apiVersion": "2016-09-01",
       "name": "[variables('hostingPlanName')]",
+      "type": "Microsoft.Web/serverfarms",
       "location": "[resourceGroup().location]",
-      "sku": {
-        "name": "[parameters('skuName')]",
-        "capacity": "[parameters('skuCapacity')]"
-      },
       "kind": "linux",
-      "tags": {},
       "properties": {
         "name": "[variables('hostingPlanName')]",
-        "reserved": true
+        "workerSizeId": 1,
+        "numberOfWorkers": "1"
+      },
+      "sku": {
+        "Tier": "[variables('skuTier')]",
+        "Name": "[parameters('skuName')]"
       }
     },
-
     {
       "apiVersion": "2015-05-01",
       "name": "AppMonitoredSite",
       "type": "microsoft.insights/components",
       "location": "[resourceGroup().location]",
       "properties": {
-        "applicationId": "[variables('appInsightsName')]",
+        "ApplicationId": "[variables('webSiteName')]",
         "Request_Source": "IbizaWebAppExtensionCreate"
       }
-    },
+    }
   ]
 }
