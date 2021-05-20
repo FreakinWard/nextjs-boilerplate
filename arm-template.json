@@ -46,9 +46,9 @@
     }
   },
   "variables": {
-    "hostingPlanName": "[concat('HostingPlan-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
-    "webSiteName": "[concat('Website-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
-    "appInsightsName": "[concat('AppInsights-', parameters('appNamePrefix'), uniqueString(resourceGroup().id))]",
+    "hostingPlanName": "[concat('HostingPlan-', parameters('appNamePrefix'))]",
+    "webSiteName": "[concat('App-', parameters('appNamePrefix'))]",
+    "appInsightsName": "[concat('AppInsights-', parameters('appNamePrefix'))]",
     "linuxFxVersion": "NODE|14-lts",
     "appStartCommand": "npm run start"
   },
