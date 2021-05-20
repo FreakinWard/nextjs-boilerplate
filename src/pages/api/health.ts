@@ -8,7 +8,7 @@ interface Health {
 }
 
 export default async (req: NextApiRequest, res: NextApiResponse<Health>) => {
-  const healthData = { version: packageJson.version, status: 'ok' };
+  const healthData = { name: packageJson.name, version: packageJson.version, status: 'ok' };
 
   res.status(200).json(healthData);
 };
