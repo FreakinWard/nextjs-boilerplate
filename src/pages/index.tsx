@@ -13,6 +13,7 @@ interface Props {
   };
 }
 
+/* istanbul ignore next: unreachable by jest as its rendered server-side */
 export async function getStaticProps(): Promise<Props> {
   const posts = await fetchPosts();
 
@@ -39,8 +40,20 @@ export default function Home({ posts }: InferGetStaticPropsType<typeof getStatic
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <Posts title="Server render" posts={posts} />
-        <Posts title="Client render" posts={clientPosts} />
+        <div className={styles.grid}>
+          <div className={styles.card}>
+            <Posts title="Server render" posts={posts} />
+          </div>
+
+          <div className={styles.card}>
+            <Posts title="Client render" posts={clientPosts} />
+          </div>
+
+          <a href="/health" className={styles.card}>
+            <h2>Health Check &rarr;</h2>
+            <p>Access application health data</p>
+          </a>
+        </div>
 
         <p className={styles.description}>
           Get started by editing <code className={styles.code}>pages/index.js</code>
