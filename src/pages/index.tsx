@@ -13,6 +13,7 @@ interface Props {
   };
 }
 
+/* istanbul ignore next: unreachable by jest as its rendered server-side */
 export async function getStaticProps(): Promise<Props> {
   const posts = await fetchPosts();
 
