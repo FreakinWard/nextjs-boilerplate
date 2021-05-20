@@ -11,10 +11,10 @@ variables:
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
 
   # Web app name
-  webAppName: 'nextjs-deployment-example'
+  webAppName: 'App-nextjs-boilerplate'
 
   # Environment name
-  environmentName: 'nextjs-deployment-example'
+  environmentName: 'App-nextjs-boilerplate'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'

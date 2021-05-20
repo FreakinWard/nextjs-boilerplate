@@ -1,0 +1,120 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appNamePrefix": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "node-linux"
+    },
+    "skuName": {
+      "type": "string",
+      "defaultValue": "P1V2",
+      "allowedValues": [
+        "D1",
+        "F1",
+        "B1",
+        "B2",
+        "B3",
+        "S1",
+        "S2",
+        "S3",
+        "P1",
+        "P2",
+        "P3",
+        "P1V2",
+        "P2V2",
+        "P3V2",
+        "I1",
+        "I2",
+        "I3",
+        "Y1",
+        "EP1",
+        "EP2",
+        "EP3"
+      ],
+      "metadata": {
+        "description": "Describes plan's pricing tier and capacity. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
+      }
+    },
+    "skuTier": {
+      "type": "string",
+      "defaultValue": "PremiumV2",
+      "metadata": {
+        "description": "Sku-tier. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
+      }
+    }
+  },
+  "variables": {
+    "hostingPlanName": "[concat('HostingPlan-', parameters('appNamePrefix'))]",
+    "webSiteName": "[concat('App-', parameters('appNamePrefix'))]",
+    "appInsightsName": "[concat('AppInsights-', parameters('appNamePrefix'))]",
+    "linuxFxVersion": "NODE|14-lts",
+    "appStartCommand": "npm run start"
+  },
+  "resources": [
+    {
+      "apiVersion": "2016-08-01",
+      "name": "[variables('webSiteName')]",
+      "type": "Microsoft.Web/sites",
+      "location": "[resourceGroup().location]",
+      "kind": "linux",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
+        "[resourceId('microsoft.insights/components/', variables('appInsightsName'))]"
+      ],
+      "properties": {
+        "name": "[variables('webSiteName')]",
+        "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
+        "clientAffinityEnabled": false,
+        "siteConfig": {
+          "linuxFxVersion": "[variables('linuxFxVersion')]",
+          "alwaysOn": false,
+          "appCommandLine": "[variables('appStartCommand')]",
+          "appSettings": [
+            {
+              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+              "value": "[reference(concat('microsoft.insights/components/', variables('appInsightsName')), '2015-05-01').InstrumentationKey]"
+            },
+            {
+              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+              "value": "[reference(concat('microsoft.insights/components/', variables('appInsightsName')), '2015-05-01').InstrumentationKey]"
+            },
+            {
+              "name": "ApplicationInsightsAgent_EXTENSION_VERSION",
+              "value": "~3"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2016-09-01",
+      "name": "[variables('hostingPlanName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "Tier": "[parameters('skuTier')]",
+        "Name": "[parameters('skuName')]"
+      },
+      "kind": "linux",
+      "properties": {
+        "name": "[variables('hostingPlanName')]",
+        "reserved": true,
+        "workerSizeId": 1,
+        "numberOfWorkers": "1"
+      }
+    },
+    {
+      "type": "microsoft.insights/components",
+      "apiVersion": "2015-05-01",
+      "name": "[variables('appInsightsName')]",
+      "location": "[resourceGroup().location]",
+      "kind": "web",
+      "properties": {
+        "ApplicationId": "[variables('webSiteName')]",
+        "Application_Type": "web"
+      }
+    }
+  ]
+}
