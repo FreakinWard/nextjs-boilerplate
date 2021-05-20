@@ -9,7 +9,7 @@
     },
     "skuName": {
       "type": "string",
-      "defaultValue": "P1V2",
+      "defaultValue": "S1",
       "allowedValues": [
         "D1",
         "F1",
@@ -39,7 +39,7 @@
     },
     "skuTier": {
       "type": "string",
-      "defaultValue": "PremiumV2",
+      "defaultValue": "Standard",
       "metadata": {
         "description": "Sku-tier. Check details at https://azure.microsoft.com/en-us/pricing/details/app-service/"
       }
