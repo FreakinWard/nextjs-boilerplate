@@ -32,12 +32,6 @@ stages:
       vmImage: $(vmImageName)
 
     steps:
-    - script: |
-        npx print-env AGENT
-        npx print-env BUILD
-        npx print-env SYSTEM
-      displayName: Pipeline Environment
-
     - task: NodeTool@0
       inputs:
         versionSpec: '10.x'
@@ -46,6 +40,12 @@ stages:
     - script: |
         npm install
       displayName: 'install & build'
+
+    - script: |
+        npx print-env AGENT
+        npx print-env BUILD
+        npx print-env SYSTEM
+      displayName: Pipeline Environment
 
     - script: |
         npm run lint --if-present
