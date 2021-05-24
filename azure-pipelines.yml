@@ -22,6 +22,9 @@ variables:
   # Is running on main branch
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
+  sourceSlot: 'staging'
+  resourceGroup: 'nextjs-boilerplate'
+
 stages:
 - stage: Build
   displayName: Build stage
@@ -99,7 +102,16 @@ stages:
               azureSubscription: $(azureSubscription)
               appType: webAppLinux
               appName: $(webAppName)
-              runtimeStack: 'NODE|10.10'
+              runtimeStack: 'NODE|14-lts'
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
               startUpCommand: 'npm run start'
-              slotName: staging
+              slotName: $(sourceSlot)
+
+          - task: AzureAppServiceManage@0
+            displayName: 'Swap Slots'
+            inputs:
+              azureSubscription: $(azureSubscription)
+              Action: 'Swap Slots'
+              WebAppName: $(webAppName)
+              ResourceGroupName: $(resourceGroup)
+              SourceSlot: $(sourceSlot)
