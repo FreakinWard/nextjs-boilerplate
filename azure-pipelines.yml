@@ -92,6 +92,8 @@ stages:
         command: buildAndPush
         repository: $(imageRepository)
         containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          latest
 
 #- stage: Deploy
 #  displayName: Deploy stage
