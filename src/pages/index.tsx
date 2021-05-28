@@ -51,7 +51,7 @@ export default function Home({ posts }: InferGetStaticPropsType<typeof getStatic
 
           <a href="/health" className={styles.card}>
             <h2>Health Check &rarr;</h2>
-            <p>Access application health data</p>
+            <p>test - Access application health data</p>
           </a>
         </div>
 
