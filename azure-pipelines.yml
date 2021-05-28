@@ -97,7 +97,7 @@ stages:
         tags: |
           $(tagLatest)
 
-    - task: AzureWebApp@1
+    - task: AzureWebAppContainer@1
       displayName: 'Deploy container'
       inputs:
         azureSubscription: $(azureSubscription)
