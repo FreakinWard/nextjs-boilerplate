@@ -102,8 +102,7 @@ stages:
       inputs:
         azureSubscription: $(azureSubscription)
         appName: $(webAppName)
-        slotName: $(sourceSlot)
-        containers: $(containerRegistry)/$(imageRepository):$(tagLatest)
+        imageName: $(containerRegistry)/$(imageRepository):$(tagLatest)
 
 #- stage: Deploy
 #  displayName: Deploy stage
