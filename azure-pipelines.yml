@@ -24,7 +24,7 @@ variables:
   vmImageName: 'ubuntu-latest'
 
   # Is running on main branch
-  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isMain: true # $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
   sourceSlot: 'staging'
   resourceGroup: 'nextjs-boilerplate'
