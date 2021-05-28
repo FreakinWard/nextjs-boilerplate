@@ -13,6 +13,10 @@ variables:
   # Web app name
   webAppName: 'App-nextjs-boilerplate'
 
+  # Container
+  imageRepository: 'nextjsboilerplate'
+  dockerRegistryServiceConnection: 'nextjscoilerplatecontainer.azurecr.io'
+
   # Environment name
   environmentName: 'App-nextjs-boilerplate'
 
@@ -82,36 +86,43 @@ stages:
     - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
-  condition: and(succeeded(), eq(variables.isMain, true))
-  jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: $(environmentName)
-    pool:
-      vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzureWebApp@1
-            displayName: 'Azure Web App Deploy: nextjs-deployment-example'
-            inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              appName: $(webAppName)
-              runtimeStack: 'NODE|14-lts'
-              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-              startUpCommand: 'npm run start'
-              slotName: $(sourceSlot)
+- task: Docker@2
+    displayName: Build and push an image to container registry
+    inputs:
+      command: buildAndPush
+      repository: $(imageRepository)
+      containerRegistry: $(dockerRegistryServiceConnection)
 
-          - task: AzureAppServiceManage@0
-            displayName: 'Swap Slots'
-            inputs:
-              azureSubscription: $(azureSubscription)
-              Action: 'Swap Slots'
-              WebAppName: $(webAppName)
-              ResourceGroupName: $(resourceGroup)
-              SourceSlot: $(sourceSlot)
+#- stage: Deploy
+#  displayName: Deploy stage
+#  dependsOn: Build
+#  condition: and(succeeded(), eq(variables.isMain, true))
+#  jobs:
+#  - deployment: Deploy
+#    displayName: Deploy
+#    environment: $(environmentName)
+#    pool:
+#      vmImage: $(vmImageName)
+#    strategy:
+#      runOnce:
+#        deploy:
+#          steps:
+#          - task: AzureWebApp@1
+#            displayName: 'Azure Web App Deploy: nextjs-deployment-example'
+#            inputs:
+#              azureSubscription: $(azureSubscription)
+#              appType: webAppLinux
+#              appName: $(webAppName)
+#              runtimeStack: 'NODE|14-lts'
+#              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+#              startUpCommand: 'npm run start'
+#              slotName: $(sourceSlot)
+#
+#          - task: AzureAppServiceManage@0
+#            displayName: 'Swap Slots'
+#            inputs:
+#              azureSubscription: $(azureSubscription)
+#              Action: 'Swap Slots'
+#              WebAppName: $(webAppName)
+#              ResourceGroupName: $(resourceGroup)
+#              SourceSlot: $(sourceSlot)
