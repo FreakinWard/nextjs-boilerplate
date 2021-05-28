@@ -14,8 +14,10 @@ variables:
   webAppName: 'App-nextjs-boilerplate'
 
   # Container
+  containerRepository: 'nextjscoilerplatecontainer.azurecr.io'
   imageRepository: 'nextjsboilerplate'
   dockerRegistryServiceConnection: 'nextjs-container-registry'
+  tagLatest: 'latest'
 
   # Environment name
   environmentName: 'App-nextjs-boilerplate'
@@ -44,35 +46,35 @@ stages:
         versionSpec: '10.x'
       displayName: 'Install Node.js'
 
-    - script: |
-        npm install
-      displayName: 'install & build'
-
-    - script: |
-        npx print-env AGENT
-        npx print-env BUILD
-        npx print-env SYSTEM
-      displayName: Pipeline Environment
-
-    - script: |
-        npm run lint --if-present
-      displayName: 'lint'
-
-    - script: |
-        npm run test:cover --if-present
-      displayName: 'test coverage'
-
-    - task: PublishTestResults@2
-      displayName: 'Publish test coverage report'
-      condition: succeededOrFailed()
-      inputs:
-        testResultsFiles: 'coverage/jest-junit/junit.xml'
-
-    - task: PublishHtmlReport@1
-      displayName: 'Publish tests html report'
-      condition: succeededOrFailed()
-      inputs:
-        reportDir: 'html-report/report.html'
+#    - script: |
+#        npm install
+#      displayName: 'install & build'
+#
+#    - script: |
+#        npx print-env AGENT
+#        npx print-env BUILD
+#        npx print-env SYSTEM
+#      displayName: Pipeline Environment
+#
+#    - script: |
+#        npm run lint --if-present
+#      displayName: 'lint'
+#
+#    - script: |
+#        npm run test:cover --if-present
+#      displayName: 'test coverage'
+#
+#    - task: PublishTestResults@2
+#      displayName: 'Publish test coverage report'
+#      condition: succeededOrFailed()
+#      inputs:
+#        testResultsFiles: 'coverage/jest-junit/junit.xml'
+#
+#    - task: PublishHtmlReport@1
+#      displayName: 'Publish tests html report'
+#      condition: succeededOrFailed()
+#      inputs:
+#        reportDir: 'html-report/report.html'
 
 #    - task: ArchiveFiles@2
 #      displayName: 'Archive files'
@@ -93,7 +95,15 @@ stages:
         repository: $(imageRepository)
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
-          latest
+          $(tagLatest)
+
+    - task: AzureWebApp@1
+      displayName: 'Deploy container'
+      inputs:
+        azureSubscription: $(azureSubscription)
+        appName: $(webAppName)
+        slotName: $(sourceSlot)
+        containers: $(containerRegistry)/$(imageRepository):$(tagLatest)
 
 #- stage: Deploy
 #  displayName: Deploy stage
