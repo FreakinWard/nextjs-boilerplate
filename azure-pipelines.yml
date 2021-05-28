@@ -24,7 +24,7 @@ variables:
   vmImageName: 'ubuntu-latest'
 
   # Is running on main branch
-  isMain: true # $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
   sourceSlot: 'staging'
   resourceGroup: 'nextjs-boilerplate'
@@ -86,12 +86,12 @@ stages:
     - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
-- task: Docker@2
-    displayName: Build and push an image to container registry
-    inputs:
-      command: buildAndPush
-      repository: $(imageRepository)
-      containerRegistry: $(dockerRegistryServiceConnection)
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        containerRegistry: $(dockerRegistryServiceConnection)
 
 #- stage: Deploy
 #  displayName: Deploy stage
