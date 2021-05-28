@@ -74,17 +74,17 @@ stages:
       inputs:
         reportDir: 'html-report/report.html'
 
-    - task: ArchiveFiles@2
-      displayName: 'Archive files'
-      inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-        includeRootFolder: false
-        archiveType: zip
-        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-        replaceExistingArchive: true
-
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      artifact: drop
+#    - task: ArchiveFiles@2
+#      displayName: 'Archive files'
+#      inputs:
+#        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+#        includeRootFolder: false
+#        archiveType: zip
+#        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+#        replaceExistingArchive: true
+#
+#    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+#      artifact: drop
 
     - task: Docker@2
       displayName: Build and push an image to container registry
