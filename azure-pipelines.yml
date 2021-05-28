@@ -15,7 +15,7 @@ variables:
 
   # Container
   imageRepository: 'nextjsboilerplate'
-  dockerRegistryServiceConnection: 'nextjscoilerplatecontainer.azurecr.io'
+  dockerRegistryServiceConnection: 'nextjs-container-registry'
 
   # Environment name
   environmentName: 'App-nextjs-boilerplate'
