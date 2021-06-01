@@ -11,7 +11,7 @@ variables:
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
 
   # Web app name
-  webAppName: 'App-nextjs-boilerplate'
+  webAppName: 'App-nextjs-boilerplate-container'
 
   # Container
   containerRepository: 'nextjscoilerplatecontainer.azurecr.io'
