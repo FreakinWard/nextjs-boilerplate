@@ -104,6 +104,8 @@ stages:
         appName: $(webAppName)
         imageName: $(containerRegistry)/$(imageRepository):$(tagLatest)
         slotName: $(sourceSlot)
+        deployToSlotOrASE: true
+        ResourceGroupName: $(resourceGroup)
 
 #- stage: Deploy
 #  displayName: Deploy stage
