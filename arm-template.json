@@ -58,7 +58,7 @@
       "name": "[variables('webSiteName')]",
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
-      "kind": "linux",
+      "kind": "linux,container",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
         "[resourceId('microsoft.insights/components/', variables('appInsightsName'))]"
@@ -121,12 +121,16 @@
       "apiVersion": "2018-02-01",
       "name": "[concat(variables('webSiteName'), '/staging')]",
       "location": "[resourceGroup().location]",
-      "kind": "app",
+      "kind": "app,linux,container",
       "dependsOn": [
         "[resourceId('Microsoft.Web/sites/', variables('webSiteName'))]"
       ],
       "properties": {
         "enabled": true,
+        "reserved": true,
+        "linuxFxVersion": "[variables('linuxFxVersion')]",
+        "alwaysOn": false,
+        "appCommandLine": "npm run start",
         "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
       }
     }

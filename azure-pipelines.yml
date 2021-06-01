@@ -103,7 +103,7 @@ stages:
         azureSubscription: $(azureSubscription)
         appName: $(webAppName)
         imageName: $(containerRegistry)/$(imageRepository):$(tagLatest)
-#        slotName: $(sourceSlot)
+        slotName: $(sourceSlot)
         deployToSlotOrASE: true
         ResourceGroupName: $(resourceGroup)
 
