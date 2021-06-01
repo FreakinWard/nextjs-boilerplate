@@ -5,7 +5,7 @@
     "appNamePrefix": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "nextjs-boilerplate-container"
+      "defaultValue": "app-nextjs-boilerplate-container"
     },
     "skuName": {
       "type": "string",
@@ -58,7 +58,7 @@
       "name": "[variables('webSiteName')]",
       "type": "Microsoft.Web/sites",
       "location": "[resourceGroup().location]",
-      "kind": "linux,container",
+      "kind": "app,linux,container",
       "dependsOn": [
         "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
         "[resourceId('microsoft.insights/components/', variables('appInsightsName'))]"
@@ -67,6 +67,8 @@
         "name": "[variables('webSiteName')]",
         "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
         "clientAffinityEnabled": false,
+        "enabled": true,
+        "reserved": true,
         "siteConfig": {
           "linuxFxVersion": "[variables('linuxFxVersion')]",
           "alwaysOn": false,
