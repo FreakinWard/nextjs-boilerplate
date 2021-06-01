@@ -103,8 +103,6 @@ stages:
         azureSubscription: $(azureSubscription)
         appName: $(webAppName)
         imageName: $(containerRegistry)/$(imageRepository):$(tagLatest)
-        deployToSlotOrASE: true
-        ResourceGroupName: $(resourceGroup)
 
 #- stage: Deploy
 #  displayName: Deploy stage
