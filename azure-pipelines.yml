@@ -96,6 +96,7 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tagLatest)
+          $(Build.BuildNumber)
 
     - task: AzureWebAppContainer@1
       displayName: 'Deploy container'
