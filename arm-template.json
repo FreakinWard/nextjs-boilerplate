@@ -5,7 +5,7 @@
     "appNamePrefix": {
       "type": "string",
       "minLength": 1,
-      "defaultValue": "app-nextjs-boilerplate-container"
+      "defaultValue": "nextjs-boilerplate-container"
     },
     "skuName": {
       "type": "string",
