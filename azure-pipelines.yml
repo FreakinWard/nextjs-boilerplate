@@ -11,16 +11,16 @@ variables:
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
 
   # Web app name
-  webAppName: 'App-nextjs-boilerplate-container'
+  webAppName: 'App-nextjs-boilerplate-container-arm'
 
   # Container
   containerRepository: 'nextjscoilerplatecontainer.azurecr.io'
-  imageRepository: 'nextjsboilerplate'
+  imageRepository: 'nextjsboilerplate-arm'
   dockerRegistryServiceConnection: 'nextjs-container-registry'
   tagLatest: 'latest'
 
   # Environment name
-  environmentName: 'App-nextjs-boilerplate'
+  environmentName: 'App-nextjs-boilerplate-arm'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -29,7 +29,7 @@ variables:
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
 
   sourceSlot: 'staging'
-  resourceGroup: 'nextjs-boilerplate'
+  resourceGroup: 'nextjs-boilerplate-arm'
 
 stages:
 - stage: Build
