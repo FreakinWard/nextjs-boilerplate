@@ -32,7 +32,7 @@ variables:
   resourceGroup: 'nextjs-boilerplate-arm'
 
 stages:
-- stage: Build and Test
+- stage: Build_Test
   displayName: Build stage
   jobs:
   - job: Build
