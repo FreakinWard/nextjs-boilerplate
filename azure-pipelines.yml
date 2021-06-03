@@ -60,10 +60,14 @@ stages:
         tags: |
           $(tagLatest)
           $(Build.BuildNumber)
-  - job: Deploy_Container
+
+- stage: Dev_Deploy
+  dependsOn: Dockerize
+  jobs:
+  - job: deployDev
     steps:
     - task: AzureWebAppContainer@1
-      displayName: 'Dev deploy'
+      displayName: 'Deploy Dev'
       inputs:
         azureSubscription: $(azureSubscription)
         appName: $(webAppName)
