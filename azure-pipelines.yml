@@ -50,9 +50,10 @@ stages:
   displayName: Dockerize
   jobs:
   - job: Build_And_Push_Container
+    displayName: Deploy container
     steps:
     - task: Docker@2
-      displayName: Build and push to registry
+      displayName: Deploy container
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
@@ -65,7 +66,8 @@ stages:
   displayName: Deploy Dev
   dependsOn: Dockerize
   jobs:
-  - job: deployDev
+  - job: productionSlot
+    displayName: 'Production Slot'
     steps:
     - task: AzureWebAppContainer@1
       displayName: 'Production Slot'
@@ -97,7 +99,7 @@ stages:
 #              runtimeStack: 'NODE|14-lts'
 #              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
 #              startUpCommand: 'npm run start'
-#              slotName: $(sourceSlot)
+#              slotName: $(stagingSlot)
 #
 #          - task: AzureAppServiceManage@0
 #            displayName: 'Swap Slots'
@@ -106,4 +108,4 @@ stages:
 #              Action: 'Swap Slots'
 #              WebAppName: $(webAppName)
 #              ResourceGroupName: $(resourceGroup)
-#              SourceSlot: $(sourceSlot)
+#              SourceSlot: $(stagingSlot)
