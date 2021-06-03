@@ -33,7 +33,7 @@ variables:
 
 stages:
 - stage: Build_Test
-  displayName: Build stage
+  displayName: Build and Test
   jobs:
   - job: Build_App
     displayName: Build
@@ -52,7 +52,7 @@ stages:
   - job: Build_And_Push_Container
     steps:
     - task: Docker@2
-      displayName: Build and push an image to container registry
+      displayName: Build and push to registry
       inputs:
         command: buildAndPush
         repository: $(imageRepository)
@@ -62,12 +62,13 @@ stages:
           $(Build.BuildNumber)
 
 - stage: Dev_Deploy
+  displayName: Deploy Dev
   dependsOn: Dockerize
   jobs:
   - job: deployDev
     steps:
     - task: AzureWebAppContainer@1
-      displayName: 'Deploy Dev'
+      displayName: 'Production Slot'
       inputs:
         azureSubscription: $(azureSubscription)
         appName: $(webAppName)
