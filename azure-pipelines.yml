@@ -49,22 +49,23 @@ stages:
 - stage: Dockerize
   displayName: Dockerize
   jobs:
-  - task: Docker@2
-    displayName: Build and push an image to container registry
-    inputs:
-      command: buildAndPush
-      repository: $(imageRepository)
-      containerRegistry: $(dockerRegistryServiceConnection)
-      tags: |
-        $(tagLatest)
-        $(Build.BuildNumber)
-
-  - task: AzureWebAppContainer@1
-    displayName: 'Dev deploy'
-    inputs:
-      azureSubscription: $(azureSubscription)
-      appName: $(webAppName)
-      imageName: $(containerRepository)/$(imageRepository):$(tagLatest)
+  - job: Build & push container
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tagLatest)
+          $(Build.BuildNumber)
+    - job: Deploy new container
+      - task: AzureWebAppContainer@1
+        displayName: 'Dev deploy'
+        inputs:
+          azureSubscription: $(azureSubscription)
+          appName: $(webAppName)
+          imageName: $(containerRepository)/$(imageRepository):$(tagLatest)
 
 #- stage: Deploy
 #  displayName: Deploy stage
