@@ -32,7 +32,7 @@ variables:
   resourceGroup: 'nextjs-boilerplate-arm'
 
 stages:
-- stage: Build
+- stage: Build & Test
   displayName: Build stage
   jobs:
   - job: Build
@@ -46,64 +46,25 @@ stages:
         versionSpec: '10.x'
       displayName: 'Install Node.js'
 
-#    - script: |
-#        npm install
-#      displayName: 'install & build'
-#
-#    - script: |
-#        npx print-env AGENT
-#        npx print-env BUILD
-#        npx print-env SYSTEM
-#      displayName: Pipeline Environment
-#
-#    - script: |
-#        npm run lint --if-present
-#      displayName: 'lint'
-#
-#    - script: |
-#        npm run test:cover --if-present
-#      displayName: 'test coverage'
-#
-#    - task: PublishTestResults@2
-#      displayName: 'Publish test coverage report'
-#      condition: succeededOrFailed()
-#      inputs:
-#        testResultsFiles: 'coverage/jest-junit/junit.xml'
-#
-#    - task: PublishHtmlReport@1
-#      displayName: 'Publish tests html report'
-#      condition: succeededOrFailed()
-#      inputs:
-#        reportDir: 'html-report/report.html'
+- stage: Dockerize
+  displayName: Dockerize
+  jobs:
+  - task: Docker@2
+    displayName: Build and push an image to container registry
+    inputs:
+      command: buildAndPush
+      repository: $(imageRepository)
+      containerRegistry: $(dockerRegistryServiceConnection)
+      tags: |
+        $(tagLatest)
+        $(Build.BuildNumber)
 
-#    - task: ArchiveFiles@2
-#      displayName: 'Archive files'
-#      inputs:
-#        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-#        includeRootFolder: false
-#        archiveType: zip
-#        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-#        replaceExistingArchive: true
-#
-#    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-#      artifact: drop
-
-    - task: Docker@2
-      displayName: Build and push an image to container registry
-      inputs:
-        command: buildAndPush
-        repository: $(imageRepository)
-        containerRegistry: $(dockerRegistryServiceConnection)
-        tags: |
-          $(tagLatest)
-          $(Build.BuildNumber)
-
-    - task: AzureWebAppContainer@1
-      displayName: 'Deploy container'
-      inputs:
-        azureSubscription: $(azureSubscription)
-        appName: $(webAppName)
-        imageName: $(containerRepository)/$(imageRepository):$(tagLatest)
+  - task: AzureWebAppContainer@1
+    displayName: 'Dev deploy'
+    inputs:
+      azureSubscription: $(azureSubscription)
+      appName: $(webAppName)
+      imageName: $(containerRepository)/$(imageRepository):$(tagLatest)
 
 #- stage: Deploy
 #  displayName: Deploy stage
