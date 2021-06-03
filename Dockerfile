@@ -1,21 +1,21 @@
-FROM node:12
+FROM node:12-alpine as base
+WORKDIR /base
+COPY package*.json ./
+COPY . .
+RUN npm ci
+RUN npm run build
 
-#ENV PORT 3000
+FROM base as build
+WORKDIR /build
+RUN npm install -g next
+COPY --from=base /base/package*.json ./
+COPY --from=base /base/.next ./.next
+COPY --from=base /base/public ./public
 
-# Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+FROM nginx:stable-alpine as production
+WORKDIR /app
+COPY --from=build /build ./
 
-# Installing dependencies
-COPY package*.json /usr/src/app/
-RUN npm install
-
-# Copying source files
-COPY . /usr/src/app
-
-# Building app
-#RUN npm run build
 EXPOSE 3000
 
-# Running the app
-CMD "npm" "run" "start"
+CMD npm run start
