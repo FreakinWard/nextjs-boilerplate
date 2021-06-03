@@ -59,13 +59,13 @@ stages:
         tags: |
           $(tagLatest)
           $(Build.BuildNumber)
-    - job: Deploy new container
-      - task: AzureWebAppContainer@1
-        displayName: 'Dev deploy'
-        inputs:
-          azureSubscription: $(azureSubscription)
-          appName: $(webAppName)
-          imageName: $(containerRepository)/$(imageRepository):$(tagLatest)
+  - job: Deploy new container
+    - task: AzureWebAppContainer@1
+      displayName: 'Dev deploy'
+      inputs:
+        azureSubscription: $(azureSubscription)
+        appName: $(webAppName)
+        imageName: $(containerRepository)/$(imageRepository):$(tagLatest)
 
 #- stage: Deploy
 #  displayName: Deploy stage
