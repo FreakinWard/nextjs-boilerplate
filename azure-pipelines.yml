@@ -35,7 +35,7 @@ stages:
 - stage: Build_Test
   displayName: Build stage
   jobs:
-  - job: Build
+  - job: Build_App
     displayName: Build
     pool:
       vmImage: $(vmImageName)
@@ -49,7 +49,7 @@ stages:
 - stage: Dockerize
   displayName: Dockerize
   jobs:
-  - job: Build and push container
+  - job: Build_And_Push_Container
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
@@ -60,7 +60,7 @@ stages:
         tags: |
           $(tagLatest)
           $(Build.BuildNumber)
-  - job: Deploy new container
+  - job: Deploy_Container
     steps:
     - task: AzureWebAppContainer@1
       displayName: 'Dev deploy'
