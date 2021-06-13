@@ -105,13 +105,13 @@ stages:
               runtimeStack: 'NODE|14-lts'
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
               startUpCommand: 'npm run start'
-              slotName: $(sourceSlot)
-
-          - task: AzureAppServiceManage@0
-            displayName: 'Swap Slots'
-            inputs:
-              azureSubscription: $(azureSubscription)
-              Action: 'Swap Slots'
-              WebAppName: $(webAppName)
-              ResourceGroupName: $(resourceGroup)
-              SourceSlot: $(sourceSlot)
+#              slotName: $(sourceSlot)
+#
+#          - task: AzureAppServiceManage@0
+#            displayName: 'Swap Slots'
+#            inputs:
+#              azureSubscription: $(azureSubscription)
+#              Action: 'Swap Slots'
+#              WebAppName: $(webAppName)
+#              ResourceGroupName: $(resourceGroup)
+#              SourceSlot: $(sourceSlot)
