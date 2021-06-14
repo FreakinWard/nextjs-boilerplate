@@ -61,6 +61,7 @@ stages:
       inputs:
         failIfCoverageEmpty: true
         summaryFileLocation: 'coverage/cobertura-coverage.xml'
+        pathToSources: src/
 #        reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'
 
     - task: PublishHtmlReport@1
