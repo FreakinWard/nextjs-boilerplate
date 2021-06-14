@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const packageJson = require('./package.json');
+
 module.exports = {
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   setupFilesAfterEnv: ['./jest.setup.js'],
@@ -17,7 +20,7 @@ module.exports = {
         publicPath: './html-report',
         filename: 'report.html',
         expand: false,
-        pageTitle: 'nextjs-boilerplate',
+        pageTitle: packageJson.name,
       },
     ],
   ],
