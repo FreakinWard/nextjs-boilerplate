@@ -81,6 +81,10 @@ stages:
     - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
       artifact: drop
 
+    - upload: $(System.DefaultWorkingDirectory)
+      condition: succeededOrFailed()
+      artifact: drop-raw
+
 - stage: Deploy
   displayName: Deploy stage
   dependsOn: Build
