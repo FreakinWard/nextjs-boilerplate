@@ -23,12 +23,8 @@
     "@microsoft/applicationinsights-react-js": "^3.1.2",
     "@microsoft/applicationinsights-web": "^2.6.2",
     "@next/bundle-analyzer": "^10.2.0",
-    "@types/react": "^17.0.5",
-    "@typescript-eslint/eslint-plugin": "^4.22.1",
-    "@typescript-eslint/parser": "^4.22.1",
     "cross-env": "^7.0.3",
     "http": "0.0.1-security",
-    "msw": "^0.28.2",
     "next": "10.2.0",
     "pascalcase": "^1.0.0",
     "react": "17.0.2",
@@ -37,6 +33,10 @@
     "url": "^0.11.0"
   },
   "devDependencies": {
+    "msw": "^0.28.2",
+    "@types/react": "^17.0.5",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
     "@bahmutov/print-env": "^2.0.2",
     "@testing-library/dom": "^7.31.0",
     "@testing-library/jest-dom": "^5.12.0",
