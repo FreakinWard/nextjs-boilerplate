@@ -60,9 +60,8 @@ stages:
       condition: succeededOrFailed()
       inputs:
         failIfCoverageEmpty: true
-        summaryFileLocation: 'coverage/cobertura-coverage.xml'
-        pathToSources: src/
-#        reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'
+        codeCoverageTool: Cobertura
+        summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
 
     - task: PublishHtmlReport@1
       displayName: 'Publish tests html report'
