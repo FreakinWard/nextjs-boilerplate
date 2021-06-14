@@ -53,7 +53,8 @@ stages:
       displayName: 'Publish test coverage report'
       condition: succeededOrFailed()
       inputs:
-        summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
+        summaryFileLocation: '$(System.DefaultWorkingDirectory)/**/*coverage.xml'
+        reportDirectory: '$(System.DefaultWorkingDirectory)/**/coverage'
 
     - task: PublishHtmlReport@1
       displayName: 'Publish tests html report'
