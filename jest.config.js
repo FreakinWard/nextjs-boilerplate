@@ -16,7 +16,8 @@ module.exports = {
       {
         publicPath: './html-report',
         filename: 'report.html',
-        expand: true,
+        expand: false,
+        pageTitle: 'nextjs-boilerplate',
       },
     ],
   ],
