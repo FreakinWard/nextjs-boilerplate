@@ -19,5 +19,6 @@ module.exports = {
         expand: true,
       },
     ],
+    [['lcov', { projectRoot: '../' }], 'text-summary'],
   ],
 };
