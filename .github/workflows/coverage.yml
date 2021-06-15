@@ -1,4 +1,4 @@
-name: CI/CD
+name: Coverage
 
 on:
   workflow_dispatch:
