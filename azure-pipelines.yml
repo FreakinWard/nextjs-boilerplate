@@ -11,16 +11,19 @@ variables:
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
 
   # Web app name
-  webAppName: 'nextjs-deployment-example'
+  webAppName: 'App-nextjs-boilerplate'
 
   # Environment name
-  environmentName: 'nextjs-deployment-example'
+  environmentName: 'App-nextjs-boilerplate'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
   # Is running on main branch
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+
+  sourceSlot: 'staging'
+  resourceGroup: 'nextjs-boilerplate'
 
 stages:
 - stage: Build
@@ -42,11 +45,17 @@ stages:
       displayName: 'Install & Build'
 
     - script: |
+        npx print-env AGENT
+        npx print-env BUILD
+        npx print-env SYSTEM
+      displayName: Pipeline Environment
+
+    - script: |
         npm run lint --if-present
       displayName: 'Lint'
 
     - script: |
-        npm run test:cover --if-present
+        npm run test:ci --if-present
       displayName: 'Tests'
 
     - task: PublishTestResults@2
@@ -87,9 +96,9 @@ stages:
   dependsOn: Build
   condition: and(succeeded(), eq(variables.isMain, true))
   jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: $(environmentName)
+  - deployment: deployProduction
+    displayName: Deploy - Production
+    environment: Production
     pool:
       vmImage: $(vmImageName)
     strategy:
@@ -102,7 +111,7 @@ stages:
               azureSubscription: $(azureSubscription)
               appType: webAppLinux
               appName: $(webAppName)
-              runtimeStack: 'NODE|10.10'
+              runtimeStack: 'NODE|14-lts'
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
               startUpCommand: 'npm run start'
               appSettings: -PORT 8080

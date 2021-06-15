@@ -10,7 +10,7 @@ export default function Posts({ title, posts = [] }: Props) {
 
   return (
     <div>
-      <h3>{title}</h3>
+      <h2>{title}</h2>
       {posts.map((post: Post) => (
         <PostRecord key={post.id} post={post} />
       ))}
