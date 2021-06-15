@@ -12,7 +12,7 @@
     "lint:fix": "eslint --fix . -f table",
     "test": "jest",
     "test:open": "open html-report/report.html",
-    "test:cover": "jest --coverage",
+    "test:cover": "jest --coverage --coverageReporters=cobertura",
     "test:cover:open": "open coverage/lcov-report/index.html",
     "format": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}' --config prettier.config.js",
     "format:fix": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config prettier.config.js",

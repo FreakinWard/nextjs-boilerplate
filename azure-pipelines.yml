@@ -41,8 +41,8 @@ stages:
       displayName: 'Install Node.js'
 
     - script: |
-        npm install
-      displayName: 'install & build'
+        npm ci
+      displayName: 'Install & Build'
 
     - script: |
         npx print-env AGENT
@@ -52,26 +52,34 @@ stages:
 
     - script: |
         npm run lint --if-present
-      displayName: 'lint'
+      displayName: 'Lint'
 
     - script: |
         npm run test:cover --if-present
-      displayName: 'test coverage'
+      displayName: 'Tests'
 
     - task: PublishTestResults@2
-      displayName: 'Publish test coverage report'
+      displayName: 'Unit Test - Publish'
       condition: succeededOrFailed()
       inputs:
         testResultsFiles: 'coverage/jest-junit/junit.xml'
 
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Code Coverage - Publish'
+      condition: succeededOrFailed()
+      inputs:
+        failIfCoverageEmpty: true
+        codeCoverageTool: Cobertura
+        summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
+
     - task: PublishHtmlReport@1
-      displayName: 'Publish tests html report'
+      displayName: 'HTML Report - Publish'
       condition: succeededOrFailed()
       inputs:
         reportDir: 'html-report/report.html'
 
     - task: ArchiveFiles@2
-      displayName: 'Archive files'
+      displayName: 'Artifact - Archive'
       inputs:
         rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
         includeRootFolder: false
@@ -80,6 +88,7 @@ stages:
         replaceExistingArchive: true
 
     - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+      displayName: Artifact - Publish
       artifact: drop
 
 - stage: Deploy
@@ -97,7 +106,7 @@ stages:
         deploy:
           steps:
           - task: AzureWebApp@1
-            displayName: 'Azure Web App Deploy: nextjs-deployment-example'
+            displayName: 'Azure Web App Deploy'
             inputs:
               azureSubscription: $(azureSubscription)
               appType: webAppLinux
