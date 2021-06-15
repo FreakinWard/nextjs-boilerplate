@@ -55,7 +55,7 @@ stages:
       displayName: 'Lint'
 
     - script: |
-        npm run test:cover --if-present
+        npm run test:ci --if-present
       displayName: 'Tests'
 
     - task: PublishTestResults@2
