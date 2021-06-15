@@ -76,7 +76,7 @@ stages:
       displayName: 'HTML Report - Publish'
       condition: succeededOrFailed()
       inputs:
-        reportDir: 'html-report/report.html'
+        reportDir: 'coverage/html-report.html'
 
     - task: ArchiveFiles@2
       displayName: 'Artifact - Archive'
