@@ -96,9 +96,9 @@ stages:
   dependsOn: Build
   condition: and(succeeded(), eq(variables.isMain, true))
   jobs:
-  - deployment: Deploy
-    displayName: Deploy
-    environment: $(environmentName)
+  - deployment: deployProduction
+    displayName: Deploy - Production
+    environment: Production
     pool:
       vmImage: $(vmImageName)
     strategy:
