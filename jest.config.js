@@ -25,11 +25,12 @@ module.exports = {
     [
       'jest-html-reporters',
       {
-        publicPath: './html-report',
-        filename: 'report.html',
+        publicPath: './coverage',
+        filename: 'html-report.html',
         expand: false,
         pageTitle: packageJson.name,
       },
     ],
   ],
+  coverageReporters: ['text', 'cobertura'],
 };
