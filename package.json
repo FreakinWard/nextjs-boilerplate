@@ -26,6 +26,7 @@
     "@microsoft/applicationinsights-web": "^2.6.2",
     "@next/bundle-analyzer": "^10.2.0",
     "cross-env": "^7.0.3",
+    "eslint-config-boilerplate": "file:../eslint-config-boilerplate",
     "http": "0.0.1-security",
     "next": "10.2.0",
     "pascalcase": "^1.0.0",
