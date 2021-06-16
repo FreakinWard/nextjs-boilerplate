@@ -18,14 +18,15 @@ module.exports = {
   },
   plugins: ['simple-import-sort', 'prettier', 'import'],
   extends: [
+    './rules/react',
+    './rules/jest',
+    // './rules/typescript',
+    // './rules/default',
+
     'eslint:recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:prettier/recommended', // Make this the last element so prettier config overrides other formatting rules
-
-    './rules/react',
-    './rules/jest',
-    // './rules/default',
   ],
   rules: {
     'import/prefer-default-export': 'error',
