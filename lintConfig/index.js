@@ -26,11 +26,11 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     // 'plugin:react-hooks/recommended',
-    'plugin:jest/style',
+    // 'plugin:jest/style',
     'plugin:prettier/recommended', // Make this the last element so prettier config overrides other formatting rules
 
     './rules/react',
-    // './rules/jest',
+    './rules/jest',
     // './rules/default',
   ],
   rules: {
@@ -51,11 +51,11 @@ module.exports = {
     //     aspects: ['invalidHref', 'preferButton'],
     //   },
     // ],
-    'jest/no-disabled-tests': 'warn',
-    'jest/no-focused-tests': 'error',
-    'jest/no-identical-title': 'error',
-    'jest/prefer-to-have-length': 'warn',
-    'jest/valid-expect': 'error',
+    // 'jest/no-disabled-tests': 'warn',
+    // 'jest/no-focused-tests': 'error',
+    // 'jest/no-identical-title': 'error',
+    // 'jest/prefer-to-have-length': 'warn',
+    // 'jest/valid-expect': 'error',
   },
 };
 
