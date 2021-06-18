@@ -1,3 +1,5 @@
+[![Build Status](https://aaronward.visualstudio.com/nextjs-typescript-example/_apis/build/status/FreakinWard.nextjs-boilerplate?branchName=main)](https://aaronward.visualstudio.com/nextjs-typescript-example/_build/latest?definitionId=8&branchName=main) [![codecov](https://codecov.io/gh/FreakinWard/nextjs-boilerplate/branch/main/graph/badge.svg?token=XL8EYC1YZP)](https://codecov.io/gh/FreakinWard/nextjs-boilerplate)
+
 # NextJs Boilerplate
 
 The purpose of this repo is to accelerate startup time when creating a new [NextJs](https://nextjs.org/docs) app.
