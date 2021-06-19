@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 const fetchPosts = async () => {
   const response = await fetch('/api/posts');
 
-  return await response.json();
+  return response.json();
 };
 
 export default function usePosts() {
