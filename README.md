@@ -1,4 +1,4 @@
-[![Build Status](https://aaronward.visualstudio.com/nextjs-typescript-example/_apis/build/status/FreakinWard.nextjs-boilerplate?branchName=main)](https://aaronward.visualstudio.com/nextjs-typescript-example/_build/latest?definitionId=8&branchName=main) [![codecov](https://codecov.io/gh/FreakinWard/nextjs-boilerplate/branch/main/graph/badge.svg?token=XL8EYC1YZP)](https://codecov.io/gh/FreakinWard/nextjs-boilerplate)
+[![Build Status](https://aaronward.visualstudio.com/nextjs-typescript-example/_apis/build/status/FreakinWard.nextjs-boilerplate?branchName=main)](https://aaronward.visualstudio.com/nextjs-typescript-example/_build/latest?definitionId=8&branchName=main) [![codecov](https://codecov.io/gh/FreakinWard/nextjs-boilerplate/branch/main/graph/badge.svg?token=XL8EYC1YZP)](https://codecov.io/gh/FreakinWard/nextjs-boilerplate) [![CodeFactor](https://www.codefactor.io/repository/github/freakinward/nextjs-boilerplate/badge)](https://www.codefactor.io/repository/github/freakinward/nextjs-boilerplate)
 
 # NextJs Boilerplate
 
