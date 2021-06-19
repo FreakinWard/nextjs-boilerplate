@@ -36,3 +36,8 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
+
+    - name: Upload coverage to Code Climate
+      uses: paambaati/codeclimate-action@v2.7.5
+      env:
+        CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
