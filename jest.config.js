@@ -32,5 +32,5 @@ module.exports = {
       },
     ],
   ],
-  coverageReporters: ['text', 'cobertura'],
+  coverageReporters: ['text', 'cobertura', 'lcov'],
 };
