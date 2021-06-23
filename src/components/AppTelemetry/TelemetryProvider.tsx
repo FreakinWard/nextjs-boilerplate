@@ -42,14 +42,14 @@ class TelemetryProvider extends Component<Props, State> {
     // const appInsightsKey: string = process.env.NEXT_PUBLIC_ANALYTICS_ID || '';
 
     const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
-    const appInsightsKey = publicRuntimeConfig.appInsightsKey;
+    const appInsightsConnectionString = publicRuntimeConfig.appInsightsConnectionString;
 
     console.log({ publicRuntimeConfig });
 
     console.log({ serverRuntimeConfig });
 
-    if (!initialized && Boolean(appInsightsKey)) {
-      ai.initialize(appInsightsKey);
+    if (!initialized && Boolean(appInsightsConnectionString)) {
+      ai.initialize(appInsightsConnectionString);
       this.setState({ initialized: true });
     }
   }

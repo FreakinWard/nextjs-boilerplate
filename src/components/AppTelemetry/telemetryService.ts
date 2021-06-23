@@ -5,8 +5,8 @@ let reactPlugin: ReactPlugin;
 let appInsights: ApplicationInsights;
 
 const createTelemetryService = () => {
-  const initialize = (instrumentationKey: string) => {
-    if (!instrumentationKey) {
+  const initialize = (connectionString: string) => {
+    if (!connectionString) {
       throw new Error('Instrumentation key not provided');
     }
 
@@ -14,7 +14,7 @@ const createTelemetryService = () => {
 
     appInsights = new ApplicationInsights({
       config: {
-        instrumentationKey,
+        connectionString,
         maxBatchInterval: 0,
         disableFetchTracking: false,
         extensions: [reactPlugin],

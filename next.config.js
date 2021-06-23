@@ -5,9 +5,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 module.exports = withBundleAnalyzer({
   env: {
-    APPINSIGHTS_INSTRUMENTATIONKEY: '',
+    APPLICATIONINSIGHTS_CONNECTION_STRING: '',
   },
   publicRuntimeConfig: {
-    appInsightsKey: process.env.APPINSIGHTS_INSTRUMENTATIONKEY,
+    appInsightsConnectionString: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
   },
 });
