@@ -27,6 +27,7 @@
     "@next/bundle-analyzer": "^10.2.0",
     "cross-env": "^7.0.3",
     "http": "0.0.1-security",
+    "jest-sonar": "^0.2.12",
     "next": "^10.2.3",
     "pascalcase": "^1.0.0",
     "react": "17.0.2",
@@ -71,5 +72,14 @@
   "validate-branch-name": {
     "pattern": "^(?!([mM]aster)|([mM]ain)$).*$",
     "errorMsg": "Avoid commiting witihout a branch. See readme for details."
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "testResultsProcessor": "jest-sonar-reporter",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/"
+    ]
   }
 }
