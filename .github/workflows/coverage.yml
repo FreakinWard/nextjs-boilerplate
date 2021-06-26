@@ -37,6 +37,13 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
 
+    - uses: actions/upload-artifact@v2
+      with:
+        name: build-artifact
+        path: |
+          ${{ github.workspace }}
+          !node_modules/
+
     - name: fix code coverage paths
       working-directory: ./coverage
       run: |
