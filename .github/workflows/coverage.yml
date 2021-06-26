@@ -39,7 +39,9 @@ jobs:
 
     - name: fix code coverage paths
       working-directory: ./coverage
-      run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' lcov.info
+      run: |
+        sed -i 's/\/home\/runner\/work\/nextjs-boilerplate\/nextjs-boilerplate\//\/github\/workspace\//g' lcov.info
+        sed -i 's/\/home\/runner\/work\/nextjs-boilerplate\/nextjs-boilerplate\//\/github\/workspace\//g' sonarqube.xml
 
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
