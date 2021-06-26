@@ -37,6 +37,10 @@ jobs:
         token: ${{ secrets.CODECOV_TOKEN }}
         fail_ci_if_error: true
 
+    - uses: actions/checkout@v2
+      with:
+        ref: main
+
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
