@@ -38,11 +38,13 @@ jobs:
         fail_ci_if_error: true
 
     - uses: actions/checkout@v2
+      if: always()
       with:
         # Disabling shallow clone is recommended for improving relevancy of reporting
         fetch-depth: 0
 
     - name: SonarCloud Scan
+      if: always()
       uses: sonarsource/sonarcloud-github-action@master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
