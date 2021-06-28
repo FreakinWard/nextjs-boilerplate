@@ -32,5 +32,5 @@ module.exports = {
       },
     ],
   ],
-  coverageReporters: ['text', 'cobertura', 'lcov'],
+  coverageReporters: ['text', 'cobertura', ['lcov', { projectRoot: '..' }]],
 };
