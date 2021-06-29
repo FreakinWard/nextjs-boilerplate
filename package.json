@@ -2,7 +2,7 @@
   "name": "nextjs-boilerplate",
   "version": "0.1.0",
   "private": true,
-  "description": "This repo serves at a bolerplate to help stand up a new nextjs app",
+  "description": "This repo serves at a boilerplate to help stand up a new nextjs app",
   "scripts": {
     "prepare": "husky install",
     "dev": "next dev",
@@ -14,7 +14,6 @@
     "test": "jest",
     "test:open": "open html-report/report.html",
     "test:cover": "jest --coverage",
-    "test:ci": "jest --coverage --reporters=default --reporters=jest-html-reporters --coverageReporters=cobertura",
     "test:cover:open": "open coverage/lcov-report/index.html",
     "format": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}' --config prettier.config.js",
     "format:fix": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config prettier.config.js",
