@@ -12,6 +12,7 @@ The purpose of this repo is to accelerate startup time when creating a new [Next
 - [Scripts](#scripts)
 - [IDE Configurations](#ide-configuration)
 - [Committing Changes](#committing-changes)
+- [Storybook](#story-book)
 
 # Getting Started
 
@@ -227,4 +228,10 @@ Should the need arise to ignore the hook, manually commit using `--no-verify`
 ```shell
 # Example
 git commit -m "commit message" --no-verify
+```
+
+# Storybook
+Documented components with [Storybook](https://storybook.js.org/docs/react/get-started/introduction)
+```shell
+npm run storybook
 ```
