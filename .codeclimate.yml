@@ -6,3 +6,6 @@ plugins:
     enabled: true
   fixme:
     enabled: true
+exclude_patterns:
+  - "node_modules"
+  - "./.*"
