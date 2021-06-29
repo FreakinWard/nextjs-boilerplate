@@ -56,7 +56,7 @@ export default function Home({ posts }: InferGetStaticPropsType<typeof getStatic
         </div>
 
         <p className={styles.description}>
-          Get started by editing <code className={styles.code}>pages/index.js</code>
+          Get started by editing <code className={styles.code}>pages/index.tsx</code>
         </p>
 
         <div className={styles.grid}>

@@ -122,9 +122,7 @@
       "name": "[concat(variables('webSiteName'), '/staging')]",
       "location": "[resourceGroup().location]",
       "kind": "app",
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites/', variables('webSiteName'))]"
-      ],
+      "dependsOn": ["[resourceId('Microsoft.Web/sites/', variables('webSiteName'))]"],
       "properties": {
         "enabled": true,
         "serverFarmId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourcegroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
