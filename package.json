@@ -23,6 +23,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
+    "@material-ui/core": "^4.11.4",
     "@microsoft/applicationinsights-react-js": "^3.1.2",
     "@microsoft/applicationinsights-web": "^2.6.2",
     "@next/bundle-analyzer": "^10.2.0",
@@ -34,7 +35,8 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-query": "^3.16.0",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@babel/core": "^7.14.6",
