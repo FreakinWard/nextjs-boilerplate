@@ -7,7 +7,7 @@ interface Props {
   label: string;
 }
 
-export default function FormTextField({ name, label }: Props) {
+export default function FormNumberField({ name, label }: Props) {
   const [field, meta] = useField(name);
   const hasError = meta.error && meta.touched;
 
@@ -20,6 +20,7 @@ export default function FormTextField({ name, label }: Props) {
       onChange={field.onChange}
       error={hasError}
       helperText={hasError && meta.error}
+      type="number"
     />
   );
 }

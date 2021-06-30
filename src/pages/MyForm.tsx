@@ -3,7 +3,7 @@ import { Form, Formik, useFormikContext } from 'formik';
 import React from 'react';
 import * as yup from 'yup';
 
-import FormTextField from '../components/FormFields/FormTextField';
+import { FormNumberField, FormTextField } from '../components/FormFields';
 
 const validationSchema = yup.object({
   email: yup.string().email('Enter a valid email').required('Email is required'),
@@ -23,7 +23,6 @@ export default function MyForm() {
 
   const initialValues = {
     firstName: 'Tyler',
-    lastName: 'Newman',
     email: 'tyler@newmaninc.com',
   };
 
@@ -38,7 +37,7 @@ export default function MyForm() {
           <FormTextField name="email" label="Email" />
           <FormTextField name="firstName" label="First Name" />
           <FormTextField name="lastName" label="Last Name" />
-
+          <FormNumberField name="age" label="Age" />
           <Button color="primary" variant="contained" fullWidth type="submit">
             Submit
           </Button>
