@@ -4,7 +4,7 @@
     <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="JSUnusedGlobalSymbols" enabled="true" level="WARNING" enabled_by_default="true">
       <scope name="Pages" level="WARNING" enabled="false" />
-      <scope name="nextjs api" level="WARNING" enabled="false" />
+      <scope name="nextjs pages" level="INFORMATION" enabled="true" />
     </inspection_tool>
   </profile>
 </component>
