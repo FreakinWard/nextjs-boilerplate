@@ -5,6 +5,19 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "jsx": "preserve",
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "isolatedModules": true
   },
   "include": [
     "next-env.d.ts",
