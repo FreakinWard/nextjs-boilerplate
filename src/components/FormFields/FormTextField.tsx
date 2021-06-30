@@ -8,17 +8,18 @@ interface Props {
 }
 
 export default function FormTextField({ name, label }: Props) {
-  const [field] = useField(name);
+  const [field, meta] = useField(name);
+  const hasError = meta.error && meta.touched;
+
   return (
     <TextField
       fullWidth
-      // id="email"
       name={field.name}
       label={label}
       value={field.value}
       onChange={field.onChange}
-      // error={formik.touched.email && Boolean(formik.errors.email)}
-      // helperText={formik.touched.email && formik.errors.email}
+      error={hasError}
+      helperText={hasError && meta.error}
     />
   );
 }

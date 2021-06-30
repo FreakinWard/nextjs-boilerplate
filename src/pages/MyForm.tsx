@@ -1,17 +1,15 @@
 import Button from '@material-ui/core/Button';
 import { Form, Formik, useFormikContext } from 'formik';
 import React from 'react';
+import * as yup from 'yup';
 
-// import * as yup from 'yup';
 import FormTextField from '../components/FormFields/FormTextField';
 
-// const validationSchema = yup.object({
-//   email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
-//   password: yup
-//     .string('Enter your password')
-//     .min(8, 'Password should be of minimum 8 characters length')
-//     .required('Password is required'),
-// });
+const validationSchema = yup.object({
+  email: yup.string().email('Enter a valid email').required('Email is required'),
+  firstName: yup.string().min(3, 'Your name is too short').required('Password is required'),
+  lastName: yup.string().required('Required, yo'),
+});
 
 export default function MyForm() {
   const handleSubmit = async values => {
@@ -26,13 +24,16 @@ export default function MyForm() {
   const initialValues = {
     firstName: 'Tyler',
     lastName: 'Newman',
-    email: 'foobar@example.com',
+    email: 'tyler@newmaninc.com',
   };
 
   return (
     <div>
       <h1>Sign Up</h1>
-      <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        validationSchema={validationSchema}>
         <Form>
           <FormTextField name="email" label="Email" />
           <FormTextField name="firstName" label="First Name" />
