@@ -1,18 +1,17 @@
-import { TextField as MuiTextField } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import { Field, Form, Formik, useFormik, useFormikContext } from 'formik';
+import { Form, Formik, useFormikContext } from 'formik';
 import React from 'react';
-import * as yup from 'yup';
 
+// import * as yup from 'yup';
 import FormTextField from '../components/FormFields/FormTextField';
 
-const validationSchema = yup.object({
-  email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
-  password: yup
-    .string('Enter your password')
-    .min(8, 'Password should be of minimum 8 characters length')
-    .required('Password is required'),
-});
+// const validationSchema = yup.object({
+//   email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
+//   password: yup
+//     .string('Enter your password')
+//     .min(8, 'Password should be of minimum 8 characters length')
+//     .required('Password is required'),
+// });
 
 export default function MyForm() {
   const handleSubmit = async values => {
@@ -21,7 +20,7 @@ export default function MyForm() {
   };
   const FormState = () => {
     const { values } = useFormikContext();
-    return <pre>{JSON.stringify(values, 0, 2)}</pre>;
+    return <pre>{JSON.stringify(values, null, 2)}</pre>;
   };
 
   const initialValues = {
