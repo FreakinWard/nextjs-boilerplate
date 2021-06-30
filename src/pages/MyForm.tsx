@@ -4,7 +4,7 @@ import { Field, Form, Formik, useFormik, useFormikContext } from 'formik';
 import React from 'react';
 import * as yup from 'yup';
 
-import TextField from '../components/FormFields/TextField';
+import FormTextField from '../components/FormFields/FormTextField';
 
 const validationSchema = yup.object({
   email: yup.string('Enter your email').email('Enter a valid email').required('Email is required'),
@@ -35,9 +35,9 @@ export default function MyForm() {
       <h1>Sign Up</h1>
       <Formik initialValues={initialValues} onSubmit={handleSubmit}>
         <Form>
-          <TextField name="email" label="Email" />
-          <TextField name="firstName" label="First Name" />
-          <TextField name="lastName" label="Last Name" />
+          <FormTextField name="email" label="Email" />
+          <FormTextField name="firstName" label="First Name" />
+          <FormTextField name="lastName" label="Last Name" />
 
           <Button color="primary" variant="contained" fullWidth type="submit">
             Submit

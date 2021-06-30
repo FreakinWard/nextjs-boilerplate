@@ -1,4 +1,4 @@
-import { TextField as MuiTextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import { useField } from 'formik';
 import React from 'react';
 
@@ -7,10 +7,10 @@ interface Props {
   label: string;
 }
 
-export default function TextField({ name, label }: Props) {
+export default function FormTextField({ name, label }: Props) {
   const [field] = useField(name);
   return (
-    <MuiTextField
+    <TextField
       fullWidth
       // id="email"
       name={field.name}
