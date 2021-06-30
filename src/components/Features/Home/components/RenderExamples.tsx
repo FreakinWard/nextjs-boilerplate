@@ -1,7 +1,7 @@
 import styles from '../../../../../styles/Home.module.css';
 import usePosts from '../../../../hooks/usePosts';
 import { Post } from '../../../../services/postsService';
-import Posts from '../../../Posts';
+import Posts from './Posts';
 
 interface Props {
   posts: Post[];
