@@ -7,7 +7,7 @@ import { FormNumberField, FormTextField } from '../components/FormFields';
 
 const validationSchema = yup.object({
   email: yup.string().email('Enter a valid email').required('Email is required'),
-  firstName: yup.string().min(3, 'Your name is too short').required('Password is required'),
+  firstName: yup.string().min(3, 'Your name is too short').required('First name is required'),
   lastName: yup.string().required('Required, yo'),
 });
 
@@ -23,6 +23,7 @@ export default function MyForm() {
 
   const initialValues = {
     firstName: 'Tyler',
+    lastName: 'Newman',
     email: 'tyler@newmaninc.com',
   };
 
@@ -38,6 +39,7 @@ export default function MyForm() {
           <FormTextField name="firstName" label="First Name" />
           <FormTextField name="lastName" label="Last Name" />
           <FormNumberField name="age" label="Age" />
+
           <Button color="primary" variant="contained" fullWidth type="submit">
             Submit
           </Button>

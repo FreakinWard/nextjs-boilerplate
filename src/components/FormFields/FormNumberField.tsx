@@ -1,6 +1,6 @@
-import { TextField } from '@material-ui/core';
-import { useField } from 'formik';
 import React from 'react';
+
+import FormTextField from './FormTextField';
 
 interface Props {
   name: string;
@@ -8,19 +8,5 @@ interface Props {
 }
 
 export default function FormNumberField({ name, label }: Props) {
-  const [field, meta] = useField(name);
-  const hasError = meta.error && meta.touched;
-
-  return (
-    <TextField
-      fullWidth
-      name={field.name}
-      label={label}
-      value={field.value ?? ''}
-      onChange={field.onChange}
-      error={hasError}
-      helperText={hasError && meta.error}
-      type="number"
-    />
-  );
+  return <FormTextField name={name} label={label} type="number" />;
 }
