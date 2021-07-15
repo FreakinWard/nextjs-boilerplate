@@ -79,5 +79,10 @@
   "validate-branch-name": {
     "pattern": "^(?!([mM]aster)|([mM]ain)$).*$",
     "errorMsg": "Avoid commiting witihout a branch. See readme for details."
+  },
+  "storybook-deployer": {
+    "gitUsername":"freakinward",
+    "gitEmail":"aaron.l.ward@gmail.com",
+    "commitMessage": "Deploy Storybook"
   }
 }
