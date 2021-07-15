@@ -20,7 +20,7 @@
     "pre-commit": "validate-branch-name && lint-staged",
     "analyze": "cross-env ANALYZE=true next build",
     "storybook": "start-storybook -p 6006",
-    "storybook:deploy": "storybook-to-ghpages"
+    "storybook:deploy": "storybook-to-ghpages --ci"
   },
   "dependencies": {
     "@microsoft/applicationinsights-react-js": "^3.1.2",
