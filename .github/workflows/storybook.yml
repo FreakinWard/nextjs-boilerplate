@@ -9,8 +9,11 @@ on:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
 
-  steps:
-  - name: Deploy Storybook
-    run: npm run storybook:deploy
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploy Storybook
+        run: npm run storybook:deploy
