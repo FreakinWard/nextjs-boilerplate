@@ -20,6 +20,7 @@
     "pre-commit": "validate-branch-name && lint-staged",
     "analyze": "cross-env ANALYZE=true next build",
     "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook -o docs-build",
     "deploy-storybook": "storybook-to-ghpages"
   },
   "dependencies": {
