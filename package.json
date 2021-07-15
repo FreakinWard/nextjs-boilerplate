@@ -20,7 +20,7 @@
     "pre-commit": "validate-branch-name && lint-staged",
     "analyze": "cross-env ANALYZE=true next build",
     "storybook": "start-storybook -p 6006",
-    "storybook:deploy": "storybook-to-ghpages --ci"
+    "deploy-storybook": "storybook-to-ghpages"
   },
   "dependencies": {
     "@microsoft/applicationinsights-react-js": "^3.1.2",
@@ -81,8 +81,8 @@
     "errorMsg": "Avoid commiting witihout a branch. See readme for details."
   },
   "storybook-deployer": {
-    "gitUsername":"freakinward",
-    "gitEmail":"aaron.l.ward@gmail.com",
-    "commitMessage": "Deploy Storybook"
+    "gitUsername": "freakinward",
+    "gitEmail": "aaron.l.ward@gmail.com",
+    "commitMessage": "Deploy Storybook [skip ci]"
   }
 }
