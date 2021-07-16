@@ -11,9 +11,9 @@ export default {
 //👇 We create a “template” of how args map to rendering
 const Template = args => <Posts {...args} />;
 
-export const FirstStoryTest = Template.bind({});
+export const FirstStoryExample = Template.bind({});
 
-FirstStoryTest.args = {
+FirstStoryExample.args = {
   title: 'Post Title',
   posts: [
     {
