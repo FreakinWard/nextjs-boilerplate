@@ -233,8 +233,9 @@ git commit -m "commit message" --no-verify
 
 # Storybook
 
-Documented components with [Storybook](https://storybook.js.org/docs/react/get-started/introduction)
+[Storybook](https://storybook.js.org/docs/react/get-started/introduction) is used to document common components and is [published here](https://freakinward.github.io/nextjs-boilerplate)
 
+Run locally
 ```shell
 npm run storybook
 ```
