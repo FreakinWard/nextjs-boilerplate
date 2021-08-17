@@ -18,7 +18,7 @@ The purpose of this repo is to accelerate startup time when creating a new [Next
 - [Scripts](#scripts)
 - [IDE Configurations](#ide-configuration)
 - [Committing Changes](#committing-changes)
-- [Storybook](#story-book)
+- [Storybook](#storybook)
 
 # Getting Started
 
