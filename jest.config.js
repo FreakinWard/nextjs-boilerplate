@@ -2,6 +2,7 @@
 const packageJson = require('./package.json');
 
 module.exports = {
+  testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   setupFilesAfterEnv: ['./jest.setup.js'],
   moduleNameMapper: {
