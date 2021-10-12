@@ -37,3 +37,5 @@ yarn-error.log*
 #story-book
 /storybook-static
 /docs-build
+
+.env

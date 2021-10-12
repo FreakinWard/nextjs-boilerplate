@@ -1,8 +1,10 @@
+import { AuthenticatedTemplate } from '@azure/msal-react';
 import { InferGetStaticPropsType } from 'next';
 import Head from 'next/head';
 import Image from 'next/image';
 
 import styles from '../../styles/Home.module.css';
+import AppBar from '../components/AppBar';
 import Posts from '../components/Posts';
 import usePosts from '../hooks/usePosts';
 import { fetchPosts, Post } from '../services/postsService';
@@ -35,9 +37,16 @@ export default function Home({ posts }: InferGetStaticPropsType<typeof getStatic
       </Head>
 
       <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
+        <div>
+          <AppBar />
+          <h1 className={styles.title}>
+            Welcome to <a href="https://nextjs.org">Next.js!</a>
+          </h1>
+        </div>
+
+        <AuthenticatedTemplate>
+          <>Secret thing</>
+        </AuthenticatedTemplate>
 
         <div className={styles.grid}>
           <div className={styles.card}>
