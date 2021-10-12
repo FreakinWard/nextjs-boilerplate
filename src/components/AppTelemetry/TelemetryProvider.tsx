@@ -39,14 +39,9 @@ class TelemetryProvider extends Component<Props, State> {
 
   componentDidMount() {
     const { initialized } = this.state;
-    // const appInsightsKey: string = process.env.NEXT_PUBLIC_ANALYTICS_ID || '';
 
-    const { serverRuntimeConfig, publicRuntimeConfig } = getConfig();
+    const { publicRuntimeConfig } = getConfig();
     const appInsightsConnectionString = publicRuntimeConfig.appInsightsConnectionString;
-
-    console.log({ publicRuntimeConfig });
-
-    console.log({ serverRuntimeConfig });
 
     if (!initialized && Boolean(appInsightsConnectionString)) {
       ai.initialize(appInsightsConnectionString);
