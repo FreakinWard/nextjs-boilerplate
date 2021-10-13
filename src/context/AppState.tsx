@@ -29,7 +29,11 @@ export default function AppState({ children }: Props) {
   }
 
   msalInstance.addEventCallback(event => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     if (event.eventType === EventType.LOGIN_SUCCESS && event.payload.account) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       const account = event.payload.account;
       msalInstance.setActiveAccount(account);
     }
