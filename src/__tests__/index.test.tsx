@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 
 import seedPosts from '../core/mocks/seed/seedPosts';
 import { queryWrapper as wrapper } from '../core/test.utils';
-import Home from '../pages/index';
+import Home, { getStaticProps } from '../pages/index';
 import { Post } from '../services/postsService';
 
 describe('index', () => {
@@ -31,6 +31,17 @@ describe('index', () => {
     posts.forEach(post => {
       expect(screen.getByText(`${post.id} - ${post.title}`)).toBeInTheDocument();
     });
+  });
+
+  it('should return expected context given getStaticProps is called', async () => {
+    // arrange
+    const expected = { props: { posts: seedPosts } };
+
+    // act
+    const response = await getStaticProps();
+
+    // assert
+    expect(response).toEqual(expected);
   });
 
   it('should render client-fetched posts', async () => {

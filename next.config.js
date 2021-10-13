@@ -4,9 +4,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 });
 
 module.exports = withBundleAnalyzer({
-  env: {
-    APPLICATIONINSIGHTS_CONNECTION_STRING: '',
-  },
   publicRuntimeConfig: {
     appInsightsConnectionString: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
   },
