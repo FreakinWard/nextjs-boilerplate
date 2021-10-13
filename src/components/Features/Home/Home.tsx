@@ -2,6 +2,7 @@ import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-reac
 
 import styles from '../../../../styles/Home.module.css';
 import { Post } from '../../../services/postsService';
+import AppBar from '../../AppBar';
 import AppHead from './components/AppHead';
 import Footer from './components/Footer';
 import Header from './components/Header';
@@ -19,7 +20,9 @@ export default function Home({ posts }: Props) {
       <AppHead />
 
       <LayoutContainer>
+        <AppBar />
         <Header />
+
         <AuthenticatedTemplate>
           <>Secret thing</>
         </AuthenticatedTemplate>
