@@ -1,4 +1,5 @@
 import styles from '../../../../../styles/Home.module.css';
+import InformationBlock from './InformationBlock';
 
 export default function NextInfo() {
   return (
@@ -8,27 +9,26 @@ export default function NextInfo() {
       </p>
 
       <div className={styles.grid}>
-        <a href="https://nextjs.org/docs" className={styles.card}>
-          <h2>Documentation &rarr;</h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a href="https://nextjs.org/learn" className={styles.card}>
-          <h2>Learn &rarr;</h2>
-          <p>Learn about Next.js in an interactive course with quizzes!</p>
-        </a>
-
-        <a href="https://github.com/vercel/next.js/tree/master/examples" className={styles.card}>
-          <h2>Examples &rarr;</h2>
-          <p>Discover and deploy boilerplate example Next.js projects.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          className={styles.card}>
-          <h2>Deploy &rarr;</h2>
-          <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
-        </a>
+        <InformationBlock
+          url="https://nextjs.org/docs"
+          title="Documentation"
+          description="Find in-depth information about Next.js features and API."
+        />
+        <InformationBlock
+          url="https://nextjs.org/learn"
+          title="Learn"
+          description="Learn about Next.js in an interactive course with quizzes!"
+        />
+        <InformationBlock
+          url="https://github.com/vercel/next.js/tree/master/examples"
+          title="Examples"
+          description="Discover and deploy boilerplate example Next.js projects."
+        />
+        <InformationBlock
+          url="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
+          title="Deploy"
+          description="Instantly deploy your Next.js site to a public URL with Vercel."
+        />
       </div>
     </>
   );
