@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "This repo serves at a boilerplate to help stand up a new nextjs app",
+  "engines": {
+    "npm": ">=7"
+  },
   "scripts": {
     "prepare": "husky install",
     "dev": "next dev",
