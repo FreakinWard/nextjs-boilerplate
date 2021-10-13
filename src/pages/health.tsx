@@ -3,6 +3,14 @@ import pascalCase from 'pascalcase';
 import styles from '../../styles/Home.module.css';
 import useHealth from '../hooks/useHealth';
 
+export async function getStaticProps() {
+  return {
+    props: {
+      hideLayout: true,
+    },
+  };
+}
+
 export default function Health() {
   const { data: health } = useHealth();
 
