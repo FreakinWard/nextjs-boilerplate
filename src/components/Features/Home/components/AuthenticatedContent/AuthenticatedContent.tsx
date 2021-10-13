@@ -1,4 +1,5 @@
 import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
+import { Button, ButtonGroup } from '@material-ui/core';
 
 export default function AuthenticatedContent() {
   return (
@@ -7,7 +8,11 @@ export default function AuthenticatedContent() {
         <>Login to see secret things</>
       </UnauthenticatedTemplate>
       <AuthenticatedTemplate>
-        <>Secret thing 2.0</>
+        <ButtonGroup orientation="vertical">
+          <Button href="/profile" variant="contained" color="secondary">
+            Request Profile Information
+          </Button>
+        </ButtonGroup>
       </AuthenticatedTemplate>
     </>
   );
