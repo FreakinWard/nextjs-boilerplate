@@ -1,9 +1,8 @@
-import { AuthenticatedTemplate, UnauthenticatedTemplate } from '@azure/msal-react';
-
 import styles from '../../../../styles/Home.module.css';
 import { Post } from '../../../services/postsService';
 import AppBar from '../../AppBar';
 import AppHead from './components/AppHead';
+import AuthenticatedContent from './components/AuthenticatedContent';
 import Footer from './components/Footer';
 import Header from './components/Header';
 import LayoutContainer from './components/LayoutContainer';
@@ -23,12 +22,8 @@ export default function Home({ posts }: Props) {
         <AppBar />
         <Header />
 
-        <AuthenticatedTemplate>
-          <>Secret thing</>
-        </AuthenticatedTemplate>
-        <UnauthenticatedTemplate>
-          <>Public thing</>
-        </UnauthenticatedTemplate>
+        <AuthenticatedContent />
+
         <RenderExamples posts={posts} />
         <NextInfo />
       </LayoutContainer>
