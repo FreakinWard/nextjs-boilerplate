@@ -1,8 +1,7 @@
-import { useMsal } from '../../../../context/AuthProvider';
-import { loginRequest } from '../../../../services/authConfig';
+import { useAuth } from '../../../../context/AuthProvider/AuthProvider';
 
 export default function useFetch(url) {
-  const { instance } = useMsal();
+  const { instance, acquireTokenSilent } = useAuth();
 
   const callMsGraph = async () => {
     const account = instance.getActiveAccount();
@@ -12,10 +11,7 @@ export default function useFetch(url) {
       );
     }
 
-    const response = await instance.acquireTokenSilent({
-      ...loginRequest,
-      account: account,
-    });
+    const response = await acquireTokenSilent();
 
     const headers = new Headers();
     const bearer = `Bearer ${response.accessToken}`;

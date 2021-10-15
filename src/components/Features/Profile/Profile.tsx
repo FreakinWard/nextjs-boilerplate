@@ -1,7 +1,7 @@
 import { MsalAuthenticationTemplate } from '@azure/msal-react';
 import Paper from '@material-ui/core/Paper';
 
-import { useMsalBrowser } from '../../../context/AuthProvider';
+import { msalBrowser } from '../../../context/AuthProvider/AuthProvider';
 import { loginRequest } from '../../../services/authConfig';
 import ErrorComponent from './components/ErrorComponent';
 import LoadingComponent from './components/LoadingComponent';
@@ -9,7 +9,7 @@ import ProfileData from './components/ProfileData';
 import useUserProfile from './hooks/useUserProfile';
 
 export default function Profile() {
-  const { InteractionType } = useMsalBrowser();
+  const { InteractionType } = msalBrowser;
   const authRequest = {
     ...loginRequest,
   };

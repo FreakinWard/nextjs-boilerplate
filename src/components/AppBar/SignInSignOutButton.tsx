@@ -1,11 +1,10 @@
-import { useIsAuthenticated, useMsal, useMsalBrowser } from '../../context/AuthProvider';
+import { msalBrowser, useAuth } from '../../context/AuthProvider/AuthProvider';
 import SignInButton from './SignInButton';
 import SignOutButton from './SignOutButton';
 
 export default function SignInSignOutButton() {
-  const { inProgress } = useMsal();
-  const isAuthenticated = useIsAuthenticated();
-  const { InteractionStatus } = useMsalBrowser();
+  const { isAuthenticated, inProgress } = useAuth();
+  const { InteractionStatus } = msalBrowser;
 
   if (isAuthenticated) {
     return <SignOutButton />;

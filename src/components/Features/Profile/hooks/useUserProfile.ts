@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useMsal, useMsalBrowser } from '../../../../context/AuthProvider';
+import { msalBrowser, useAuth } from '../../../../context/AuthProvider/AuthProvider';
 import { graphConfig } from '../../../../services/authConfig';
 import useFetch from './useFetch';
 
 export default function useUserProfile() {
   const { callMsGraph } = useFetch(graphConfig.graphMeEndpoint);
   const [data, setData] = useState();
-  const { inProgress } = useMsal();
-  const { InteractionStatus } = useMsalBrowser();
+  const { inProgress } = useAuth();
+  const { InteractionStatus } = msalBrowser;
 
   const fetchUserProfileData = useCallback(async () => {
     const data = await callMsGraph();
@@ -19,7 +19,7 @@ export default function useUserProfile() {
     if (!data && inProgress === InteractionStatus.None) {
       fetchUserProfileData();
     }
-  }, [data, fetchUserProfileData, inProgress]);
+  }, [InteractionStatus.None, data, fetchUserProfileData, inProgress]);
 
   return {
     data,

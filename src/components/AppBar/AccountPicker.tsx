@@ -8,21 +8,21 @@ import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
 import PersonIcon from '@material-ui/icons/Person';
 
-import { useMsal } from '../../context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider/AuthProvider';
 import { loginRequest } from '../../services/authConfig';
 
 interface Props {
-  onClose: (any) => void;
+  onClose: () => void;
   open: boolean;
 }
 
 export default function AccountPicker({ onClose, open }: Props) {
-  const { instance, accounts } = useMsal();
+  const { login, instance, accounts } = useAuth();
 
   const handleListItemClick = account => {
     instance.setActiveAccount(account);
     if (!account) {
-      instance.loginRedirect({
+      login({
         ...loginRequest,
         prompt: 'login',
       });
@@ -31,7 +31,7 @@ export default function AccountPicker({ onClose, open }: Props) {
       window.location.reload();
     }
 
-    onClose(account);
+    onClose();
   };
 
   return (

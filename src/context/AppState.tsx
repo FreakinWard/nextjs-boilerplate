@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
-import { AuthProvider } from './AuthProvider';
+import { AuthProvider } from './AuthProvider/AuthProvider';
 
 interface Props {
   children: ReactNode;
@@ -19,7 +19,7 @@ export default function AppState({ children }: Props) {
   const queryClient = new QueryClient(queryConfig);
 
   return (
-    <AuthProvider>
+    <AuthProvider redirectOnAuth>
       <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
     </AuthProvider>
   );
