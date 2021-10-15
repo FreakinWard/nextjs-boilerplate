@@ -1,4 +1,3 @@
-import { useMsal } from '@azure/msal-react';
 import Avatar from '@material-ui/core/Avatar';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -8,8 +7,8 @@ import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
 import AddIcon from '@material-ui/icons/Add';
 import PersonIcon from '@material-ui/icons/Person';
-import React from 'react';
 
+import { useMsal } from '../../context/AuthProvider';
 import { loginRequest } from '../../services/authConfig';
 
 interface Props {

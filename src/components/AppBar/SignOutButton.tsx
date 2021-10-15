@@ -1,11 +1,10 @@
-import { useMsal } from '@azure/msal-react';
 import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { AccountCircle } from '@material-ui/icons';
-import React from 'react';
 import { useState } from 'react';
 
+import { useMsal } from '../../context/AuthProvider';
 import AccountPicker from './AccountPicker';
 
 export default function SignOutButton() {

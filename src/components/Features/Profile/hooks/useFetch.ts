@@ -1,17 +1,18 @@
-import { useAuth } from '../../../../context/AuthProvider';
-import { graphConfig, loginRequest } from '../../../../services/authConfig';
+import { useMsal } from '../../../../context/AuthProvider';
+import { loginRequest } from '../../../../services/authConfig';
 
-export default function useMsGraph() {
-  const { msalInstance } = useAuth();
+export default function useFetch(url) {
+  const { instance } = useMsal();
+
   const callMsGraph = async () => {
-    const account = msalInstance.getActiveAccount();
+    const account = instance.getActiveAccount();
     if (!account) {
       throw Error(
         'No active account! Verify a user has been signed in and setActiveAccount has been called.'
       );
     }
 
-    const response = await msalInstance.acquireTokenSilent({
+    const response = await instance.acquireTokenSilent({
       ...loginRequest,
       account: account,
     });
@@ -26,7 +27,7 @@ export default function useMsGraph() {
       headers: headers,
     };
 
-    return fetch(graphConfig.graphMeEndpoint, options)
+    return fetch(url, options)
       .then(response => response.json())
       .catch(error => console.log(error));
   };

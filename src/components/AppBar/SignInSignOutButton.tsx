@@ -1,13 +1,11 @@
-import { InteractionStatus } from '@azure/msal-browser';
-import { useIsAuthenticated, useMsal } from '@azure/msal-react';
-import React from 'react';
-
+import { useIsAuthenticated, useMsal, useMsalBrowser } from '../../context/AuthProvider';
 import SignInButton from './SignInButton';
 import SignOutButton from './SignOutButton';
 
 export default function SignInSignOutButton() {
   const { inProgress } = useMsal();
   const isAuthenticated = useIsAuthenticated();
+  const { InteractionStatus } = useMsalBrowser();
 
   if (isAuthenticated) {
     return <SignOutButton />;

@@ -24,8 +24,6 @@ const {
   logoutRedirectUri,
 } = publicRuntimeConfig;
 
-console.log('test', { publicRuntimeConfig });
-
 export const msalConfig = {
   auth: {
     clientId: azureApplicationId,

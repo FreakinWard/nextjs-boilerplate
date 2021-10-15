@@ -1,10 +1,9 @@
-import { useMsal } from '@azure/msal-react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useState } from 'react';
-import React from 'react';
 
+import { useMsal } from '../../context/AuthProvider';
 import { loginRequest } from '../../services/authConfig';
 
 export default function SignInButton() {

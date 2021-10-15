@@ -1,9 +1,11 @@
-import { useMsal } from '@azure/msal-react';
 import Typography from '@material-ui/core/Typography';
 import { useEffect, useState } from 'react';
 
+import { useIsAuthenticated, useMsal } from '../../context/AuthProvider';
+
 export default function WelcomeName() {
   const { instance } = useMsal();
+  const isAuthenticated = useIsAuthenticated();
   const [name, setName] = useState(null);
 
   const activeAccount = instance.getActiveAccount();
@@ -13,9 +15,7 @@ export default function WelcomeName() {
     }
   }, [activeAccount]);
 
-  if (name) {
-    return <Typography variant="h6">Welcome, {name}</Typography>;
-  } else {
-    return null;
-  }
+  if (!isAuthenticated) return null;
+
+  return <Typography variant="h6">Welcome, {name}</Typography>;
 }
