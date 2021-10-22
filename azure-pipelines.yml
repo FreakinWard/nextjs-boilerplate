@@ -91,13 +91,13 @@ stages:
       displayName: Artifact - Publish
       artifact: drop
 
-- stage: Deploy
-  displayName: Deploy stage
+- stage: deployDev
+  displayName: Dev
   dependsOn: Build
   condition: and(succeeded(), eq(variables.isMain, true))
   jobs:
   - deployment: deployProduction
-    displayName: Deploy - Production
+    displayName: Deploy - Dev
     environment: Production
     pool:
       vmImage: $(vmImageName)
@@ -115,3 +115,25 @@ stages:
               package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
               startUpCommand: 'npm run start'
               appSettings: -PORT 8080
+
+- stage: deployQA
+  displayName: QA
+  dependsOn: deployDev
+  jobs:
+    - script: echo qa-deploy-mocked
+    displayName: Deploy QA
+
+- stage: deployProdStaging
+  displayName: Prod Staging
+  dependsOn: deployQa
+  jobs:
+   - script: echo prod-staging-deploy-mocked
+   displayName: Deploy Prod Staging
+
+
+- stage: deployProd
+  displayName: Prod
+  dependsOn: deployProdStaging
+  jobs:
+    - script: echo prod-staging-deploy-mocked
+    displayName: Deploy Prod
