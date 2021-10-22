@@ -98,42 +98,70 @@ stages:
   jobs:
   - deployment: deployProduction
     displayName: Deploy - Dev
-    environment: Production
+    environment: Dev
     pool:
       vmImage: $(vmImageName)
     strategy:
       runOnce:
         deploy:
           steps:
-          - task: AzureWebApp@1
-            displayName: 'Azure Web App Deploy'
-            inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              appName: $(webAppName)
-              runtimeStack: 'NODE|14-lts'
-              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-              startUpCommand: 'npm run start'
-              appSettings: -PORT 8080
+          - script: echo dev-deploy-mocked
+            displayName: Deploy Dev
+#          - task: AzureWebApp@1
+#            displayName: 'Azure Web App Deploy'
+#            inputs:
+#              azureSubscription: $(azureSubscription)
+#              appType: webAppLinux
+#              appName: $(webAppName)
+#              runtimeStack: 'NODE|14-lts'
+#              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+#              startUpCommand: 'npm run start'
+#              appSettings: -PORT 8080
 
-- stage: deployQA
+- stage: deployQa
   displayName: QA
   dependsOn: deployDev
   jobs:
-    - script: echo qa-deploy-mocked
-    displayName: Deploy QA
+    - deployment: deployDev
+      displayName: Deploy - QA
+      environment: QA
+      pool:
+        vmImage: $(vmImageName)
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - script: echo qa-deploy-mocked
+              displayName: Deploy QA
 
 - stage: deployProdStaging
   displayName: Prod Staging
   dependsOn: deployQa
   jobs:
-   - script: echo prod-staging-deploy-mocked
-   displayName: Deploy Prod Staging
-
+    - deployment: deployProdStaging
+      displayName: Deploy - Prod Staging
+      environment: ProdStaging
+      pool:
+        vmImage: $(vmImageName)
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - script: echo prodc-staging-deploy-mocked
+              displayName: Deploy Prod Staging
 
 - stage: deployProd
-  displayName: Prod
-  dependsOn: deployProdStaging
+  displayName: QA
+  dependsOn: deployDev
   jobs:
-    - script: echo prod-staging-deploy-mocked
-    displayName: Deploy Prod
+    - deployment: deployProd
+      displayName: Deploy - Prod
+      environment: QA
+      pool:
+        vmImage: $(vmImageName)
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - script: echo prodc-deploy-mocked
+              displayName: Deploy Prod
