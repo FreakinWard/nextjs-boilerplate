@@ -8,6 +8,7 @@ export default function AppBar() {
   return (
     <MuiAppBar>
       <Toolbar>
+        <div style={{ flexGrow: 1 }} />
         <WelcomeName />
         <SignInSignOutButton />
       </Toolbar>
