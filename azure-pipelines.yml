@@ -151,12 +151,12 @@ stages:
               displayName: Deploy Prod Staging
 
 - stage: deployProd
-  displayName: QA
-  dependsOn: deployDev
+  displayName: Prod
+  dependsOn: deployProdStaging
   jobs:
     - deployment: deployProd
       displayName: Deploy - Prod
-      environment: QA
+      environment: Prod
       pool:
         vmImage: $(vmImageName)
       strategy:
