@@ -107,6 +107,7 @@ stages:
           steps:
           - script: echo dev-deploy-mocked
             displayName: Deploy Dev
+#            TODO: Deployment temp disabled, will reimplement
 #          - task: AzureWebApp@1
 #            displayName: 'Azure Web App Deploy'
 #            inputs:
