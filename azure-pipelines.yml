@@ -119,6 +119,15 @@ stages:
 #              startUpCommand: 'npm run start'
 #              appSettings: -PORT 8080
 
+- stage: devE2E
+  displayName: E2E - Dev
+  dependsOn: deployDev
+  jobs:
+    - script: echo dev-e2e-mocked
+      displayName: Run E2E
+
+
+
 - stage: deployQa
   displayName: QA
   dependsOn: deployDev
