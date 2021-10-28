@@ -12,7 +12,7 @@ export default function LayoutContainer({ hideLayout, children }: Props) {
   if (hideLayout) return children;
 
   return (
-    <div className={styles.container}>
+    <div>
       <AppHead />
 
       <main className={styles.main}>
