@@ -110,7 +110,7 @@ stages:
             onTimeout: 'resume'
     - job: aprovedJob
       dependsOn: waitForValidation
-      - script: echo Example Run
+      - script: 'echo Example Run'
         displayName: 'Tests'
 
 
