@@ -1,7 +1,7 @@
-[![Build Status](https://aaronward.visualstudio.com/nextjs-typescript-example/_apis/build/status/FreakinWard.nextjs-boilerplate?branchName=main)](https://aaronward.visualstudio.com/nextjs-typescript-example/_build/latest?definitionId=8&branchName=main) 
-[![codecov](https://codecov.io/gh/FreakinWard/nextjs-boilerplate/branch/main/graph/badge.svg?token=XL8EYC1YZP)](https://codecov.io/gh/FreakinWard/nextjs-boilerplate) 
-[![CodeFactor](https://www.codefactor.io/repository/github/freakinward/nextjs-boilerplate/badge)](https://www.codefactor.io/repository/github/freakinward/nextjs-boilerplate) 
-[![Maintainability](https://api.codeclimate.com/v1/badges/25a53970d9a620abcaf8/maintainability)](https://codeclimate.com/github/FreakinWard/nextjs-boilerplate/maintainability) 
+[![Build Status](https://aaronward.visualstudio.com/nextjs-typescript-example/_apis/build/status/FreakinWard.nextjs-boilerplate?branchName=main)](https://aaronward.visualstudio.com/nextjs-typescript-example/_build/latest?definitionId=8&branchName=main)
+[![codecov](https://codecov.io/gh/FreakinWard/nextjs-boilerplate/branch/main/graph/badge.svg?token=XL8EYC1YZP)](https://codecov.io/gh/FreakinWard/nextjs-boilerplate)
+[![CodeFactor](https://www.codefactor.io/repository/github/freakinward/nextjs-boilerplate/badge)](https://www.codefactor.io/repository/github/freakinward/nextjs-boilerplate)
+[![Maintainability](https://api.codeclimate.com/v1/badges/25a53970d9a620abcaf8/maintainability)](https://codeclimate.com/github/FreakinWard/nextjs-boilerplate/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/25a53970d9a620abcaf8/test_coverage)](https://codeclimate.com/github/FreakinWard/nextjs-boilerplate/test_coverage)
 [![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/FreakinWard/nextjs-boilerplate?color=F1CE0C&style=plastic)](https://codeclimate.com/github/FreakinWard/nextjs-boilerplate/issues)
 
@@ -107,6 +107,10 @@ Tests are configured for both unit and integration tests. Unit tests are perform
 
 # Scripts
 
+# Scripts
+
+## Unit tests
+
 ```bash
 npm run test    # runs all tests, creating test report
 ```
@@ -123,6 +127,29 @@ npm run test:cover    # runs all tests, creating coverage report
 npm run test:cover:open    # opens the coverage report
 ```
 
+## End-to-end (e2e)
+
+```bash
+npm run test:e2e    # within the cli, runs end-to-end (e2e) tests
+```
+
+```bash
+npm run test:e2e:open    # visualize end-to-end (e2e) tests
+```
+
+```bash
+npm run test:e2e:verify    # validates end-to-end (e2e) tests ability to run
+```
+
+```bash
+npm run test:e2e:ci    # runs end-to-end (e2e) tests for continuous integration (ci) pipeline
+```
+
+```bash
+npm run test:e2e:report    # opens html report from end-to-end (e2e) test results
+```
+
+## Static code analysis
 ```bash
 npm run lint    # runs lint check, produces report
 ```
@@ -236,6 +263,7 @@ git commit -m "commit message" --no-verify
 [Storybook](https://storybook.js.org/docs/react/get-started/introduction) is used to document common components and is [published here](https://freakinward.github.io/nextjs-boilerplate)
 
 Run locally
+
 ```shell
 npm run storybook
 ```

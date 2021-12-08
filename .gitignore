@@ -26,17 +26,18 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env*
 
 # vercel
 .vercel
 
-#story-book
+# story-book
 /storybook-static
 /docs-build
 
 # jetbrains
 .idea/sonarlint
+
+# cypress
+cypress/videos
+cypress/screenshots

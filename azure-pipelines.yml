@@ -6,66 +6,68 @@
 trigger:
 - main
 
+parameters:
+  - name: forceDeploy
+    type: boolean
+    default: false
+
 variables:
-  # Azure Resource Manager connection created during pipeline creation
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
-
-  # Web app name
   webAppName: 'App-nextjs-boilerplate'
-
-  # Environment name
   environmentName: 'App-nextjs-boilerplate'
-
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
-
-  # Is running on main branch
-  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
-
   sourceSlot: 'staging'
   resourceGroup: 'nextjs-boilerplate'
+  npm_config_cache: $(Pipeline.Workspace)/.npm
+  CYPRESS_CACHE_FOLDER: $(Pipeline.Workspace)/.cache/Cypress
 
 stages:
-- stage: Build
-  displayName: Build stage
+- stage: stageBuild
+  displayName: Build
   jobs:
   - job: Build
-    displayName: Build
     pool:
-      vmImage: $(vmImageName)
+      vmImage: ubuntu-latest
 
     steps:
+    - script: env | sort
+      displayName: Pipeline Environment
+
     - task: NodeTool@0
       inputs:
         versionSpec: '16.x'
-      displayName: 'Install Node.js'
+      displayName: Install Node.js
 
-    - script: |
-        npm ci
-      displayName: 'Install & Build'
+    - task: Cache@2
+      displayName: 'Cache npm'
+      inputs:
+        key: 'npm | "$(Agent.OS)" | package-lock.json'
+        restoreKeys: |
+          npm | "$(Agent.OS)"
+          npm
+        path: $(npm_config_cache)
 
-    - script: |
-        npx print-env AGENT
-        npx print-env BUILD
-        npx print-env SYSTEM
-      displayName: Pipeline Environment
+    - task: Cache@2
+      displayName: 'Cache Cypress'
+      inputs:
+        key: 'cypress | $(Agent.OS) | package-lock.json'
+        restoreKeys: |
+          cypress | $(Agent.OS) | package-lock.json
+        path: $(CYPRESS_CACHE_FOLDER)
 
-    - script: |
-        npm run lint --if-present
-      displayName: 'Lint'
+    - script: npm ci # --cache $(npm_config_cache)
+      displayName: Install & Build
 
-    - script: |
-        npm run test:cover --if-present
-      displayName: 'Tests'
+    - script: npm run test:cover
+      displayName: Unit Tests
 
     - task: PublishTestResults@2
-      displayName: 'Unit Test - Publish'
+      displayName: Publish Unit Test
       condition: succeededOrFailed()
       inputs:
         testResultsFiles: 'coverage/jest-junit/junit.xml'
 
     - task: PublishCodeCoverageResults@1
-      displayName: 'Code Coverage - Publish'
+      displayName: Publish Code Coverage
       condition: succeededOrFailed()
       inputs:
         failIfCoverageEmpty: true
@@ -73,45 +75,173 @@ stages:
         summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
 
     - task: PublishHtmlReport@1
-      displayName: 'HTML Report - Publish'
+      displayName: Publish Unit Test Report
       condition: succeededOrFailed()
       inputs:
         reportDir: 'coverage/html-report.html'
+        tabName: Unit Tests
 
-    - task: ArchiveFiles@2
-      displayName: 'Artifact - Archive'
+    - task: CopyFiles@2
+      displayName: Prepare Artifact
       inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-        includeRootFolder: false
-        archiveType: zip
-        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-        replaceExistingArchive: true
+        contents: |
+          **/**
+          !node_modules/**
+          !.git/**
+          !.idea/**
+          !.storybook/**
+          !jest.config.js
+          !jest.setup.js
+          !lint-staged.config.js
+          !prettier.config.js
+        targetFolder: $(Build.ArtifactStagingDirectory)
 
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      displayName: Artifact - Publish
-      artifact: drop
+    - task: PublishPipelineArtifact@1
+      displayName: Publish Artifact
+      inputs:
+        targetPath: $(Build.ArtifactStagingDirectory)
+        artifactType: 'pipeline'
+        artifactName: $(System.DefinitionName)
 
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
-  condition: and(succeeded(), eq(variables.isMain, true))
-  jobs:
-  - deployment: deployProduction
-    displayName: Deploy - Production
-    environment: Production
-    pool:
-      vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
+- ${{ if xor(eq(variables['Build.SourceBranch'], 'refs/heads/main'),eq(parameters.forceDeploy, true)) }}:
+    - stage: stageDeployDev
+      displayName: Dev
+      dependsOn: stageBuild
+      jobs:
+        - deployment: jobDeploy
+          displayName: Deploy Dev
+          environment: Dev
+          pool:
+            vmImage: ubuntu-latest
+          strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - task: AzureWebApp@1
+                    displayName: Deploy
+                    inputs:
+                      azureSubscription: $(azureSubscription)
+                      appType: webAppLinux
+                      appName: $(webAppName)
+                      runtimeStack: 'NODE|14-lts'
+                      package: $(Pipeline.Workspace)/$(System.DefinitionName)
+                      startUpCommand: 'npm run start'
+                      appSettings: -PORT 8080
+
+        - job: jobDeployValidation
+          displayName: E2E Tests - Dev
+          dependsOn: jobDeploy
           steps:
-          - task: AzureWebApp@1
-            displayName: 'Azure Web App Deploy'
-            inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              appName: $(webAppName)
-              runtimeStack: 'NODE|14-lts'
-              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-              startUpCommand: 'npm run start'
-              appSettings: -PORT 8080
+            - task: Cache@2
+              displayName: 'Cache npm'
+              inputs:
+                key: 'npm | "$(Agent.OS)" | package-lock.json'
+                restoreKeys: |
+                  npm | "$(Agent.OS)"
+                  npm
+                path: $(npm_config_cache)
+
+            - task: Cache@2
+              displayName: 'Cache Cypress'
+              inputs:
+                key: 'cypress | $(Agent.OS) | package-lock.json'
+                restoreKeys: |
+                  cypress | $(Agent.OS) | package-lock.json
+                path: $(CYPRESS_CACHE_FOLDER)
+
+            - script: npm ci --ignore-scripts
+              displayName: NPM Install
+
+            - script: npm run test:e2e:env
+              displayName: Cypress
+
+    - stage: stageDeployQA
+      displayName: QA
+      dependsOn: stageDeployDev
+      jobs:
+        - job: jobDeploy
+          displayName: Deploy QA
+          steps:
+            - script: 'echo deploy QA'
+              displayName: Deploy
+
+        - job: jobDeployValidation
+          displayName: E2E Tests - QA
+          dependsOn: jobDeploy
+          steps:
+            - script: 'echo e2e test'
+              displayName: Cypress
+
+        - job: jobApproval
+          displayName: Manual Approval
+          dependsOn: jobDeployValidation
+          pool: server
+          steps:
+            - task: ManualValidation@0
+              timeoutInMinutes: 1
+              inputs:
+                instructions: |
+                  ✅ Acceptance criteria is met
+                  ✅ Regressions pass
+                onTimeout: 'reject'
+
+    - stage: stageDeployStaging
+      displayName: Staging Prod
+      dependsOn: stageDeployQA
+      jobs:
+        - job: jobDeploy
+          displayName: Deploy Staging
+
+          steps:
+            - script: 'echo deploy Staging'
+              displayName: Deploy
+
+        - job: jobDeployValidation
+          displayName: E2E Tests Staging
+          dependsOn: jobDeploy
+          steps:
+            - script: 'echo e2e test'
+              displayName: Cypress
+
+        - job: jobApproval
+          displayName: Manual Approval
+          dependsOn: jobDeployValidation
+          pool: server
+          steps:
+            - task: ManualValidation@0
+              timeoutInMinutes: 1
+              inputs:
+                instructions: |
+                  ✅ Acceptance criteria is met
+                  ✅ Regressions pass
+                onTimeout: 'reject'
+
+    - stage: stageDeployProd
+      displayName: Prod
+      dependsOn: stageDeployStaging
+      jobs:
+        - job: jobDeploy
+          displayName: Deploy Prod
+          steps:
+            - script: 'echo deploy Prod'
+              displayName: Deploy
+
+        - job: jobDeployValidation
+          displayName: E2E Tests Prod
+          dependsOn: jobDeploy
+          steps:
+            - script: 'echo e2e test'
+              displayName: Cypress
+
+        - job: jobApproval
+          displayName: Manual Approval
+          dependsOn: jobDeployValidation
+          pool: server
+          steps:
+            - task: ManualValidation@0
+              timeoutInMinutes: 1
+              inputs:
+                instructions: |
+                  ✅ Acceptance criteria is met
+                  ✅ Regressions pass
+                onTimeout: 'reject'

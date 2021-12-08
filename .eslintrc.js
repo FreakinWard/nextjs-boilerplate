@@ -4,6 +4,7 @@ module.exports = {
     'react-goodies',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
+    "plugin:cypress/recommended"
   ],
   rules: {
     '@typescript-eslint/explicit-function-return-type': 'off',
