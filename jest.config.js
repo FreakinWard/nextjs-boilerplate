@@ -5,6 +5,9 @@ module.exports = {
   testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
   setupFilesAfterEnv: ['./jest.setup.js'],
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
+  },
   moduleNameMapper: {
     // Resolve .css and similar files to identity-obj-proxy instead.
     '.+\\.(css|styl|less|sass|scss)$': `identity-obj-proxy`,
