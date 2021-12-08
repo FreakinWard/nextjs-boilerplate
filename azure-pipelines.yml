@@ -108,9 +108,9 @@ stages:
 #                example@example.com
             instructions: 'Please validate the build configuration and resume'
             onTimeout: 'resume'
-        - task: awaitedTask
-          - script: 'echo Example Run'
-          displayName: 'Awaited Task'
+        - task: CmdLine@2
+          inputs:
+            script: 'echo Awaited Task'
 
 
 - stage: Deploy
