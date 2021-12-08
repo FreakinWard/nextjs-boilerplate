@@ -101,13 +101,13 @@ stages:
     timeoutInMinutes: 4320 # job times out in 3 days
     steps:
       - task: ManualValidation@0
-        timeoutInMinutes: 5 # task times out in 5 minutes
+        timeoutInMinutes: 1
         inputs:
 #              notifyUsers: |
 #                test@test.com
 #                example@example.com
           instructions: 'Please validate the build configuration and resume'
-          onTimeout: 'resume'
+          onTimeout: 'reject'
 #        - script: 'echo Awaited Task'
 
 
