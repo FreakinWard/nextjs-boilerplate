@@ -1,4 +1,5 @@
 module.exports = {
+  ignorePatterns: ['/cypress/**'], // TODO: remove and implement eslint-plugin-cypress when eslint 8 is supported - https://github.com/cypress-io/eslint-plugin-cypress/issues/89
   parser: '@typescript-eslint/parser',
   extends: [
     'react-goodies',
