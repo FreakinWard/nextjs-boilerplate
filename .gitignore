@@ -40,3 +40,7 @@ yarn-error.log*
 
 # jetbrains
 .idea/sonarlint
+
+# cypress
+cypress/videos
+cypress/screenshots

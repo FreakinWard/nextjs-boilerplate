@@ -58,6 +58,12 @@ stages:
         npm run test:cover --if-present
       displayName: 'Tests'
 
+    - script: npm run test:e2e:verify
+      displayName: 'Cypress verify'
+
+    - script: npm run test:e2e:ci
+      displayName: 'Run Cypress tests'
+
     - task: PublishTestResults@2
       displayName: 'Unit Test - Publish'
       condition: succeededOrFailed()
