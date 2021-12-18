@@ -35,23 +35,18 @@ stages:
           vmImage: $(vmImageName)
 
         steps:
+          - script: 'env | sort'
+            displayName: Pipeline Environment
+
           - task: NodeTool@0
             inputs:
               versionSpec: '16.x'
             displayName: 'Install Node.js'
 
-          - script: |
-              npm ci
+          - script: npm ci
             displayName: 'Install & Build'
 
-          - script: |
-              npx print-env AGENT
-              npx print-env BUILD
-              npx print-env SYSTEM
-            displayName: Pipeline Environment
-
-          - script: |
-              npm run test:cover --if-present
+          - script: npm run test:cover
             displayName: 'Tests'
 
           - task: PublishTestResults@2
