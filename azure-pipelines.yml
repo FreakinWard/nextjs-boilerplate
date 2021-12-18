@@ -51,10 +51,6 @@ stages:
       displayName: Pipeline Environment
 
     - script: |
-        npm run lint --if-present
-      displayName: 'Lint'
-
-    - script: |
         npm run test:cover --if-present
       displayName: 'Tests'
 

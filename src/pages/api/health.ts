@@ -7,7 +7,7 @@ interface Health {
   status: string;
 }
 
-export default async (req: NextApiRequest, res: NextApiResponse<Health>) => {
+export default async function health (req: NextApiRequest, res: NextApiResponse<Health>) {
   const healthData = { name: packageJson.name, version: packageJson.version, status: 'ok' };
 
   res.status(200).json(healthData);

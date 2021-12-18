@@ -6,7 +6,7 @@ interface Response {
   posts: Post[];
 }
 
-export default async (req: NextApiRequest, res: NextApiResponse<Response>) => {
+export default async function posts (req: NextApiRequest, res: NextApiResponse<Response>) {
   const posts = await fetchPosts();
 
   res.status(200).json(posts);
