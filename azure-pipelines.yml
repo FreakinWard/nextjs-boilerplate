@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-- main
+  - main
 
 variables:
   # Azure Resource Manager connection created during pipeline creation
@@ -26,88 +26,89 @@ variables:
   resourceGroup: 'nextjs-boilerplate'
 
 stages:
-- stage: Build
-  displayName: Build stage
-  jobs:
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: $(vmImageName)
+  - stage: Build
+    displayName: Build stage
+    jobs:
+      - job: Build
+        displayName: Build
+        pool:
+          vmImage: $(vmImageName)
 
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '16.x'
-      displayName: 'Install Node.js'
-
-    - script: |
-        npm ci
-      displayName: 'Install & Build'
-
-    - script: |
-        npx print-env AGENT
-        npx print-env BUILD
-        npx print-env SYSTEM
-      displayName: Pipeline Environment
-
-    - script: |
-        npm run test:cover --if-present
-      displayName: 'Tests'
-
-    - task: PublishTestResults@2
-      displayName: 'Unit Test - Publish'
-      condition: succeededOrFailed()
-      inputs:
-        testResultsFiles: 'coverage/jest-junit/junit.xml'
-
-    - task: PublishCodeCoverageResults@1
-      displayName: 'Code Coverage - Publish'
-      condition: succeededOrFailed()
-      inputs:
-        failIfCoverageEmpty: true
-        codeCoverageTool: Cobertura
-        summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
-
-    - task: PublishHtmlReport@1
-      displayName: 'HTML Report - Publish'
-      condition: succeededOrFailed()
-      inputs:
-        reportDir: 'coverage/html-report.html'
-
-    - task: ArchiveFiles@2
-      displayName: 'Artifact - Archive'
-      inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-        includeRootFolder: false
-        archiveType: zip
-        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-        replaceExistingArchive: true
-
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      displayName: Artifact - Publish
-      artifact: drop
-
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
-  condition: and(succeeded(), eq(variables.isMain, true))
-  jobs:
-  - deployment: deployProduction
-    displayName: Deploy - Production
-    environment: Production
-    pool:
-      vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzureWebApp@1
-            displayName: 'Azure Web App Deploy'
+        steps:
+          - task: NodeTool@0
             inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              appName: $(webAppName)
-              runtimeStack: 'NODE|14-lts'
-              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-              startUpCommand: 'npm run start'
-              appSettings: -PORT 8080
+              versionSpec: '16.x'
+            displayName: 'Install Node.js'
+
+          - script: |
+              npm ci
+            displayName: 'Install & Build'
+
+          - script: |
+              npx print-env AGENT
+              npx print-env BUILD
+              npx print-env SYSTEM
+            displayName: Pipeline Environment
+
+          - script: |
+              npm run test:cover --if-present
+            displayName: 'Tests'
+
+          - task: PublishTestResults@2
+            displayName: 'Unit Test - Publish'
+            condition: succeededOrFailed()
+            inputs:
+              testResultsFiles: 'coverage/jest-junit/junit.xml'
+
+          - task: PublishCodeCoverageResults@1
+            displayName: 'Code Coverage - Publish'
+            condition: succeededOrFailed()
+            inputs:
+              failIfCoverageEmpty: true
+              codeCoverageTool: Cobertura
+              summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
+
+          - task: PublishHtmlReport@1
+            displayName: 'Unit Test Report - Publish'
+            condition: succeededOrFailed()
+            inputs:
+              reportDir: 'coverage/html-report.html'
+              tabName: 'Unit Tests'
+
+          - task: ArchiveFiles@2
+            displayName: 'Artifact - Archive'
+            inputs:
+              rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+              includeRootFolder: false
+              archiveType: zip
+              archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+              replaceExistingArchive: true
+
+          - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+            displayName: Artifact - Publish
+            artifact: drop
+
+  - stage: Deploy
+    displayName: Deploy stage
+    dependsOn: Build
+    condition: and(succeeded(), eq(variables.isMain, true))
+    jobs:
+      - deployment: deployProduction
+        displayName: Deploy - Production
+        environment: Production
+        pool:
+          vmImage: $(vmImageName)
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: AzureWebApp@1
+                  displayName: 'Azure Web App Deploy'
+                  inputs:
+                    azureSubscription: $(azureSubscription)
+                    appType: webAppLinux
+                    appName: $(webAppName)
+                    runtimeStack: 'NODE|14-lts'
+                    package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
+                    startUpCommand: 'npm run start'
+                    appSettings: -PORT 8080
