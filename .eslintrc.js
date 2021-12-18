@@ -1,6 +1,13 @@
 module.exports = {
-  extends: ["next/core-web-vitals"],
+  plugins: ['simple-import-sort', 'prettier'],
+  extends: ["next/core-web-vitals", "plugin:@next/next/recommended", "plugin:prettier/recommended"],
   rules: {
-    'import/no-anonymous-default-export': [2, {"allowObject": true}]
+    'prettier/prettier': 'error', // Use our prettier.config.js file as source
+    'import/prefer-default-export': 'error',
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'import/no-anonymous-default-export': [2, {"allowObject": true, "allowArray": true}]
   }
 }
