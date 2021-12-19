@@ -106,4 +106,4 @@ stages:
                     runtimeStack: 'NODE|14-lts'
                     package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
                     startUpCommand: 'npm run start'
-                    appSettings: -PORT 8080
+                    appSettings: -PORT 3000
