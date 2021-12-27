@@ -50,13 +50,13 @@ stages:
             displayName: 'Tests'
 
           - task: PublishTestResults@2
-            displayName: 'Unit Test - Publish'
+            displayName: 'Publish Unit Test'
             condition: succeededOrFailed()
             inputs:
               testResultsFiles: 'coverage/jest-junit/junit.xml'
 
           - task: PublishCodeCoverageResults@1
-            displayName: 'Code Coverage - Publish'
+            displayName: 'Publish Code Coverage'
             condition: succeededOrFailed()
             inputs:
               failIfCoverageEmpty: true
@@ -70,40 +70,33 @@ stages:
               reportDir: 'coverage/html-report.html'
               tabName: 'Unit Tests'
 
-          - task: ArchiveFiles@2
-            displayName: 'Artifact - Archive'
+          - task: PublishPipelineArtifact@1
+            displayName: Publish Artifact
             inputs:
-              rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-              includeRootFolder: false
-              archiveType: zip
-              archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-              replaceExistingArchive: true
+              targetPath: $(System.DefaultWorkingDirectory)
+              artifactType: 'pipeline'
 
-          - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-            displayName: Artifact - Publish
-            artifact: drop
-
-  - stage: Deploy
-    displayName: Deploy stage
-    dependsOn: Build
-    condition: and(succeeded(), eq(variables.isMain, true))
-    jobs:
-      - deployment: deployProduction
-        displayName: Deploy - Production
-        environment: Dev
-        pool:
-          vmImage: $(vmImageName)
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - task: AzureWebApp@1
-                  displayName: 'Azure Web App Deploy'
-                  inputs:
-                    azureSubscription: $(azureSubscription)
-                    appType: webAppLinux
-                    appName: $(webAppName)
-                    runtimeStack: 'NODE|14-lts'
-                    package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-                    startUpCommand: 'npm run start'
-                    appSettings: -PORT 8080
+  - ${{ if xor(eq(parameters.forceDeploy, true), eq(variables.isMain, true)) }}:
+      - stage: Deploy
+        displayName: Deploy stage
+        dependsOn: Build
+        jobs:
+          - deployment: deployProduction
+            displayName: Deploy - Production
+            environment: Dev
+            pool:
+              vmImage: $(vmImageName)
+            strategy:
+              runOnce:
+                deploy:
+                  steps:
+                    - task: AzureWebApp@1
+                      displayName: 'Azure Web App Deploy'
+                      inputs:
+                        azureSubscription: $(azureSubscription)
+                        appType: webAppLinux
+                        appName: $(webAppName)
+                        runtimeStack: 'NODE|14-lts'
+                        package: $(Pipeline.Workspace)/drop
+                        startUpCommand: 'npm run start'
+                        appSettings: -PORT 8080
