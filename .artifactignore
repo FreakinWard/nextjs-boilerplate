@@ -1,8 +1,7 @@
 **/node_modules
 
-**/.git
-**/.github
-**/.husky
-**/.idea
+**/.*
+!**/.next
 
 **/coverage
+**/__mocks__

@@ -6,6 +6,11 @@
 trigger:
   - main
 
+parameters:
+  - name: forceDeploy
+    type: boolean
+    default: false
+
 variables:
   # Azure Resource Manager connection created during pipeline creation
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
@@ -75,6 +80,7 @@ stages:
             inputs:
               targetPath: $(System.DefaultWorkingDirectory)
               artifactType: 'pipeline'
+              artifactName: 'drop'
 
   - ${{ if xor(eq(parameters.forceDeploy, true), eq(variables.isMain, true)) }}:
       - stage: Deploy
