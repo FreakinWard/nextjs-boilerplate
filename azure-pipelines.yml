@@ -90,7 +90,7 @@ stages:
     jobs:
       - deployment: deployProduction
         displayName: Deploy - Production
-        environment: Production
+        environment: Dev
         pool:
           vmImage: $(vmImageName)
         strategy:
