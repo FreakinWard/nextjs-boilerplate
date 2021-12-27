@@ -69,18 +69,35 @@ stages:
               summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
 
           - task: PublishHtmlReport@1
-            displayName: 'Unit Test Report - Publish'
+            displayName: 'Publish Unit Test Report'
             condition: succeededOrFailed()
             inputs:
               reportDir: 'coverage/html-report.html'
               tabName: 'Unit Tests'
 
+          - task: CopyFiles@2
+            displayName: Prepare Artifact
+            inputs:
+              contents: |
+                **/**
+
+                !node_modules/**
+                !.git/**
+                !.husky/**
+                !.idea/**
+                !.storybook/**
+                !jest.config.js
+                !jest.setup.js
+                !lint-staged.config.js
+                !prettier.config.js
+              targetFolder: $(Build.ArtifactStagingDirectory)
+
           - task: PublishPipelineArtifact@1
             displayName: Publish Artifact
             inputs:
-              targetPath: $(System.DefaultWorkingDirectory)
+              targetPath: $(Build.ArtifactStagingDirectory)
               artifactType: 'pipeline'
-              artifactName: 'drop'
+              artifactName: $(System.DefinitionName)
 
   - ${{ if xor(eq(parameters.forceDeploy, true), eq(variables.isMain, true)) }}:
       - stage: Deploy
@@ -88,7 +105,7 @@ stages:
         dependsOn: Build
         jobs:
           - deployment: deployProduction
-            displayName: Deploy - Production
+            displayName: Deploy Dev
             environment: Dev
             pool:
               vmImage: $(vmImageName)
@@ -103,6 +120,6 @@ stages:
                         appType: webAppLinux
                         appName: $(webAppName)
                         runtimeStack: 'NODE|14-lts'
-                        package: $(Pipeline.Workspace)/drop
+                        package: $(Pipeline.Workspace)/$(System.DefinitionName)
                         startUpCommand: 'npm run start'
                         appSettings: -PORT 8080
