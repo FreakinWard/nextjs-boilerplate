@@ -43,6 +43,11 @@ stages:
           - script: 'env | sort'
             displayName: Pipeline Environment
 
+          - script: |
+              echo $(Build.SourceBranch)
+              echo isMain $(isMain)
+              echo forceDeploy ${{ parameters.forceDeploy }}
+
           - task: NodeTool@0
             inputs:
               versionSpec: '16.x'
@@ -99,7 +104,8 @@ stages:
               artifactType: 'pipeline'
               artifactName: $(System.DefinitionName)
 
-  - ${{ if xor(eq(parameters.forceDeploy, true), eq(variables.isMain, true)) }}:
+  - ${{ if xor( eq(variables.isMain, true), eq(parameters.forceDeploy, true) ) }}:
+      #  - ${{ if eq(variables.isMain, 'true') }}:
       - stage: Deploy
         displayName: Deploy stage
         dependsOn: Build
