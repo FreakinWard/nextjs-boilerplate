@@ -6,6 +6,11 @@
 trigger:
   - main
 
+parameters:
+  - name: forceDeploy
+    type: boolean
+    default: false
+
 variables:
   # Azure Resource Manager connection created during pipeline creation
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
@@ -50,13 +55,13 @@ stages:
             displayName: 'Tests'
 
           - task: PublishTestResults@2
-            displayName: 'Unit Test - Publish'
+            displayName: 'Publish Unit Test'
             condition: succeededOrFailed()
             inputs:
               testResultsFiles: 'coverage/jest-junit/junit.xml'
 
           - task: PublishCodeCoverageResults@1
-            displayName: 'Code Coverage - Publish'
+            displayName: 'Publish Code Coverage'
             condition: succeededOrFailed()
             inputs:
               failIfCoverageEmpty: true
@@ -64,46 +69,57 @@ stages:
               summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
 
           - task: PublishHtmlReport@1
-            displayName: 'Unit Test Report - Publish'
+            displayName: 'Publish Unit Test Report'
             condition: succeededOrFailed()
             inputs:
               reportDir: 'coverage/html-report.html'
               tabName: 'Unit Tests'
 
-          - task: ArchiveFiles@2
-            displayName: 'Artifact - Archive'
+          - task: CopyFiles@2
+            displayName: Prepare Artifact
             inputs:
-              rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-              includeRootFolder: false
-              archiveType: zip
-              archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-              replaceExistingArchive: true
+              contents: |
+                **/**
 
-          - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-            displayName: Artifact - Publish
-            artifact: drop
+                !node_modules/**
+                !.git/**
+                !.husky/**
+                !.idea/**
+                !.storybook/**
+                !jest.config.js
+                !jest.setup.js
+                !lint-staged.config.js
+                !prettier.config.js
+              targetFolder: $(Build.ArtifactStagingDirectory)
 
-  - stage: Deploy
-    displayName: Deploy stage
-    dependsOn: Build
-    condition: and(succeeded(), eq(variables.isMain, true))
-    jobs:
-      - deployment: deployProduction
-        displayName: Deploy - Production
-        environment: Dev
-        pool:
-          vmImage: $(vmImageName)
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - task: AzureWebApp@1
-                  displayName: 'Azure Web App Deploy'
-                  inputs:
-                    azureSubscription: $(azureSubscription)
-                    appType: webAppLinux
-                    appName: $(webAppName)
-                    runtimeStack: 'NODE|14-lts'
-                    package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-                    startUpCommand: 'npm run start'
-                    appSettings: -PORT 8080
+          - task: PublishPipelineArtifact@1
+            displayName: Publish Artifact
+            inputs:
+              targetPath: $(Build.ArtifactStagingDirectory)
+              artifactType: 'pipeline'
+              artifactName: $(System.DefinitionName)
+
+  - ${{ if xor(eq(parameters.forceDeploy, true), eq(variables.isMain, true)) }}:
+      - stage: Deploy
+        displayName: Deploy stage
+        dependsOn: Build
+        jobs:
+          - deployment: deployProduction
+            displayName: Deploy Dev
+            environment: Dev
+            pool:
+              vmImage: $(vmImageName)
+            strategy:
+              runOnce:
+                deploy:
+                  steps:
+                    - task: AzureWebApp@1
+                      displayName: 'Azure Web App Deploy'
+                      inputs:
+                        azureSubscription: $(azureSubscription)
+                        appType: webAppLinux
+                        appName: $(webAppName)
+                        runtimeStack: 'NODE|14-lts'
+                        package: $(Pipeline.Workspace)/$(System.DefinitionName)
+                        startUpCommand: 'npm run start'
+                        appSettings: -PORT 8080
