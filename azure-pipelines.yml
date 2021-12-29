@@ -12,21 +12,10 @@ parameters:
     default: false
 
 variables:
-  # Azure Resource Manager connection created during pipeline creation
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
-
-  # Web app name
   webAppName: 'App-nextjs-boilerplate'
-
-  # Environment name
   environmentName: 'App-nextjs-boilerplate'
-
-  # Agent VM image name
   vmImageName: 'ubuntu-latest'
-
-  # Is running on main branch
-  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
-
   sourceSlot: 'staging'
   resourceGroup: 'nextjs-boilerplate'
 
@@ -42,11 +31,6 @@ stages:
         steps:
           - script: 'env | sort'
             displayName: Pipeline Environment
-
-          - script: |
-              echo $(Build.SourceBranch)
-              echo isMain $(isMain)
-              echo forceDeploy ${{ parameters.forceDeploy }}
 
           - task: NodeTool@0
             inputs:
@@ -104,8 +88,7 @@ stages:
               artifactType: 'pipeline'
               artifactName: $(System.DefinitionName)
 
-  - ${{ if xor( eq(variables.isMain, true), eq(parameters.forceDeploy, true) ) }}:
-      #  - ${{ if eq(variables.isMain, 'true') }}:
+  - ${{ if xor(eq(variables['Build.SourceBranch'], 'refs/heads/main'),eq(parameters.forceDeploy, true)) }}:
       - stage: Deploy
         displayName: Deploy stage
         dependsOn: Build
