@@ -9,4 +9,15 @@ describe('health', () => {
     // assert
     cy.findByText('Health Check');
   });
+
+  it('should show expected build number', () => {
+    // arrange
+    const buildNumber = process.env.CI_BUILD_NUMBER ?? 'not-set';
+
+    // act
+    // assert
+    // cy.findByText(`BuildNumber: ${buildNumber}`);
+    // eslint-disable-next-line jest/valid-expect
+    expect(Cypress.env('CI_BUILD_NUMBER')).to.equal(buildNumber);
+  });
 });

@@ -1,0 +1,67 @@
+parameters:
+  - name: environmentType
+    type: string
+    values:
+      - Dev
+      - QA
+      - Prod
+
+  - name: slotName
+    type: string
+    default: production
+
+  - name: regions
+    type: object
+    default:
+      - East
+
+  - name: serviceConnection
+    type: string
+
+jobs:
+- ${{ each region in parameters.regions }}:
+    - deployment: jobDeploy${{ region }}
+      displayName: Deploy ${{ region }}
+      environment: ${{ parameters.environmentType }}
+      pool:
+        vmImage: ubuntu-latest
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - task: AzureWebApp@1
+                name: Deploy
+                inputs:
+                  azureSubscription: ${{ parameters.serviceConnection }}
+                  appType: webAppLinux
+                  appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
+                  runtimeStack: 'NODE|14-lts'
+                  package: $(Pipeline.Workspace)/drop/$(buildPackageName)
+                  startUpCommand: 'npm run start:prod'
+                  resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
+                  slotName: ${{ parameters.slotName }}
+                  appSettings: -CI_BUILD_NUMBER $(Build.BuildNumber) -WEBSITE_WARMUP_PATH "/health" -WEBSITE_SWAP_WARMUP_PING_STATUSES "200, 202"
+
+              - bash: |
+                  echo "AppServiceApplicationUrl is $(Deploy.AppServiceApplicationUrl)"
+                  echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(Deploy.AppServiceApplicationUrl)"
+                name: setDeployedAppUrl
+                displayName: Set deployedAppUrl
+
+              - script: env | sort
+                displayName: Pipeline Environment
+
+    - job: jobDeployValidation${{ region }}
+      displayName: E2E Tests ${{ region }}
+      dependsOn: jobDeploy${{ region }}
+      condition: false # TODO: re-enable
+      variables:
+        deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeployedAppUrl.deployedAppUrl'] ]
+      steps:
+        - script: env | sort
+          displayName: Pipeline Environment
+
+        - template: npmInstall.yml
+
+        - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(Build.BuildNumber)
+          displayName: Cypress

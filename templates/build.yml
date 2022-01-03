@@ -1,0 +1,78 @@
+jobs:
+- job: Build
+  pool:
+    vmImage: ubuntu-latest
+
+  steps:
+    - script: env | sort
+      displayName: Pipeline Environment
+
+    - template: npmInstall.yml
+
+    - script: npm run build
+      displayName: App Build
+
+#    - script: npm run test:cover
+#      displayName: Unit Tests
+#
+#    - script: npm run test:e2e:ci
+#      displayName: E2E Tests
+#
+#    - task: PublishTestResults@2
+#      displayName: Publish Unit Test
+#      condition: succeededOrFailed()
+#      inputs:
+#        testResultsFiles: 'coverage/jest-junit/junit.xml'
+#
+#    - task: PublishCodeCoverageResults@1
+#      displayName: Publish Code Coverage
+#      condition: succeededOrFailed()
+#      inputs:
+#        failIfCoverageEmpty: true
+#        codeCoverageTool: Cobertura
+#        summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
+#
+#    - task: PublishHtmlReport@1
+#      displayName: Publish Unit Test Report
+#      condition: succeededOrFailed()
+#      inputs:
+#        reportDir: 'coverage/html-report.html'
+#        tabName: Unit Tests
+
+    - task: CopyFiles@2
+      displayName: Prepare Artifact
+      inputs:
+        contents: |
+          **/**
+          
+          !node_modules/**
+          !.git/**
+          !.idea/**
+          !.storybook/**
+          !jest.config.js
+          !jest.setup.js
+          !lint-staged.config.js
+          !prettier.config.js
+          !.npmrc
+        targetFolder: $(Build.ArtifactStagingDirectory)
+
+    # TODO: prune may be causing some issues - maybe try npm i --production within staging directory
+#    - script: npm prune --production
+#      displayName: Npm prune prod
+#      workingDirectory: $(Build.ArtifactStagingDirectory)
+    - script: npm run ci:prod
+      displayName: Install Prod
+      workingDirectory: $(Build.ArtifactStagingDirectory)
+
+    - task: ArchiveFiles@2
+      displayName: Archive Artifact
+      inputs:
+        rootFolderOrFile: $(Build.ArtifactStagingDirectory)
+        includeRootFolder: false
+        archiveType: zip
+        archiveFile: $(Build.ArtifactStagingDirectory)/$(buildPackageName)
+        replaceExistingArchive: true
+
+    - upload: $(Build.ArtifactStagingDirectory)/$(buildPackageName)
+      displayName: Artifact - Publish
+      artifact: drop

@@ -6,242 +6,124 @@
 trigger:
 - main
 
+pool:
+  vmImage: 'ubuntu-latest'
+
 parameters:
-  - name: forceDeploy
+  - name: deployToDev
     type: boolean
     default: false
 
 variables:
+  appName: aw-aux-checkout-microsite
+
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
-  webAppName: 'App-nextjs-boilerplate'
-  environmentName: 'App-nextjs-boilerplate'
-  sourceSlot: 'staging'
-  resourceGroup: 'nextjs-boilerplate'
+  buildPackageName: $(System.DefinitionName)-$(Build.BuildNumber).zip
+
   npm_config_cache: $(Pipeline.Workspace)/.npm
-  CYPRESS_CACHE_FOLDER: $(Pipeline.Workspace)/.cache/Cypress
+  cyCacheDir: /home/vsts/.cache/Cypress
+  nextCacheDir: $(System.DefaultWorkingDirectory)/.next/cache
+  cacheVersion: v1
+
+  CI_BUILD_NUMBER: mySuperValue-$(Build.BuildNumber)
 
 stages:
 - stage: stageBuild
   displayName: Build
   jobs:
-  - job: Build
-    pool:
-      vmImage: ubuntu-latest
+  - template: templates/build.yml
 
-    steps:
-    - script: env | sort
-      displayName: Pipeline Environment
+- stage: stageDeployDev
+  displayName: Dev
+  dependsOn: stageBuild
+  #  condition: and(succeeded(), or(eq(variables.isCI, 'true'), eq(${{ parameters.deployToDev }}, 'true')))
+  condition: and(succeeded(), eq(${{ parameters.deployToDev }}, 'true'))
+  jobs:
+  - template: templates/deploy.yml
+    parameters:
+      environmentType: Dev
+      slotName: service-staging
+      serviceConnection: $(azureSubscription)
+      regions:
+        - East
 
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '16.x'
-      displayName: Install Node.js
+  - template: templates/swapSlot.yml
+    parameters:
+      environmentType: Dev
+      slotName: service-staging
+      dependsOnDeployJob: true
+      serviceConnection: $(azureSubscription)
+      regions:
+        - East
 
-    - task: Cache@2
-      displayName: 'Cache npm'
-      inputs:
-        key: 'npm | "$(Agent.OS)" | package-lock.json'
-        restoreKeys: |
-          npm | "$(Agent.OS)"
-          npm
-        path: $(npm_config_cache)
 
-    - task: Cache@2
-      displayName: 'Cache Cypress'
-      inputs:
-        key: 'cypress | $(Agent.OS) | package-lock.json'
-        restoreKeys: |
-          cypress | $(Agent.OS) | package-lock.json
-        path: $(CYPRESS_CACHE_FOLDER)
-
-    - script: npm ci # --cache $(npm_config_cache)
-      displayName: Install & Build
-
-    - script: npm run test:cover
-      displayName: Unit Tests
-
-    - task: PublishTestResults@2
-      displayName: Publish Unit Test
-      condition: succeededOrFailed()
-      inputs:
-        testResultsFiles: 'coverage/jest-junit/junit.xml'
-
-    - task: PublishCodeCoverageResults@1
-      displayName: Publish Code Coverage
-      condition: succeededOrFailed()
-      inputs:
-        failIfCoverageEmpty: true
-        codeCoverageTool: Cobertura
-        summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
-
-    - task: PublishHtmlReport@1
-      displayName: Publish Unit Test Report
-      condition: succeededOrFailed()
-      inputs:
-        reportDir: 'coverage/html-report.html'
-        tabName: Unit Tests
-
-    - task: CopyFiles@2
-      displayName: Prepare Artifact
-      inputs:
-        contents: |
-          **/**
-          !node_modules/**
-          !.git/**
-          !.idea/**
-          !.storybook/**
-          !jest.config.js
-          !jest.setup.js
-          !lint-staged.config.js
-          !prettier.config.js
-        targetFolder: $(Build.ArtifactStagingDirectory)
-
-    - task: PublishPipelineArtifact@1
-      displayName: Publish Artifact
-      inputs:
-        targetPath: $(Build.ArtifactStagingDirectory)
-        artifactType: 'pipeline'
-        artifactName: $(System.DefinitionName)
-
-- ${{ if xor(eq(variables['Build.SourceBranch'], 'refs/heads/main'),eq(parameters.forceDeploy, true)) }}:
-    - stage: stageDeployDev
-      displayName: Dev
-      dependsOn: stageBuild
-      jobs:
-        - deployment: jobDeploy
-          displayName: Deploy Dev
-          environment: Dev
-          pool:
-            vmImage: ubuntu-latest
-          strategy:
-            runOnce:
-              deploy:
-                steps:
-                  - task: AzureWebApp@1
-                    displayName: Deploy
-                    inputs:
-                      azureSubscription: $(azureSubscription)
-                      appType: webAppLinux
-                      appName: $(webAppName)
-                      runtimeStack: 'NODE|14-lts'
-                      package: $(Pipeline.Workspace)/$(System.DefinitionName)
-                      startUpCommand: 'npm run start'
-                      appSettings: -PORT 8080
-
-        - job: jobDeployValidation
-          displayName: E2E Tests - Dev
-          dependsOn: jobDeploy
-          steps:
-            - task: Cache@2
-              displayName: 'Cache npm'
-              inputs:
-                key: 'npm | "$(Agent.OS)" | package-lock.json'
-                restoreKeys: |
-                  npm | "$(Agent.OS)"
-                  npm
-                path: $(npm_config_cache)
-
-            - task: Cache@2
-              displayName: 'Cache Cypress'
-              inputs:
-                key: 'cypress | $(Agent.OS) | package-lock.json'
-                restoreKeys: |
-                  cypress | $(Agent.OS) | package-lock.json
-                path: $(CYPRESS_CACHE_FOLDER)
-
-            - script: npm ci --ignore-scripts
-              displayName: NPM Install
-
-            - script: npm run test:e2e:env
-              displayName: Cypress
-
-    - stage: stageDeployQA
-      displayName: QA
-      dependsOn: stageDeployDev
-      jobs:
-        - job: jobDeploy
-          displayName: Deploy QA
-          steps:
-            - script: 'echo deploy QA'
-              displayName: Deploy
-
-        - job: jobDeployValidation
-          displayName: E2E Tests - QA
-          dependsOn: jobDeploy
-          steps:
-            - script: 'echo e2e test'
-              displayName: Cypress
-
-        - job: jobApproval
-          displayName: Manual Approval
-          dependsOn: jobDeployValidation
-          pool: server
-          steps:
-            - task: ManualValidation@0
-              timeoutInMinutes: 1
-              inputs:
-                instructions: |
-                  ✅ Acceptance criteria is met
-                  ✅ Regressions pass
-                onTimeout: 'reject'
-
-    - stage: stageDeployStaging
-      displayName: Staging Prod
-      dependsOn: stageDeployQA
-      jobs:
-        - job: jobDeploy
-          displayName: Deploy Staging
-
-          steps:
-            - script: 'echo deploy Staging'
-              displayName: Deploy
-
-        - job: jobDeployValidation
-          displayName: E2E Tests Staging
-          dependsOn: jobDeploy
-          steps:
-            - script: 'echo e2e test'
-              displayName: Cypress
-
-        - job: jobApproval
-          displayName: Manual Approval
-          dependsOn: jobDeployValidation
-          pool: server
-          steps:
-            - task: ManualValidation@0
-              timeoutInMinutes: 1
-              inputs:
-                instructions: |
-                  ✅ Acceptance criteria is met
-                  ✅ Regressions pass
-                onTimeout: 'reject'
-
-    - stage: stageDeployProd
-      displayName: Prod
-      dependsOn: stageDeployStaging
-      jobs:
-        - job: jobDeploy
-          displayName: Deploy Prod
-          steps:
-            - script: 'echo deploy Prod'
-              displayName: Deploy
-
-        - job: jobDeployValidation
-          displayName: E2E Tests Prod
-          dependsOn: jobDeploy
-          steps:
-            - script: 'echo e2e test'
-              displayName: Cypress
-
-        - job: jobApproval
-          displayName: Manual Approval
-          dependsOn: jobDeployValidation
-          pool: server
-          steps:
-            - task: ManualValidation@0
-              timeoutInMinutes: 1
-              inputs:
-                instructions: |
-                  ✅ Acceptance criteria is met
-                  ✅ Regressions pass
-                onTimeout: 'reject'
+#- stage: stageDeployQA
+#  displayName: QA
+#  dependsOn: stageBuild
+#  condition: and(succeeded(), eq(${{ parameters.pullRequest }}, false))
+#  jobs:
+#  - template: templates/deploy.yml
+#    parameters:
+#      environmentType: QA
+#      appName: App-nextjs-boilerplate-qa
+#
+#- stage: stageDeployStaging
+#  displayName: Staging Prod
+#  dependsOn: stageDeployQA
+#  jobs:
+#    - job: jobDeploy
+#      displayName: Deploy Staging
+#
+#      steps:
+#        - script: 'echo deploy Staging'
+#          displayName: Deploy
+#
+#    - job: jobDeployValidation
+#      displayName: E2E Tests Staging
+#      dependsOn: jobDeploy
+#      steps:
+#        - script: 'echo e2e test'
+#          displayName: Cypress
+#
+#    - job: jobApproval
+#      displayName: Manual Approval
+#      dependsOn: jobDeployValidation
+#      pool: server
+#      steps:
+#        - task: ManualValidation@0
+#          timeoutInMinutes: 1
+#          inputs:
+#            instructions: |
+#              ✅ Acceptance criteria is met
+#              ✅ Regressions pass
+#            onTimeout: 'reject'
+#
+#- stage: stageDeployProd
+#  displayName: Prod
+#  dependsOn: stageDeployStaging
+#  jobs:
+#    - job: jobDeploy
+#      displayName: Deploy Prod
+#      steps:
+#        - script: 'echo deploy Prod'
+#          displayName: Deploy
+#
+#    - job: jobDeployValidation
+#      displayName: E2E Tests Prod
+#      dependsOn: jobDeploy
+#      steps:
+#        - script: 'echo e2e test'
+#          displayName: Cypress
+#
+#    - job: jobApproval
+#      displayName: Manual Approval
+#      dependsOn: jobDeployValidation
+#      pool: server
+#      steps:
+#        - task: ManualValidation@0
+#          timeoutInMinutes: 1
+#          inputs:
+#            instructions: |
+#              ✅ Acceptance criteria is met
+#              ✅ Regressions pass
+#            onTimeout: 'reject'

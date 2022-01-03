@@ -1,0 +1,45 @@
+parameters:
+  - name: environmentType
+    type: string
+    values:
+      - Dev
+      - QA
+      - Prod
+
+  - name: slotName
+    type: string
+    default: staging
+
+  - name: dependsOnDeployJob
+    type: boolean
+    default: false
+
+  - name: serviceConnection
+    type: string
+
+  - name: regions
+    type: object
+
+jobs:
+- ${{ each region in parameters.regions }}:
+  - deployment: jobSwapSlot${{ region }}
+    displayName: Swap Slot ${{ region }}
+    environment: ${{ parameters.environmentType }}
+    ${{ if parameters.dependsOnDeployJob }}:
+      dependsOn: jobDeploy${{ region }}
+    pool:
+      vmImage: ubuntu-latest
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - download: none
+            - task: AzureAppServiceManage@0
+              displayName: Swap slot ${{ region }}
+              inputs:
+                azureSubscription: ${{ parameters.serviceConnection }}
+                appType: webAppLinux
+                webAppName: $(appName)-${{ parameters.environmentType }}-${{ region }}
+                resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
+                sourceSlot: ${{ parameters.slotName }}
+                swapWithProduction: true
