@@ -14,11 +14,17 @@ parameters:
     type: string
 
 jobs:
-  - job: jobSwapSlot
-    displayName: Swap staging to prod slot
-    steps:
-      - script: echo build-artifact
-        displayName: Swap
+  - deployment: jobSwapSlot
+    displayName: Swap slot
+    environment: ${{ parameters.environmentType }}
+    pool:
+      vmImage: ubuntu-latest
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - script: echo swap-slot
+              displayName: Swap slot
 
   - job: jobDeployValidation
     displayName: E2E Tests

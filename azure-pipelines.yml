@@ -74,6 +74,7 @@ stages:
     jobs:
       - template: templates/swapSlot.yml
         parameters:
+          environmentType: Prod
           appName: app-nextjs-boilerplate-prod
           resourceGroupName: nextjs-boilerplate
           requireManual: true
