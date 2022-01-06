@@ -26,7 +26,7 @@ stages:
   - stage: stageDeployDev
     displayName: Dev
     dependsOn: stageBuild
-    condition: eq(parameters.pullRequest, true)
+    condition: and(succeeded(), eq(parameters.pullRequest, true))
     jobs:
       - template: templates/deploy.yml
         parameters:
