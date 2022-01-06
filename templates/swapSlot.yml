@@ -2,6 +2,12 @@ parameters:
   - name: appName
     type: string
 
+  - name: environmentType
+    type: string
+    values:
+      - QA
+      - Prod
+
   - name: slotName
     type: string
     default: staging

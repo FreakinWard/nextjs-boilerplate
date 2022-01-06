@@ -50,6 +50,7 @@ stages:
     jobs:
       - template: templates/swapSlot.yml
         parameters:
+          environmentType: QA
           appName: app-nextjs-boilerplate-qa
           resourceGroupName: nextjs-boilerplate
           requireManual: true
