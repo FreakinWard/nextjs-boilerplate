@@ -20,16 +20,29 @@ jobs:
       - script: echo build-artifact
         displayName: Swap
 
-  - ${{ if eq(parameters.requireManual, true) }}:
-      - job:
-        displayName: Manual Approval
-        dependsOn: jobSwapSlot
-        pool: server
-        steps:
-          - task: ManualValidation@0
-            timeoutInMinutes: 1
-            inputs:
-              instructions: |
-                ✅ Acceptance criteria is met
-                ✅ Regressions pass
-              onTimeout: 'reject'
+  - job: jobDeployValidation
+    displayName: E2E Tests
+    dependsOn: jobDeploy
+    condition: false
+    variables:
+      deployedAppUrl: $[ dependencies.jobDeploy.outputs['jobDeploy.setDeployedAppUrl.deployedAppUrl'] ]
+    steps:
+      - script: env | sort
+        displayName: Pipeline Environment
+
+      - script: echo build-artifact
+        displayName: Build
+
+#  - ${{ if eq(parameters.requireManual, true) }}:
+#      - job:
+#        displayName: Manual Approval
+#        dependsOn: jobSwapSlot
+#        pool: server
+#        steps:
+#          - task: ManualValidation@0
+#            timeoutInMinutes: 1
+#            inputs:
+#              instructions: |
+#                ✅ Acceptance criteria is met
+#                ✅ Regressions pass
+#              onTimeout: 'reject'

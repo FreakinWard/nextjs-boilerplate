@@ -7,6 +7,7 @@ parameters:
     values:
       - Dev
       - QA
+      - ProdStaging
       - Prod
 
   - name: slotName
@@ -43,16 +44,16 @@ jobs:
       - script: echo build-artifact
         displayName: Build
 
-  - ${{ if eq(parameters.requireManual, true) }}:
-      - job:
-        displayName: Manual Approval
-        dependsOn: jobDeployValidation
-        pool: server
-        steps:
-          - task: ManualValidation@0
-            timeoutInMinutes: 1
-            inputs:
-              instructions: |
-                ✅ Acceptance criteria is met
-                ✅ Regressions pass
-              onTimeout: 'reject'
+#  - ${{ if eq(parameters.requireManual, true) }}:
+#      - job:
+#        displayName: Manual Approval
+#        dependsOn: jobDeployValidation
+#        pool: server
+#        steps:
+#          - task: ManualValidation@0
+#            timeoutInMinutes: 1
+#            inputs:
+#              instructions: |
+#                ✅ Acceptance criteria is met
+#                ✅ Regressions pass
+#              onTimeout: 'reject'

@@ -58,10 +58,11 @@ stages:
   - stage: stageDeployStaging
     displayName: Staging Prod
     dependsOn: stageDeployQA
+#    condition: eq(true, false) # TODO: disabled until production environment is created
     jobs:
       - template: templates/deploy.yml
         parameters:
-          environmentType: Prod
+          environmentType: ProdStaging
           appName: app-nextjs-boilerplate-prod
           slotName: staging
           requireManual: true
