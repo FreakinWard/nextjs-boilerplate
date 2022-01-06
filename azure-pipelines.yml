@@ -37,7 +37,7 @@ stages:
   - stage: stageDeployIntegration
     displayName: Integration
     dependsOn: stageBuild
-    condition: eq(parameters.pullRequest, false)
+    condition: and(succeeded(), eq(${{ parameters.pullRequest }}, false))
     jobs:
       - template: templates/deploy.yml
         parameters:
