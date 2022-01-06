@@ -1,0 +1,35 @@
+parameters:
+  - name: appName
+    type: string
+
+  - name: slotName
+    type: string
+    default: staging
+
+  - name: requireManual
+    type: boolean
+    default: false
+
+  - name: resourceGroupName
+    type: string
+
+jobs:
+  - job: jobSwapSlot
+    displayName: Swap staging to prod slot
+    steps:
+      - script: echo build-artifact
+        displayName: Swap
+
+  - ${{ if eq(parameters.requireManual, true) }}:
+      - job:
+        displayName: Manual Approval
+        dependsOn: jobSwapSlot
+        pool: server
+        steps:
+          - task: ManualValidation@0
+            timeoutInMinutes: 1
+            inputs:
+              instructions: |
+                ✅ Acceptance criteria is met
+                ✅ Regressions pass
+              onTimeout: 'reject'

@@ -1,0 +1,11 @@
+jobs:
+- job: Build
+  pool:
+    vmImage: ubuntu-latest
+
+  steps:
+    - script: env | sort
+      displayName: Pipeline Environment
+
+    - script: echo build-artifact
+      displayName: Build

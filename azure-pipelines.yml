@@ -4,134 +4,75 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-- main
+  - main
+
+parameters:
+  - name: forceDeploy
+    type: boolean
+    default: false
 
 variables:
-  # Azure Resource Manager connection created during pipeline creation
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
-
-  # Web app name
-  webAppName: 'App-nextjs-boilerplate'
-
-  # Environment name
-  environmentName: 'App-nextjs-boilerplate'
-
-  # Agent VM image name
-  vmImageName: 'ubuntu-latest'
-
-  # Is running on main branch
-  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
-
-  sourceSlot: 'staging'
-  resourceGroup: 'nextjs-boilerplate'
+  npm_config_cache: $(Pipeline.Workspace)/.npm
+  CYPRESS_CACHE_FOLDER: $(Pipeline.Workspace)/.cache/Cypress
 
 stages:
-- stage: Build
-  displayName: Build stage
-  jobs:
-  - job: Build
+  - stage: stageBuild
     displayName: Build
-    pool:
-      vmImage: $(vmImageName)
-
-    steps:
-    - task: NodeTool@0
-      inputs:
-        versionSpec: '16.x'
-      displayName: 'Install Node.js'
-
-    - script: |
-        npm ci
-      displayName: 'Install & Build'
-
-    - script: |
-        npx print-env AGENT
-        npx print-env BUILD
-        npx print-env SYSTEM
-      displayName: Pipeline Environment
-
-    - script: |
-        npm run lint --if-present
-      displayName: 'Lint'
-
-    - script: |
-        npm run test:cover --if-present
-      displayName: 'Tests'
-
-    - task: PublishTestResults@2
-      displayName: 'Unit Test - Publish'
-      condition: succeededOrFailed()
-      inputs:
-        testResultsFiles: 'coverage/jest-junit/junit.xml'
-
-    - task: PublishCodeCoverageResults@1
-      displayName: 'Code Coverage - Publish'
-      condition: succeededOrFailed()
-      inputs:
-        failIfCoverageEmpty: true
-        codeCoverageTool: Cobertura
-        summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
-
-    - task: PublishHtmlReport@1
-      displayName: 'HTML Report - Publish'
-      condition: succeededOrFailed()
-      inputs:
-        reportDir: 'coverage/html-report.html'
-
-    - task: ArchiveFiles@2
-      displayName: 'Artifact - Archive'
-      inputs:
-        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
-        includeRootFolder: false
-        archiveType: zip
-        archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-        replaceExistingArchive: true
-
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
-      displayName: Artifact - Publish
-      artifact: drop
-
-- stage: Demo
-  displayName: Manual Approval Stage
-  dependsOn: Build
-  jobs:
-  - job: waitForValidation
-    displayName: External validation
-    pool: server
-    timeoutInMinutes: 4320 # job times out in 3 days
-    steps:
-      - task: ManualValidation@0
-        timeoutInMinutes: 1
-        inputs:
-#              notifyUsers: |
-#                test@test.com
-#                example@example.com
-          instructions: 'Please validate the build configuration and resume'
-          onTimeout: 'reject'
-#        - script: 'echo Awaited Task'
+    jobs:
+      - template: templates/build.yml
 
 
-- stage: Deploy
-  displayName: Deploy stage
-  dependsOn: Build
-  condition: and(succeeded(), eq(variables.isMain, true))
-  jobs:
-  - deployment: deployProduction
-    displayName: Deploy - Production
-    environment: Production
-    pool:
-      vmImage: $(vmImageName)
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - task: AzureWebApp@1
-            displayName: 'Azure Web App Deploy'
-            inputs:
-              azureSubscription: $(azureSubscription)
-              appType: webAppLinux
-              appName: $(webAppName)
-              runtimeStack: 'NODE|14-lts'
-              package: $(Pipeline.Workspace)/drop/$(Build.BuildId).zip
-              startUpCommand: 'npm run start'
-              appSettings: -PORT 8080
+  - stage: stageDeployDev
+    displayName: Dev
+    dependsOn: stageBuild
+    condition: eq(variables['Build.Reason'], 'PullRequest')
+    jobs:
+      - template: templates/deploy.yml
+        parameters:
+          environmentType: Dev
+          appName: app-nextjs-boilerplate
+
+
+  - stage: stageDeployIntegration
+    displayName: Integration
+    dependsOn: stageBuild
+    jobs:
+      - template: templates/deploy.yml
+        parameters:
+          environmentType: QA
+          appName: app-nextjs-boilerplate-qa
+
+
+  - stage: stageDeployQA
+    displayName: QA
+    dependsOn: stageDeployIntegration
+    jobs:
+      - template: templates/swapSlot.yml
+        parameters:
+          appName: app-nextjs-boilerplate-qa
+          resourceGroupName: nextjs-boilerplate
+          requireManual: true
+
+
+  - stage: stageDeployStaging
+    displayName: Staging Prod
+    dependsOn: stageDeployQA
+    jobs:
+      - template: templates/deploy.yml
+        parameters:
+          environmentType: Prod
+          appName: app-nextjs-boilerplate-prod
+          slotName: staging
+          requireManual: true
+
+
+  - stage: stageDeployProd
+    displayName: Prod
+    dependsOn: stageDeployStaging
+    jobs:
+      - template: templates/swapSlot.yml
+        parameters:
+          appName: app-nextjs-boilerplate-prod
+          resourceGroupName: nextjs-boilerplate
+          requireManual: true
