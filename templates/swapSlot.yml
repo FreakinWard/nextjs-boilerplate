@@ -22,7 +22,7 @@ jobs:
 
   - job: jobDeployValidation
     displayName: E2E Tests
-    dependsOn: jobDeploy
+    dependsOn: jobSwapSlot
     condition: false
     variables:
       deployedAppUrl: $[ dependencies.jobDeploy.outputs['jobDeploy.setDeployedAppUrl.deployedAppUrl'] ]
