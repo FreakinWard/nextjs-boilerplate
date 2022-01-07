@@ -31,7 +31,7 @@ jobs:
             - script: echo build-artifact
               displayName: Deploy
 
-  - job: Deploy Matrix
+  - job: deployMatrix
     strategy:
       matrix:
         foo:
