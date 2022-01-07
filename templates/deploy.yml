@@ -9,6 +9,10 @@ parameters:
       - QA
       - ProdStaging
       - Prod
+  - region:
+    type: object
+    default:
+      - East
 
   - name: slotName
     type: string
@@ -34,10 +38,13 @@ jobs:
   - job: deployMatrix
     strategy:
       matrix:
-        foo:
-          appName: nameFoo
-        bar:
-          appName: nameBar
+        ${{ each region in parameters.regions }}
+          ${{ region }}:
+            appName: $(appName)-${{region}}-${{ parameters.environmentType }}
+#        foo:
+#          appName: nameFoo
+#        bar:
+#          appName: nameBar
     steps:
       - script: echo $(appName)
 
