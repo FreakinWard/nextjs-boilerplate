@@ -33,8 +33,10 @@ jobs:
       runOnce:
         deploy:
           steps:
-            - script: echo build-artifact
-              displayName: Deploy
+            ${{ each region in parameters.regions }}:
+              ${{ region }}:
+                - script: echo build-artifact
+                  displayName: Deploy ${{ region }}
 
   - job: jobDeploy
     strategy:
