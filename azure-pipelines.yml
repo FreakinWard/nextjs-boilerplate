@@ -30,8 +30,11 @@ stages:
     jobs:
       - template: templates/deploy.yml
         parameters:
-          environmentType: Dev
           appName: app-nextjs-boilerplate
+          environmentType: Dev
+          regions:
+            - East
+            - West
 
 
   - stage: stageDeployIntegration
