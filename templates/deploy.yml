@@ -42,12 +42,8 @@ jobs:
         ${{ each region in parameters.regions }}:
           ${{ region }}:
             azureAppName: ${{ parameters.appName }}-${{ region }}-${{ parameters.environmentType }}
-#        foo:
-#          appName: nameFoo
-#        bar:
-#          appName: nameBar
     steps:
-      - script: echo $(appName)
+      - script: echo $(azureAppName)
 
   - job: jobDeployValidation
     displayName: E2E Tests
