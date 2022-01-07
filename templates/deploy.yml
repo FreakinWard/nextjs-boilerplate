@@ -33,10 +33,11 @@ jobs:
 
   - job:
     strategy:
-      foo:
-        appName: nameFoo
-      bar:
-        appName: nameBar
+      matrix:
+        foo:
+          appName: nameFoo
+        bar:
+          appName: nameBar
     steps:
       - script: echo $(appName)
 
