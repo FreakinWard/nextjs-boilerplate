@@ -34,9 +34,8 @@ jobs:
         deploy:
           steps:
             ${{ each region in parameters.regions }}:
-              ${{ region }}:
-                - script: echo build-artifact
-                  displayName: Deploy ${{ region }}
+              - script: echo build-artifact
+                displayName: Deploy ${{ region }}
 
   - job: jobDeploy
     strategy:
