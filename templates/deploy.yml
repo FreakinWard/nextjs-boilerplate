@@ -9,7 +9,7 @@ parameters:
       - QA
       - ProdStaging
       - Prod
-  - region:
+  - name: region
     type: object
     default:
       - East
@@ -39,8 +39,8 @@ jobs:
     strategy:
       matrix:
         ${{ each region in parameters.regions }}
-          ${{ region }}:
-            appName: $(appName)-${{region}}-${{ parameters.environmentType }}
+        ${{ region }}:
+          appName: $(appName)-${{region}}-${{ parameters.environmentType }}
 #        foo:
 #          appName: nameFoo
 #        bar:
