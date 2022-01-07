@@ -9,7 +9,8 @@ parameters:
       - QA
       - ProdStaging
       - Prod
-  - name: region
+
+  - name: regions
     type: object
     default:
       - East
@@ -38,9 +39,9 @@ jobs:
   - job: deployMatrix
     strategy:
       matrix:
-        ${{ each region in parameters.regions }}
-        ${{ region }}:
-          appName: $(appName)-${{region}}-${{ parameters.environmentType }}
+        ${{ each region in parameters.regions }}:
+          ${{ region }}:
+            appName: ${{ region }}
 #        foo:
 #          appName: nameFoo
 #        bar:
