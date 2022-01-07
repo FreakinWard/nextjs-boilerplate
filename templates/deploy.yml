@@ -34,7 +34,7 @@ jobs:
         deploy:
           steps:
             - ${{ each region in parameters.regions }}:
-              - script: echo build-artifact
+              - script: echo build-artifact - ${{ parameters.appName }}-${{ region }}-${{ parameters.environmentType }}
                 displayName: Deploy ${{ region }}
 
   - job: jobDeployMatrix
