@@ -33,7 +33,7 @@ jobs:
       runOnce:
         deploy:
           steps:
-            ${{ each region in parameters.regions }}:
+            - ${{ each region in parameters.regions }}:
               - script: echo build-artifact
                 displayName: Deploy ${{ region }}
 
