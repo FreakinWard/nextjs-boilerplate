@@ -37,7 +37,7 @@ jobs:
               - script: echo build-artifact
                 displayName: Deploy ${{ region }}
 
-  - job: jobDeploy
+  - job: jobDeployMatrix
     strategy:
       matrix:
         ${{ each region in parameters.regions }}:
