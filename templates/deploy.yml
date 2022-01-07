@@ -41,7 +41,7 @@ jobs:
       matrix:
         ${{ each region in parameters.regions }}:
           ${{ region }}:
-            appName: ${{ region }}
+            azureAppName: ${{ parameters.appName }}-${{ region }}-${{ parameters.environmentType }}
 #        foo:
 #          appName: nameFoo
 #        bar:
