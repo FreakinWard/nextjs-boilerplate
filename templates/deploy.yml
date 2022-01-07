@@ -31,6 +31,15 @@ jobs:
             - script: echo build-artifact
               displayName: Deploy
 
+  - job:
+    strategy:
+      foo:
+        appName: nameFoo
+      bar:
+        appName: nameBar
+    steps:
+      - script: echo $(appName)
+
   - job: jobDeployValidation
     displayName: E2E Tests
     dependsOn: jobDeploy
