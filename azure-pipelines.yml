@@ -28,7 +28,7 @@ stages:
   - stage: stageDeployDev
     displayName: Dev
     dependsOn: stageBuild
-    condition: and(succeeded(), or(variables.isCI, variables.deployToDev))
+    condition: and(succeeded(), or(true, false))
     jobs:
       - template: templates/deploy.yml
         parameters:
