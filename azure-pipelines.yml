@@ -26,7 +26,7 @@ stages:
   - stage: stageDeployDev
     displayName: Dev
     dependsOn: stageBuild
-    condition: and(succeeded(), eq(${{ parameters.pullRequest }}, true))
+    condition: and(succeeded(), ${{ parameters.pullRequest }})
     jobs:
       - template: templates/deploy.yml
         parameters:
@@ -36,21 +36,21 @@ stages:
             - East
             - West
 
-
-  - stage: stageDeployIntegration
-    displayName: Integration
-    dependsOn: stageBuild
-    condition: and(succeeded(), eq(${{ parameters.pullRequest }}, false))
-    jobs:
-      - template: templates/deploy.yml
-        parameters:
-          environmentType: QA
-          appName: app-nextjs-boilerplate-qa
+#
+#  - stage: stageDeployIntegration
+#    displayName: Integration
+#    dependsOn: stageBuild
+#    condition: and(succeeded(), eq(${{ parameters.pullRequest }}, false))
+#    jobs:
+#      - template: templates/deploy.yml
+#        parameters:
+#          environmentType: QA
+#          appName: app-nextjs-boilerplate-qa
 
 
   - stage: stageDeployQA
     displayName: QA
-    dependsOn: stageDeployIntegration
+    dependsOn: stageDeployDev
     jobs:
       - template: templates/swapSlot.yml
         parameters:
