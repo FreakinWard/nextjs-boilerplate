@@ -28,7 +28,7 @@ stages:
   - stage: stageDeployDev
     displayName: Dev
     dependsOn: stageBuild
-    condition: and(succeeded(), or(true, false))
+    condition: and(succeeded(), or(eq(true, false), eq(true, false)))
     jobs:
       - template: templates/deploy.yml
         parameters:
@@ -53,7 +53,8 @@ stages:
   - stage: stageDeployQA
     displayName: QA
     dependsOn: stageDeployDev
-    condition: variables.isCI
+#    condition: variables.isCI
+    condition: false
     jobs:
       - template: templates/swapSlot.yml
         parameters:
