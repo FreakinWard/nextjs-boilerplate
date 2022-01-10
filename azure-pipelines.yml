@@ -7,11 +7,13 @@ trigger:
   - main
 
 parameters:
-  - name: pullRequest
+  - name: deployToDev
     type: boolean
     default: false
 
 variables:
+  isCI: $[in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')]
+
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
   npm_config_cache: $(Pipeline.Workspace)/.npm
   CYPRESS_CACHE_FOLDER: $(Pipeline.Workspace)/.cache/Cypress
@@ -26,7 +28,7 @@ stages:
   - stage: stageDeployDev
     displayName: Dev
     dependsOn: stageBuild
-    condition: and(succeeded(), ${{ parameters.pullRequest }})
+    condition: and(succeeded(), or(variables.isCI, variables.deployToDev))
     jobs:
       - template: templates/deploy.yml
         parameters:
@@ -51,6 +53,7 @@ stages:
   - stage: stageDeployQA
     displayName: QA
     dependsOn: stageDeployDev
+    condition: variables.isCI
     jobs:
       - template: templates/swapSlot.yml
         parameters:
