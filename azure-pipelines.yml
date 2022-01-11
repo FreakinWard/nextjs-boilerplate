@@ -18,11 +18,6 @@ variables:
   npm_config_cache: $(Pipeline.Workspace)/.npm
   CYPRESS_CACHE_FOLDER: $(Pipeline.Workspace)/.cache/Cypress
 
-  MajorVersion: 1
-  MinorVersion: 0
-  InitialReleaseTagNumber: 1
-  IncrementReleaseTagNumber: $[counter(variables['InitialReleaseTagNumber'], 0)]
-
 stages:
   - stage: stageGithubPreRelease
     displayName: Github Pre - Release
@@ -38,6 +33,7 @@ stages:
             inputs:
               gitHubConnection: FreakinWard-github-connection
               repositoryName: $(Build.Repository.Name)
+              title: $(Build.DefinitionName) -v$(Build.BuildNumber)
               action: create
               target: $(Build.SourceVersion)
               tagSource: userSpecifiedTag
