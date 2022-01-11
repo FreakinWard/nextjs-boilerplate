@@ -19,8 +19,63 @@ variables:
   CYPRESS_CACHE_FOLDER: $(Pipeline.Workspace)/.cache/Cypress
 
 stages:
+  - stage: stageGithubPreRelease
+    displayName: Github Pre - Release
+    jobs:
+      - job: jobGithubPreRelease
+        displayName: Github Pre-Release
+        steps:
+          - script: env | sort
+            displayName: Pipeline Environment
+
+          - task: GithubRelease@1
+            displayName: GitHub Create
+            inputs:
+              gitHubConnection: FreakinWard-github-connection
+              repositoryName: $(Build.Repository.Name)
+              title: $(Build.DefinitionName) -v$(Build.BuildNumber)
+              action: create
+              target: $(Build.SourceVersion)
+              tagSource: userSpecifiedTag
+              changeLogCompareToRelease: lastFullRelease
+              changeLogType: commitBased
+              tag: $(Build.BuildNumber)
+              isPreRelease: true
+
+  - stage: stageGithubRelease
+    displayName: Github Release
+    dependsOn: stageGithubPreRelease
+    jobs:
+      - job: manualApproval
+        displayName: Manual Approval
+        pool: server
+        steps:
+          - task: ManualValidation@0
+            timeoutInMinutes: 1
+            inputs:
+              instructions: Release is ready to promote
+              onTimeout: 'reject'
+
+      - job: jobGithubPromote
+        displayName: Github Promote
+        dependsOn: manualApproval
+        steps:
+          - script: env | sort
+            displayName: Pipeline Environment
+
+          - task: GithubRelease@1
+            displayName: github request
+            inputs:
+              gitHubConnection: FreakinWard-github-connection
+              repositoryName: $(Build.Repository.Name)
+              action: edit
+              tag: $(Build.BuildNumber)
+
+
   - stage: stageBuild
+    dependsOn: stageGithubRelease
     displayName: Build
+    condition: false
     jobs:
       - template: templates/build.yml
 
@@ -28,7 +83,7 @@ stages:
   - stage: stageDeployDev
     displayName: Dev
     dependsOn: stageBuild
-    condition: and(succeeded(), or(eq(true, false), eq(true, false)))
+    condition: and(succeeded(), or(eq(variables.isCI, true), eq(${{ parameters.deployToDev }}, true)))
     jobs:
       - template: templates/deploy.yml
         parameters:
