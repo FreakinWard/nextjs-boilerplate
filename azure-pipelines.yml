@@ -36,14 +36,13 @@ stages:
             displayName: GitHub Create
             inputs:
               gitHubConnection: FreakinWard-github-connection
-              repositoryName: '$(Build.Repository.Name)'
-              action: 'create'
-              target: '$(Build.SourceVersion)'
-              tagSource: 'userSpecifiedTag'
-              tagPattern: 'release-v[0-9]*\S'
-              changeLogCompareToRelease: 'lastFullRelease'
-              changeLogType: 'commitBased'
-              tag: '$(Build.BuildNumber)'
+              repositoryName: $(Build.Repository.Name)
+              action: create
+              target: $(Build.SourceVersion)
+              tagSource: userSpecifiedTag
+              changeLogCompareToRelease: lastFullRelease
+              changeLogType: commitBased
+              tag: $(Build.BuildNumber)
               isPreRelease: true
 
   - stage: stageGithubRelease
@@ -69,9 +68,9 @@ stages:
             displayName: GitHub Promote
             inputs:
               gitHubConnection: FreakinWard-github-connection
-              repositoryName: '$(Build.Repository.Name)'
-              action: 'edit'
-              tag: '$(Build.BuildNumber)'
+              repositoryName: $(Build.Repository.Name)
+              action: edit
+              tag: $(Build.BuildNumber)
 
 
   - stage: stageBuild
