@@ -49,7 +49,7 @@ stages:
     displayName: Github Release
     dependsOn: stageGithubPreRelease
     jobs:
-      - job:
+      - job: manualApproval
         displayName: Manual Approval
         pool: server
         steps:
@@ -60,6 +60,7 @@ stages:
               onTimeout: 'reject'
 
       - job:
+        dependsOn: manualApproval
         steps:
           - script: env | sort
             displayName: Pipeline Environment
