@@ -44,6 +44,7 @@ stages:
               changeLogCompareToRelease: 'lastFullRelease'
               changeLogType: 'commitBased'
               tag: '$(Build.BuildNumber)'
+              isPreRelease: true
 
 
   - stage: stageBuild
