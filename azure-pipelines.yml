@@ -27,7 +27,8 @@ stages:
   - stage: stageGithubPreRelease
     displayName: Github Pre - Release
     jobs:
-      - job:
+      - job: jobGithubPreRelease
+        displayName: Github Pre-Release
         steps:
           - script: env | sort
             displayName: Pipeline Environment
@@ -59,14 +60,15 @@ stages:
               instructions: Release is ready to promote
               onTimeout: 'reject'
 
-      - job:
+      - job: jobGithubPromote
+        displayName: Github Promote
         dependsOn: manualApproval
         steps:
           - script: env | sort
             displayName: Pipeline Environment
 
           - task: GithubRelease@1
-            displayName: GitHub Promote
+            displayName: github request
             inputs:
               gitHubConnection: FreakinWard-github-connection
               repositoryName: $(Build.Repository.Name)
