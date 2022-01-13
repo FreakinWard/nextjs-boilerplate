@@ -12,6 +12,14 @@ jobs:
     - script: npm run build
       displayName: App Build
 
+    - task: PublishPipelineArtifact@1
+      displayName: Publish Artifact
+      inputs:
+        targetPath: $(System.DefaultWorkingDirectory)
+        artifactType: 'pipeline'
+        artifactName: $(buildPackageName)
+
+
 #    - script: npm run test:cover
 #      displayName: Unit Tests
 #
@@ -39,40 +47,37 @@ jobs:
 #        reportDir: 'coverage/html-report.html'
 #        tabName: Unit Tests
 
-    - task: CopyFiles@2
-      displayName: Prepare Artifact
-      inputs:
-        contents: |
-          **/**
-          
-          !node_modules/**
-          !.git/**
-          !.idea/**
-          !.storybook/**
-          !jest.config.js
-          !jest.setup.js
-          !lint-staged.config.js
-          !prettier.config.js
-          !.npmrc
-        targetFolder: $(Build.ArtifactStagingDirectory)
+#    - task: CopyFiles@2
+#      displayName: Prepare Artifact
+#      inputs:
+#        contents: |
+#          **/**
+#
+#          !node_modules/**
+#          !.git/**
+#          !.idea/**
+#          !.storybook/**
+#          !jest.config.js
+#          !jest.setup.js
+#          !lint-staged.config.js
+#          !prettier.config.js
+#          !.npmrc
+#        targetFolder: $(Build.ArtifactStagingDirectory)
 
     # TODO: prune may be causing some issues - maybe try npm i --production within staging directory
 #    - script: npm prune --production
 #      displayName: Npm prune prod
 #      workingDirectory: $(Build.ArtifactStagingDirectory)
-    - script: npm run ci:prod
-      displayName: Install Prod
-      workingDirectory: $(Build.ArtifactStagingDirectory)
+#    - script: npm run ci:prod
+#      displayName: Install Prod
+#      workingDirectory: $(Build.ArtifactStagingDirectory)
+#
+#    - task: ArchiveFiles@2
+#      displayName: Archive Artifact
+#      inputs:
+#        rootFolderOrFile: $(Build.ArtifactStagingDirectory)
+#        includeRootFolder: false
+#        archiveType: zip
+#        archiveFile: $(Build.ArtifactStagingDirectory)/$(buildPackageName)
+#        replaceExistingArchive: true
 
-    - task: ArchiveFiles@2
-      displayName: Archive Artifact
-      inputs:
-        rootFolderOrFile: $(Build.ArtifactStagingDirectory)
-        includeRootFolder: false
-        archiveType: zip
-        archiveFile: $(Build.ArtifactStagingDirectory)/$(buildPackageName)
-        replaceExistingArchive: true
-
-    - upload: $(Build.ArtifactStagingDirectory)/$(buildPackageName)
-      displayName: Artifact - Publish
-      artifact: drop

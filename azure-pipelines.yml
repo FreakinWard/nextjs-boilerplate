@@ -18,7 +18,7 @@ variables:
   appName: aw-aux-checkout-microsite
 
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
-  buildPackageName: $(System.DefinitionName)-$(Build.BuildNumber).zip
+  buildPackageName: $(System.DefinitionName)-$(Build.BuildNumber)
 
   npm_config_cache: $(Pipeline.Workspace)/.npm
   cyCacheDir: /home/vsts/.cache/Cypress

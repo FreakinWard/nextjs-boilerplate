@@ -23,6 +23,8 @@ jobs:
     - deployment: jobDeploy${{ region }}
       displayName: Deploy ${{ region }}
       environment: ${{ parameters.environmentType }}
+      variables:
+        ciBuildNumber: $(Build.BuildNumber)_$(System.JobAttempt)
       pool:
         vmImage: ubuntu-latest
       strategy:
@@ -36,16 +38,17 @@ jobs:
                   appType: webAppLinux
                   appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
                   runtimeStack: 'NODE|14-lts'
-                  package: $(Pipeline.Workspace)/drop/$(buildPackageName)
+                  package: $(Pipeline.Workspace)/$(buildPackageName)
                   startUpCommand: 'npm run start:prod'
                   resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
                   slotName: ${{ parameters.slotName }}
-                  appSettings: -CI_BUILD_NUMBER $(Build.BuildNumber) -WEBSITE_WARMUP_PATH "/health" -WEBSITE_SWAP_WARMUP_PING_STATUSES "200, 202"
+                  appSettings: -CI_BUILD_NUMBER $(ciBuildNumber) -WEBSITE_WARMUP_PATH "/health" -WEBSITE_SWAP_WARMUP_PING_STATUSES "200, 202"
 
               - bash: |
                   echo "AppServiceApplicationUrl is $(Deploy.AppServiceApplicationUrl)"
                   echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(Deploy.AppServiceApplicationUrl)"
-                name: setDeployedAppUrl
+                  echo "##vso[task.setvariable variable=ciBuildNumber;isOutput=true;]$(Deploy.ciBuildNumber)"
+                name: setDeploymentResults
                 displayName: Set deployedAppUrl
 
               - script: env | sort
@@ -54,14 +57,14 @@ jobs:
     - job: jobDeployValidation${{ region }}
       displayName: E2E Tests ${{ region }}
       dependsOn: jobDeploy${{ region }}
-      condition: false # TODO: re-enable
       variables:
-        deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeployedAppUrl.deployedAppUrl'] ]
+        deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedAppUrl'] ]
+        ciBuildNumber: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.ciBuildNumber'] ]
       steps:
         - script: env | sort
           displayName: Pipeline Environment
 
         - template: npmInstall.yml
 
-        - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(Build.BuildNumber)
+        - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(ciBuildNumber)
           displayName: Cypress

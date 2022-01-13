@@ -26,7 +26,7 @@ jobs:
     displayName: Swap Slot ${{ region }}
     environment: ${{ parameters.environmentType }}
     ${{ if parameters.dependsOnDeployJob }}:
-      dependsOn: jobDeploy${{ region }}
+      dependsOn: jobDeployValidation${{ region }}
     pool:
       vmImage: ubuntu-latest
     strategy:
@@ -34,6 +34,20 @@ jobs:
         deploy:
           steps:
             - download: none
+            - task: PowerShell@2
+              displayName: 'Wait for endpoint to respond'
+              inputs:
+                targetType: 'inline'
+                script: |
+                  Do {
+                    try {
+                      $response = Invoke-WebRequest -Uri 'https://aw-aux-checkout-microsite-dev-east-service-staging.azurewebsites.net' -TimeoutSec 5
+                    } catch {}
+                    Start-Sleep -Seconds 2
+                  } 
+                  while (-not $response)
+                pwsh: true
+
             - task: AzureAppServiceManage@0
               displayName: Swap slot ${{ region }}
               inputs:
@@ -43,3 +57,17 @@ jobs:
                 resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
                 sourceSlot: ${{ parameters.slotName }}
                 swapWithProduction: true
+
+  - job: jobSwapValidation${{ region }}
+    displayName: E2E Tests ${{ region }}
+    dependsOn: jobSwapSlot${{ region }}
+    variables:
+      deployedAppUrl: 'https://$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
+    steps:
+      - script: env | sort
+        displayName: Pipeline Environment
+
+      - template: npmInstall.yml
+
+      - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(Build.BuildNumber)
+        displayName: Cypress

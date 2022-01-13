@@ -13,13 +13,13 @@ steps:
   - script: npm config set cache $(npm_config_cache)
     displayName: npm set cache
 
-#  - task: Cache@2
-#    displayName: Cache Cypress
-#    inputs:
-#      key: cypress | $(cacheVersion) | $(Agent.OS) | package-lock.json
-#      restoreKeys: cypress | $(cacheVersion) | $(Agent.OS)
-#      path: $(cyCacheDir)
-#      cacheHitVar: CYPRESS_CACHE_RESTORED
+  - task: Cache@2
+    displayName: Cache Cypress
+    inputs:
+      key: cypress | $(cacheVersion) | $(Agent.OS) | package-lock.json
+      restoreKeys: cypress | $(cacheVersion) | $(Agent.OS)
+      path: $(cyCacheDir)
+      cacheHitVar: CYPRESS_CACHE_RESTORED
 
   - task: Cache@2
     displayName: Cache nextjs
@@ -29,12 +29,13 @@ steps:
       path: $(nextCacheDir)
       cacheHitVar: NEXT_CACHE_RESTORED
 
-#  - template: directories.yml
+  - task: NodeTool@0
+    displayName: Use node 14
+    inputs:
+      versionSpec: '14.x'
 
   - script: |
       npm set-script prepare ""
       npm set-script postinstall ""
       npm ci --cache $(npm_config_cache)
     displayName: Install
-
-#  - template: directories.yml
