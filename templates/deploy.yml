@@ -18,11 +18,34 @@ parameters:
   - name: serviceConnection
     type: string
 
+  - name: skipE2eTests
+    type: boolean
+    default: false
+
+  - name: manualApproval
+    type: boolean
+    default: false
+
 jobs:
+- ${{ if parameters.manualApproval }}:
+  - job: jobManualApproval
+    displayName: Manual Approval
+    pool: server
+    steps:
+      - task: ManualValidation@0
+        timeoutInMinutes: 1
+        inputs:
+          instructions: |
+            ✅ Acceptance criteria is met
+            ✅ Regressions pass
+          onTimeout: 'reject'
+
 - ${{ each region in parameters.regions }}:
     - deployment: jobDeploy${{ region }}
       displayName: Deploy ${{ region }}
       environment: ${{ parameters.environmentType }}
+      ${{ if parameters.manualApproval }}:
+        dependsOn: jobManualApproval
       variables:
         ciBuildNumber: $(Build.BuildNumber)_$(System.JobAttempt)
       pool:
@@ -57,6 +80,8 @@ jobs:
     - job: jobDeployValidation${{ region }}
       displayName: E2E Tests ${{ region }}
       dependsOn: jobDeploy${{ region }}
+#      condition: ${{ parameters.skipE2eTests }}
+      condition: false
       variables:
         deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedAppUrl'] ]
         ciBuildNumber: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.ciBuildNumber'] ]

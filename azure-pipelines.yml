@@ -56,6 +56,50 @@ stages:
       regions:
         - East
 
+- stage: stageDeployQA
+  displayName: QA
+  dependsOn: stageDeployDev
+  condition: and(succeeded(), eq(${{ parameters.deployToDev }}, 'true'))
+  jobs:
+  - template: templates/deploy.yml
+    parameters:
+      manualApproval: true
+      environmentType: Dev
+      slotName: service-staging
+      serviceConnection: $(azureSubscription)
+      regions:
+        - East
+
+  - template: templates/swapSlot.yml
+    parameters:
+      environmentType: Dev
+      slotName: service-staging
+      dependsOnDeployJob: true
+      serviceConnection: $(azureSubscription)
+      regions:
+        - East
+
+- stage: stageDeployProd
+  displayName: Prod
+  jobs:
+  - template: templates/deploy.yml
+    parameters:
+      manualApproval: true
+      environmentType: Dev
+      slotName: service-staging
+      serviceConnection: $(azureSubscription)
+      regions:
+        - East
+
+  - template: templates/swapSlot.yml
+    parameters:
+      environmentType: Dev
+      slotName: service-staging
+      dependsOnDeployJob: true
+      serviceConnection: $(azureSubscription)
+      regions:
+        - East
+
 
 #- stage: stageDeployQA
 #  displayName: QA
