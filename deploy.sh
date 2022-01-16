@@ -118,6 +118,8 @@ NPM_CMD="\"$NODE_EXE\" \"$NPM_JS_PATH\""
 # 3. Install npm packages
 if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
   cd "$DEPLOYMENT_TARGET"
+  echo "Disable Cypress binary install"
+  eval export CYPRESS_INSTALL_BINARY=0
   eval $NODE_EXE -v
   eval $NPM_CMD -v
   echo "Running $NPM_CMD install --production"

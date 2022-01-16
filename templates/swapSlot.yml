@@ -25,8 +25,10 @@ jobs:
   - deployment: jobSwapSlot${{ region }}
     displayName: Swap Slot ${{ region }}
     environment: ${{ parameters.environmentType }}
-    ${{ if parameters.dependsOnDeployJob }}:
+    ${{ if eq(variables.skipE2eTests, false) }}:
       dependsOn: jobDeployValidation${{ region }}
+    ${{ else }}:
+      dependsOn: jobDeploy${{ region }}
     pool:
       vmImage: ubuntu-latest
     strategy:
@@ -34,40 +36,43 @@ jobs:
         deploy:
           steps:
             - download: none
-            - task: PowerShell@2
-              displayName: 'Wait for endpoint to respond'
-              inputs:
-                targetType: 'inline'
-                script: |
-                  Do {
-                    try {
-                      $response = Invoke-WebRequest -Uri 'https://aw-aux-checkout-microsite-dev-east-service-staging.azurewebsites.net' -TimeoutSec 5
-                    } catch {}
-                    Start-Sleep -Seconds 2
-                  } 
-                  while (-not $response)
-                pwsh: true
-
-            - task: AzureAppServiceManage@0
-              displayName: Swap slot ${{ region }}
-              inputs:
-                azureSubscription: ${{ parameters.serviceConnection }}
-                appType: webAppLinux
-                webAppName: $(appName)-${{ parameters.environmentType }}-${{ region }}
-                resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
-                sourceSlot: ${{ parameters.slotName }}
-                swapWithProduction: true
+            - script: echo swapSlot
+              displayName: Swap Slot
+#            - task: PowerShell@2
+#              displayName: 'Wait for endpoint to respond'
+#              inputs:
+#                targetType: 'inline'
+#                script: |
+#                  Do {
+#                    try {
+#                      $response = Invoke-WebRequest -Uri 'https://aw-aux-checkout-microsite-dev-east-service-staging.azurewebsites.net' -TimeoutSec 5
+#                    } catch {}
+#                    Start-Sleep -Seconds 2
+#                  }
+#                  while (-not $response)
+#                pwsh: true
+#
+#            - task: AzureAppServiceManage@0
+#              displayName: Swap slot ${{ region }}
+#              inputs:
+#                azureSubscription: ${{ parameters.serviceConnection }}
+#                appType: webAppLinux
+#                webAppName: $(appName)-${{ parameters.environmentType }}-${{ region }}
+#                resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
+#                sourceSlot: ${{ parameters.slotName }}
+#                swapWithProduction: true
 
   - job: jobSwapValidation${{ region }}
     displayName: E2E Tests ${{ region }}
     dependsOn: jobSwapSlot${{ region }}
+    condition: ${{ eq(variables.skipE2eTests, false) }}
     variables:
       deployedAppUrl: 'https://$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
     steps:
       - script: env | sort
         displayName: Pipeline Environment
 
-      - template: npmInstall.yml
-
-      - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(Build.BuildNumber)
-        displayName: Cypress
+#      - template: npmInstall.yml
+#
+#      - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(Build.BuildNumber)
+#        displayName: Cypress

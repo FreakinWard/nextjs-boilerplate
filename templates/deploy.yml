@@ -18,10 +18,6 @@ parameters:
   - name: serviceConnection
     type: string
 
-  - name: skipE2eTests
-    type: boolean
-    default: false
-
   - name: manualApproval
     type: boolean
     default: false
@@ -54,25 +50,27 @@ jobs:
         runOnce:
           deploy:
             steps:
-              - task: AzureWebApp@1
-                name: Deploy
-                inputs:
-                  azureSubscription: ${{ parameters.serviceConnection }}
-                  appType: webAppLinux
-                  appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
-                  runtimeStack: 'NODE|14-lts'
-                  package: $(Pipeline.Workspace)/$(buildPackageName)
-                  startUpCommand: 'npm run start:prod'
-                  resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
-                  slotName: ${{ parameters.slotName }}
-                  appSettings: -CI_BUILD_NUMBER $(ciBuildNumber) -WEBSITE_WARMUP_PATH "/health" -WEBSITE_SWAP_WARMUP_PING_STATUSES "200, 202"
-
-              - bash: |
-                  echo "AppServiceApplicationUrl is $(Deploy.AppServiceApplicationUrl)"
-                  echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(Deploy.AppServiceApplicationUrl)"
-                  echo "##vso[task.setvariable variable=ciBuildNumber;isOutput=true;]$(Deploy.ciBuildNumber)"
-                name: setDeploymentResults
-                displayName: Set deployedAppUrl
+              - script: echo AzureWebApp
+                displayName: AzureWeb deploy
+#              - task: AzureWebApp@1
+#                name: taskDeployAppService
+#                inputs:
+#                  azureSubscription: ${{ parameters.serviceConnection }}
+#                  appType: webAppLinux
+#                  appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
+#                  runtimeStack: 'NODE|14-lts'
+#                  package: $(Pipeline.Workspace)/$(buildPackageName)
+#                  startUpCommand: 'npm run start:prod'
+#                  resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
+#                  slotName: ${{ parameters.slotName }}
+#                  appSettings: -CI_BUILD_NUMBER $(ciBuildNumber) -WEBSITE_WARMUP_PATH "/health" -WEBSITE_SWAP_WARMUP_PING_STATUSES "200, 202"
+#
+#              - bash: |
+#                  echo "AppServiceApplicationUrl is $(taskDeployAppService.AppServiceApplicationUrl)"
+#                  echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(taskDeployAppService.AppServiceApplicationUrl)"
+#                  echo "##vso[task.setvariable variable=ciBuildNumber;isOutput=true;]$(taskDeployAppService.ciBuildNumber)"
+#                name: setDeploymentResults
+#                displayName: Set deployedAppUrl
 
               - script: env | sort
                 displayName: Pipeline Environment
@@ -80,8 +78,7 @@ jobs:
     - job: jobDeployValidation${{ region }}
       displayName: E2E Tests ${{ region }}
       dependsOn: jobDeploy${{ region }}
-#      condition: ${{ parameters.skipE2eTests }}
-      condition: false
+      condition: ${{ eq(variables.skipE2eTests, false) }}
       variables:
         deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedAppUrl'] ]
         ciBuildNumber: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.ciBuildNumber'] ]
@@ -89,7 +86,7 @@ jobs:
         - script: env | sort
           displayName: Pipeline Environment
 
-        - template: npmInstall.yml
-
-        - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(ciBuildNumber)
-          displayName: Cypress
+#        - template: npmInstall.yml
+#
+#        - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(ciBuildNumber)
+#          displayName: Cypress
