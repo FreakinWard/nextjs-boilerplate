@@ -14,6 +14,10 @@ parameters:
     type: boolean
     default: false
 
+  - name: pullRequestMock
+    type: boolean
+    default: false
+
   - name: skipE2eTests
     type: boolean
     default: false
@@ -32,7 +36,6 @@ variables:
 
   CI_BUILD_NUMBER: mySuperValue-$(Build.BuildNumber)
   skipE2eTests: ${{ eq(parameters.skipE2eTests, true) }}
-#  skipE2eTests: true
 
 stages:
 - stage: stageBuild
@@ -107,74 +110,63 @@ stages:
       regions:
         - East
 
+- stage: stageDeployStaging
+  displayName: Staging Prod
+  dependsOn: stageDeployQA
+  jobs:
+    - job: jobDeploy
+      displayName: Deploy Staging
 
-#- stage: stageDeployQA
-#  displayName: QA
-#  dependsOn: stageBuild
-#  condition: and(succeeded(), eq(${{ parameters.pullRequest }}, false))
-#  jobs:
-#  - template: templates/deploy.yml
-#    parameters:
-#      environmentType: QA
-#      appName: App-nextjs-boilerplate-qa
-#
-#- stage: stageDeployStaging
-#  displayName: Staging Prod
-#  dependsOn: stageDeployQA
-#  jobs:
-#    - job: jobDeploy
-#      displayName: Deploy Staging
-#
-#      steps:
-#        - script: 'echo deploy Staging'
-#          displayName: Deploy
-#
-#    - job: jobDeployValidation
-#      displayName: E2E Tests Staging
-#      dependsOn: jobDeploy
-#      steps:
-#        - script: 'echo e2e test'
-#          displayName: Cypress
-#
-#    - job: jobApproval
-#      displayName: Manual Approval
-#      dependsOn: jobDeployValidation
-#      pool: server
-#      steps:
-#        - task: ManualValidation@0
-#          timeoutInMinutes: 1
-#          inputs:
-#            instructions: |
-#              ✅ Acceptance criteria is met
-#              ✅ Regressions pass
-#            onTimeout: 'reject'
-#
-#- stage: stageDeployProd
-#  displayName: Prod
-#  dependsOn: stageDeployStaging
-#  jobs:
-#    - job: jobDeploy
-#      displayName: Deploy Prod
-#      steps:
-#        - script: 'echo deploy Prod'
-#          displayName: Deploy
-#
-#    - job: jobDeployValidation
-#      displayName: E2E Tests Prod
-#      dependsOn: jobDeploy
-#      steps:
-#        - script: 'echo e2e test'
-#          displayName: Cypress
-#
-#    - job: jobApproval
-#      displayName: Manual Approval
-#      dependsOn: jobDeployValidation
-#      pool: server
-#      steps:
-#        - task: ManualValidation@0
-#          timeoutInMinutes: 1
-#          inputs:
-#            instructions: |
-#              ✅ Acceptance criteria is met
-#              ✅ Regressions pass
-#            onTimeout: 'reject'
+      steps:
+        - script: 'echo deploy Staging'
+          displayName: Deploy
+
+    - job: jobDeployValidation
+      displayName: E2E Tests Staging
+      dependsOn: jobDeploy
+      steps:
+        - script: 'echo e2e test'
+          displayName: Cypress
+
+    - job: jobApproval
+      displayName: Manual Approval
+      dependsOn: jobDeployValidation
+      pool: server
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1
+          inputs:
+            instructions: |
+              ✅ Acceptance criteria is met
+              ✅ Regressions pass
+            onTimeout: 'reject'
+
+- stage: stageDeployProd
+  displayName: Prod
+  dependsOn: stageDeployStaging
+  jobs:
+    - job: jobDeploy
+      displayName: Deploy Prod
+      steps:
+        - script: 'echo deploy Prod'
+          displayName: Deploy
+
+    - job: jobDeployValidation
+      displayName: E2E Tests Prod
+      dependsOn: jobDeploy
+      steps:
+        - script: 'echo e2e test'
+          displayName: Cypress
+
+    - job: jobApproval
+      displayName: Manual Approval
+      dependsOn: jobDeployValidation
+      pool: server
+      steps:
+        - task: ManualValidation@0
+          timeoutInMinutes: 1
+          inputs:
+            instructions: |
+              ✅ Acceptance criteria is met
+              ✅ Regressions pass
+            onTimeout: 'reject'
