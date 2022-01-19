@@ -141,32 +141,32 @@ stages:
               ✅ Regressions pass
             onTimeout: 'reject'
 
-- stage: stageDeployProd
-  displayName: Prod
-  dependsOn: stageDeployStaging
-  jobs:
-    - job: jobDeploy
-      displayName: Deploy Prod
-      steps:
-        - script: 'echo deploy Prod'
-          displayName: Deploy
-
-    - job: jobDeployValidation
-      displayName: E2E Tests Prod
-      dependsOn: jobDeploy
-      steps:
-        - script: 'echo e2e test'
-          displayName: Cypress
-
-    - job: jobApproval
-      displayName: Manual Approval
-      dependsOn: jobDeployValidation
-      pool: server
-      steps:
-        - task: ManualValidation@0
-          timeoutInMinutes: 1
-          inputs:
-            instructions: |
-              ✅ Acceptance criteria is met
-              ✅ Regressions pass
-            onTimeout: 'reject'
+#- stage: stageDeployProd
+#  displayName: Prod
+#  dependsOn: stageDeployStaging
+#  jobs:
+#    - job: jobDeploy
+#      displayName: Deploy Prod
+#      steps:
+#        - script: 'echo deploy Prod'
+#          displayName: Deploy
+#
+#    - job: jobDeployValidation
+#      displayName: E2E Tests Prod
+#      dependsOn: jobDeploy
+#      steps:
+#        - script: 'echo e2e test'
+#          displayName: Cypress
+#
+#    - job: jobApproval
+#      displayName: Manual Approval
+#      dependsOn: jobDeployValidation
+#      pool: server
+#      steps:
+#        - task: ManualValidation@0
+#          timeoutInMinutes: 1
+#          inputs:
+#            instructions: |
+#              ✅ Acceptance criteria is met
+#              ✅ Regressions pass
+#            onTimeout: 'reject'
