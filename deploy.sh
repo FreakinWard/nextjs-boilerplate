@@ -122,9 +122,19 @@ if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
   eval export CYPRESS_INSTALL_BINARY=0
   eval $NODE_EXE -v
   eval $NPM_CMD -v
-  echo "Running $NPM_CMD install --production"
-  eval $NPM_CMD install --production
-  eval $NPM_CMD run build
+#  echo "Running $NPM_CMD install --production"
+#  eval $NPM_CMD install --production
+#  eval $NPM_CMD run build
+  eval node -v
+  eval npm -v
+
+  echo "Running npm install --production"
+  eval npm install --production
+
+  echo "Running npm run build"
+  eval npm run build
+
+
   exitWithMessageOnError "npm failed"
   cd - > /dev/null
 fi
