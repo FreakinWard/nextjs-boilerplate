@@ -29,13 +29,14 @@ steps:
       path: $(nextCacheDir)
       cacheHitVar: NEXT_CACHE_RESTORED
 
+  - script: |
+      npm set-script prepare ""
+      npm set-script postinstall ""
+
   - task: NodeTool@0
     displayName: Use node 14
     inputs:
       versionSpec: '14.x'
 
-  - script: |
-      npm set-script prepare ""
-      npm set-script postinstall ""
-      npm ci --cache $(npm_config_cache)
+  - script: npm ci --cache $(npm_config_cache)
     displayName: Install
