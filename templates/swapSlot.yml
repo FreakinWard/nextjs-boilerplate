@@ -62,6 +62,10 @@ jobs:
                 sourceSlot: ${{ parameters.slotName }}
                 swapWithProduction: true
 
+            - template: smokeTest.yml
+              parameters:
+                appUrl: 'https://$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
+
   - job: jobSwapValidation${{ region }}
     displayName: E2E Tests ${{ region }}
     dependsOn: jobSwapSlot${{ region }}

@@ -34,7 +34,7 @@ variables:
   nextCacheDir: $(System.DefaultWorkingDirectory)/.next/cache
   cacheVersion: v1
 
-  CI_BUILD_NUMBER: mySuperValue-$(Build.BuildNumber)
+  ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
   skipE2eTests: ${{ eq(parameters.skipE2eTests, true) }}
 
 stages:

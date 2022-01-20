@@ -42,8 +42,6 @@ jobs:
       environment: ${{ parameters.environmentType }}
       ${{ if parameters.manualApproval }}:
         dependsOn: jobManualApproval
-      variables:
-        ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
       pool:
         vmImage: ubuntu-latest
       strategy:
@@ -71,6 +69,31 @@ jobs:
                 name: setDeploymentResults
                 displayName: Set deployedAppUrl
 
+              - template: smokeTest.yml
+                parameters:
+                  appUrl: $(taskDeployAppService.AppServiceApplicationUrl)
+
+#              - task: PowerShell@2
+#                displayName: 'Wait for endpoint to respond'
+#                timeoutInMinutes: 5
+#                env:
+#                  ciBuildNumber: $(ciBuildNumber)
+#                  appUrl: $(taskDeployAppService.AppServiceApplicationUrl)/api/system/health
+#                inputs:
+#                  targetType: 'inline'
+#                  script: |
+#                    write-host "ping: " $env:appUrl
+#                    Do {
+#                      try {
+#                        $response = Invoke-RestMethod -Uri $env:appUrl -TimeoutSec 5
+#                        write-host "Expected:" $env:ciBuildNumber -> Received: $response.buildNumber
+#                      } catch { write-host "No Response" -ForegroundColor Yellow }
+#                      Start-Sleep -Seconds 2
+#                    }
+#                    while (-not $response -or $response.buildNumber -ne $env:ciBuildNumber)
+#                    write-host "App deployed, hooray!" -ForegroundColor Green
+#                  pwsh: true
+
               - script: env | sort
                 displayName: Pipeline Environment
 
@@ -80,7 +103,6 @@ jobs:
       condition: ${{ eq(variables.skipE2eTests, false) }}
       variables:
         deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedAppUrl'] ]
-        ciBuildNumber: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.ciBuildNumber'] ]
       steps:
         - script: env | sort
           displayName: Pipeline Environment

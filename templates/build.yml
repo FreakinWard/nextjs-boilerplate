@@ -7,6 +7,24 @@ jobs:
     - script: env | sort
       displayName: Pipeline Environment
 
+#    - task: PowerShell@2
+#      displayName: 'Wait for endpoint to respond'
+#      env:
+#        ciBuildNumber: '20220120.3x2'
+#      inputs:
+#        targetType: 'inline'
+#        script: |
+#          Do {
+#            try {
+#              $response = Invoke-RestMethod -Uri 'https://aw-aux-checkout-microsite-dev-east.azurewebsites.net/api/health' -TimeoutSec 5
+#              write-host "Expected:" $env:ciBuildNumber -> Received: $response.buildNumber
+#            } catch {}
+#            Start-Sleep -Seconds 2
+#          }
+#          while (-not $response -or $response.buildNumber -ne $env:ciBuildNumber)
+#          write-host "App deployed, hooray!" -ForegroundColor Green
+#        pwsh: true
+
     - template: npmInstall.yml
 
     - script: npm run build
