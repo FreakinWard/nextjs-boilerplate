@@ -54,16 +54,6 @@ steps:
           "slotSetting": false
         },
         {
-          "name": "WEBSITE_NODE_DEFAULT_VERSION",
-          "value": "14.17.4",
-          "slotSetting": false
-        },
-        {
-          "name": "WEBSITE_NPM_DEFAULT_VERSION",
-          "value": "6",
-          "slotSetting": false
-        },
-        {
           "name": "WEBSITE_SWAP_WARMUP_PING_PATH",
           "value": "/api/health",
           "slotSetting": false
