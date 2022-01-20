@@ -52,6 +52,7 @@ jobs:
             steps:
               - task: AzureWebApp@1
                 name: taskDeployAppService
+                displayName: Azure Deploy
                 inputs:
                   azureSubscription: ${{ parameters.serviceConnection }}
                   appType: webAppLinux
@@ -61,7 +62,9 @@ jobs:
 #                  startUpCommand: 'npm run start:prod'
                   resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
                   slotName: ${{ parameters.slotName }}
-                  appSettings: -CI_BUILD_NUMBER $(ciBuildNumber) -WEBSITE_WARMUP_PATH "/health" -WEBSITE_SWAP_WARMUP_PING_STATUSES "200, 202"
+#                  appSettings: -CI_BUILD_NUMBER $(ciBuildNumber) -WEBSITE_WARMUP_PATH "/health" -WEBSITE_SWAP_WARMUP_PING_STATUSES "200, 202"
+
+              - template: appSettings.yml
 
               - bash: |
                   echo "AppServiceApplicationUrl is $(taskDeployAppService.AppServiceApplicationUrl)"
