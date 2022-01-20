@@ -43,7 +43,7 @@ jobs:
       ${{ if parameters.manualApproval }}:
         dependsOn: jobManualApproval
       variables:
-        ciBuildNumber: $(Build.BuildNumber)_$(System.JobAttempt)
+        ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
       pool:
         vmImage: ubuntu-latest
       strategy:
@@ -65,6 +65,10 @@ jobs:
 #                  appSettings: -CI_BUILD_NUMBER $(ciBuildNumber) -WEBSITE_WARMUP_PATH "/health" -WEBSITE_SWAP_WARMUP_PING_STATUSES "200, 202"
 
               - template: appSettings.yml
+                parameters:
+                  deployedAppName: $(appName)-${{ parameters.environmentType }}-${{ region }}
+                  serviceConnection: ${{ parameters.serviceConnection }}
+                  ciBuildNumber: $(taskDeployAppService.ciBuildNumber)
 
               - bash: |
                   echo "AppServiceApplicationUrl is $(taskDeployAppService.AppServiceApplicationUrl)"

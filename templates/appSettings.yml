@@ -1,16 +1,25 @@
+parameters:
+  - name: deployedAppName
+  - name: serviceConnection
+    type: string
+
+  - name: ciBuildNumber
+    type: string
+
+
 steps:
 - task: AzureAppServiceSettings@1
   displayName: Azure App Service Settings
   inputs:
-    azureSubscription: $(azureSubscription)
-    appName: $(WebApp_Name)
+    azureSubscription: ${{ parameters.serviceConnection }}
+    appName: ${{ parameters.deployedAppName }}
     # To deploy the settings on a slot, provide slot name as below. By default, the settings would be applied to the actual Web App (Production slot)
-    # slotName: staging
+    slotName: service-staging
     appSettings: |
       [
         {
           "name": "CI_BUILD_NUMBER",
-          "value": "$(ciBuildNumber)",
+          "value": "${{ parameters.ciBuildNumber }}",
           "slotSetting": false
         },
         {
