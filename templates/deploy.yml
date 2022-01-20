@@ -59,16 +59,14 @@ jobs:
                   appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
                   runtimeStack: 'NODE|14-lts'
                   package: $(Pipeline.Workspace)/$(buildPackageName)
-#                  startUpCommand: 'npm run start:prod'
                   resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
                   slotName: ${{ parameters.slotName }}
-#                  appSettings: -CI_BUILD_NUMBER $(ciBuildNumber) -WEBSITE_WARMUP_PATH "/health" -WEBSITE_SWAP_WARMUP_PING_STATUSES "200, 202"
 
               - template: appSettings.yml
                 parameters:
                   deployedAppName: $(appName)-${{ parameters.environmentType }}-${{ region }}
                   serviceConnection: ${{ parameters.serviceConnection }}
-                  ciBuildNumber: $(taskDeployAppService.ciBuildNumber)
+                  ciBuildNumber: $(ciBuildNumber)
 
               - bash: |
                   echo "AppServiceApplicationUrl is $(taskDeployAppService.AppServiceApplicationUrl)"

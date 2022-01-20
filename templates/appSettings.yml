@@ -15,6 +15,12 @@ steps:
     appName: ${{ parameters.deployedAppName }}
     # To deploy the settings on a slot, provide slot name as below. By default, the settings would be applied to the actual Web App (Production slot)
     slotName: service-staging
+    generalSettings: |
+      [
+        {
+          "startUpCommand": ""
+        }
+      ]
     appSettings: |
       [
         {
