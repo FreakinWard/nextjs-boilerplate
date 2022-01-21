@@ -12,7 +12,7 @@ parameters:
 
   - name: dependsOnDeployJob
     type: boolean
-    default: false
+    default: true
 
   - name: serviceConnection
     type: string
@@ -25,9 +25,9 @@ jobs:
   - deployment: jobSwapSlot${{ region }}
     displayName: Swap Slot ${{ region }}
     environment: ${{ parameters.environmentType }}
-    ${{ if eq(variables.skipE2eTests, false) }}:
+    ${{ if and(eq(parameters.dependsOnDeployJob, true), eq(variables.skipE2eTests, false)) }}:
       dependsOn: jobDeployValidation${{ region }}
-    ${{ else }}:
+    ${{ elseif parameters.dependsOnDeployJob }}:
       dependsOn: jobDeploy${{ region }}
     pool:
       vmImage: ubuntu-latest

@@ -61,7 +61,6 @@ stages:
     parameters:
       environmentType: Dev
       slotName: service-staging
-      dependsOnDeployJob: true
       serviceConnection: $(azureSubscription)
       regions:
         - East
@@ -84,13 +83,13 @@ stages:
     parameters:
       environmentType: Dev
       slotName: service-staging
-      dependsOnDeployJob: true
       serviceConnection: $(azureSubscription)
       regions:
         - East
 
-- stage: stageDeployProd
-  displayName: Prod
+- stage: stageDeployStaging
+  displayName: Staging Prod
+  dependsOn: stageDeployQA
   jobs:
   - template: templates/deploy.yml
     parameters:
@@ -101,72 +100,15 @@ stages:
       regions:
         - East
 
+- stage: stageDeployProd
+  displayName: Prod
+  dependsOn: stageDeployQA
+  jobs:
   - template: templates/swapSlot.yml
     parameters:
       environmentType: Dev
       slotName: service-staging
-      dependsOnDeployJob: true
+      dependsOnDeployJob: false
       serviceConnection: $(azureSubscription)
       regions:
         - East
-
-- stage: stageDeployStaging
-  displayName: Staging Prod
-  dependsOn: stageDeployQA
-  jobs:
-    - job: jobDeploy
-      displayName: Deploy Staging
-
-      steps:
-        - script: 'echo deploy Staging'
-          displayName: Deploy
-
-    - job: jobDeployValidation
-      displayName: E2E Tests Staging
-      dependsOn: jobDeploy
-      steps:
-        - script: 'echo e2e test'
-          displayName: Cypress
-
-    - job: jobApproval
-      displayName: Manual Approval
-      dependsOn: jobDeployValidation
-      pool: server
-      steps:
-        - task: ManualValidation@0
-          timeoutInMinutes: 1
-          inputs:
-            instructions: |
-              ✅ Acceptance criteria is met
-              ✅ Regressions pass
-            onTimeout: 'reject'
-
-#- stage: stageDeployProd
-#  displayName: Prod
-#  dependsOn: stageDeployStaging
-#  jobs:
-#    - job: jobDeploy
-#      displayName: Deploy Prod
-#      steps:
-#        - script: 'echo deploy Prod'
-#          displayName: Deploy
-#
-#    - job: jobDeployValidation
-#      displayName: E2E Tests Prod
-#      dependsOn: jobDeploy
-#      steps:
-#        - script: 'echo e2e test'
-#          displayName: Cypress
-#
-#    - job: jobApproval
-#      displayName: Manual Approval
-#      dependsOn: jobDeployValidation
-#      pool: server
-#      steps:
-#        - task: ManualValidation@0
-#          timeoutInMinutes: 1
-#          inputs:
-#            instructions: |
-#              ✅ Acceptance criteria is met
-#              ✅ Regressions pass
-#            onTimeout: 'reject'

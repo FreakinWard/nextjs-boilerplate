@@ -22,5 +22,5 @@ steps:
         Start-Sleep -Seconds 2
       }
       while (-not $response -or $response.buildNumber -ne $env:ciBuildNumber)
-      Write-Host "App deployed, hooray!" -ForegroundColor Green
+      Write-Host "App deployed, hooray! 🚀" -ForegroundColor Green
     pwsh: true
