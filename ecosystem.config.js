@@ -2,10 +2,10 @@ module.exports = {
   apps: [
     {
       name: 'auctions-checkout-microsite',
-      script: 'npm',
-      args: 'start',
-      instances: 'max',
-      exec_mode: 'cluster',
+      script: './node_modules/next/dist/bin/next',
+      args: 'start -p ' + (process.env.PORT || 3000),
+      watch: false,
+      autorestart: false,
     },
   ],
 };

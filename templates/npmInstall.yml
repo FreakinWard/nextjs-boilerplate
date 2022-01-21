@@ -32,6 +32,7 @@ steps:
   - script: |
       npm set-script prepare ""
       npm set-script postinstall ""
+    displayName: Disable Scripts
 
   - task: NodeTool@0
     displayName: Use node 14
