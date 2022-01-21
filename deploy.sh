@@ -119,6 +119,9 @@ NPM_CMD="\"$NODE_EXE\" \"$NPM_JS_PATH\""
 if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
   cd "$DEPLOYMENT_TARGET"
 
+  echo "Running printenv"
+  eval printenv
+
   echo "Setting scripts prepend-node-path"
   eval $NPM_CMD config set scripts-prepend-node-path=true
 
