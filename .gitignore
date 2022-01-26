@@ -37,3 +37,4 @@ yarn-error.log*
 
 # jetbrains
 .idea/sonarlint
+.idea/dictionaries
