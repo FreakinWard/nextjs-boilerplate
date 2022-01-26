@@ -14,7 +14,7 @@ parameters:
     type: boolean
     default: false
 
-  - name: pullRequestMock
+  - name: mockCI
     type: boolean
     default: false
 
@@ -34,6 +34,7 @@ variables:
   nextCacheDir: $(System.DefaultWorkingDirectory)/.next/cache
   cacheVersion: v1
 
+  isCI: $[in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')]
   ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
   skipE2eTests: ${{ eq(parameters.skipE2eTests, true) }}
 
@@ -46,8 +47,7 @@ stages:
 - stage: stageDeployDev
   displayName: Dev
   dependsOn: stageBuild
-  #  condition: and(succeeded(), or(eq(variables.isCI, 'true'), eq(${{ parameters.deployToDev }}, 'true')))
-  condition: and(succeeded(), eq(${{ parameters.deployToDev }}, 'true'))
+  condition: and(succeeded(), or(eq(variables.isCI, 'true'), eq(${{ parameters.deployToDev }}, 'true')))
   jobs:
   - template: templates/deploy.yml
     parameters:
@@ -68,7 +68,7 @@ stages:
 - stage: stageDeployQA
   displayName: QA
   dependsOn: stageDeployDev
-  condition: and(succeeded(), eq(${{ parameters.deployToDev }}, 'true'))
+  condition: and(succeeded(), or(eq(variables.isCI, 'true'), eq(${{ parameters.mockCI }}, 'true')))
   jobs:
   - template: templates/deploy.yml
     parameters:

@@ -29,7 +29,7 @@
     "test:e2e:docker": "docker run -it -v $PWD:/e2e -w /e2e cypress/included:9.2.0",
     "format": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}' --config prettier.config.js",
     "format:fix": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config prettier.config.js",
-    "pre-commit": "validate-branch-name && lint-staged",
+    "pre-commit": "validate-branch-name",
     "analyze": "cross-env ANALYZE=true next build",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook -o docs-build",
