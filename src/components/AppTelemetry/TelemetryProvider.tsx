@@ -1,5 +1,5 @@
 import { withAITracking } from '@microsoft/applicationinsights-react-js';
-// import getConfig from 'next/config';
+import getConfig from 'next/config';
 import { Component, ReactNode } from 'react';
 
 import { ai } from './telemetryService';
@@ -40,11 +40,8 @@ class TelemetryProvider extends Component<Props, State> {
   componentDidMount() {
     const { initialized } = this.state;
 
-    // const { publicRuntimeConfig } = getConfig();
-    // const appInsightsConnectionString = publicRuntimeConfig.appInsightsConnectionString;
-    const appInsightsConnectionString =
-      process.env.NEXT_PUBLIC_APPLICATIONINSIGHTS_CONNECTION_STRING;
-    console.log('test', { appInsightsConnectionString });
+    const { publicRuntimeConfig } = getConfig();
+    const appInsightsConnectionString = publicRuntimeConfig.appInsightsConnectionString;
 
     if (!initialized && Boolean(appInsightsConnectionString)) {
       ai.initialize(appInsightsConnectionString);
