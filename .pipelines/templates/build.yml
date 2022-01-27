@@ -12,6 +12,15 @@ jobs:
     - script: npm run build
       displayName: App Build
 
+    - task: CopyFiles@2
+      displayName: Deploy scripts
+      inputs:
+        contents: |
+          $(System.DefaultWorkingDirectory)/.pipelines/kudu/*
+          $(System.DefaultWorkingDirectory)/.pipelines/.artifactignore
+        targetFolder: $(System.DefaultWorkingDirectory)
+        flattenFolders: true
+
     - script: |
         cat << EOF >> .env
         CI_BUILD_NUMBER = $(ciBuildNumber)
