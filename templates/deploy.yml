@@ -48,6 +48,15 @@ jobs:
         runOnce:
           deploy:
             steps:
+              - script: |
+                  cat << EOF >> .env
+                  CI_BUILD_NUMBER = $(ciBuildNumber)
+                  CYPRESS_INSTALL_BINARY = 0
+                  NODE_ENV = production
+                  EOF
+                displayName: .env create
+                workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
+
               - task: AzureWebApp@1
                 name: taskDeployAppService
                 displayName: Azure Deploy
@@ -60,7 +69,7 @@ jobs:
                   package: $(Pipeline.Workspace)/$(buildPackageName)
                   startUpCommand: 'npm run start:pm2'
                   slotName: ${{ parameters.slotName }}
-                  appSettings: -CI_BUILD_NUMBER $(ciBuildNumber) -CYPRESS_INSTALL_BINARY "0" -SCM_DO_BUILD_DURING_DEPLOYMENT "true" -WEBSITE_ENABLE_SYNC_UPDATE_SITE true -WEBSITE_SWAP_WARMUP_PING_PATH "/api/health" -WEBSITE_WARMUP_PATH "/health" -WEBSITE_SWAP_WARMUP_PING_STATUSES "200, 202"
+#                  appSettings: -CI_BUILD_NUMBER $(ciBuildNumber) -CYPRESS_INSTALL_BINARY "0" -SCM_DO_BUILD_DURING_DEPLOYMENT "true" -WEBSITE_ENABLE_SYNC_UPDATE_SITE true -WEBSITE_SWAP_WARMUP_PING_PATH "/api/health" -WEBSITE_WARMUP_PATH "/health" -WEBSITE_SWAP_WARMUP_PING_STATUSES "200, 202"
 
               - bash: |
                   echo "AppServiceApplicationUrl is $(taskDeployAppService.AppServiceApplicationUrl)"
@@ -72,27 +81,6 @@ jobs:
               - template: smokeTest.yml
                 parameters:
                   appUrl: $(taskDeployAppService.AppServiceApplicationUrl)
-
-#              - task: PowerShell@2
-#                displayName: 'Wait for endpoint to respond'
-#                timeoutInMinutes: 5
-#                env:
-#                  ciBuildNumber: $(ciBuildNumber)
-#                  appUrl: $(taskDeployAppService.AppServiceApplicationUrl)/api/system/health
-#                inputs:
-#                  targetType: 'inline'
-#                  script: |
-#                    write-host "ping: " $env:appUrl
-#                    Do {
-#                      try {
-#                        $response = Invoke-RestMethod -Uri $env:appUrl -TimeoutSec 5
-#                        write-host "Expected:" $env:ciBuildNumber -> Received: $response.buildNumber
-#                      } catch { write-host "No Response" -ForegroundColor Yellow }
-#                      Start-Sleep -Seconds 2
-#                    }
-#                    while (-not $response -or $response.buildNumber -ne $env:ciBuildNumber)
-#                    write-host "App deployed, hooray!" -ForegroundColor Green
-#                  pwsh: true
 
               - script: env | sort
                 displayName: Pipeline Environment

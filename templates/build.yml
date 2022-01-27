@@ -7,28 +7,20 @@ jobs:
     - script: env | sort
       displayName: Pipeline Environment
 
-#    - task: PowerShell@2
-#      displayName: 'Wait for endpoint to respond'
-#      env:
-#        ciBuildNumber: '20220120.3x2'
-#      inputs:
-#        targetType: 'inline'
-#        script: |
-#          Do {
-#            try {
-#              $response = Invoke-RestMethod -Uri 'https://aw-aux-checkout-microsite-dev-east.azurewebsites.net/api/health' -TimeoutSec 5
-#              write-host "Expected:" $env:ciBuildNumber -> Received: $response.buildNumber
-#            } catch {}
-#            Start-Sleep -Seconds 2
-#          }
-#          while (-not $response -or $response.buildNumber -ne $env:ciBuildNumber)
-#          write-host "App deployed, hooray!" -ForegroundColor Green
-#        pwsh: true
-
     - template: npmInstall.yml
 
     - script: npm run build
       displayName: App Build
+
+    - script: |
+        cat << EOF >> .env
+        CI_BUILD_NUMBER = $(ciBuildNumber)
+        CYPRESS_INSTALL_BINARY = 0
+        NODE_ENV = production
+        EOF
+      displayName: .env create
+      env:
+        MAPPED_SECRET_PASSWORD: $(JFROG_PASSWORD)
 
     - task: PublishPipelineArtifact@1
       displayName: Publish Artifact
