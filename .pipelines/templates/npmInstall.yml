@@ -13,13 +13,14 @@ steps:
   - script: npm config set cache $(npm_config_cache)
     displayName: npm set cache
 
-  - task: Cache@2
-    displayName: Cache Cypress
-    inputs:
-      key: cypress | $(cacheVersion) | $(Agent.OS) | package-lock.json
-      restoreKeys: cypress | $(cacheVersion) | $(Agent.OS)
-      path: $(cyCacheDir)
-      cacheHitVar: CYPRESS_CACHE_RESTORED
+  - ${{ if parameters.skipE2eTests }}:
+    - task: Cache@2
+      displayName: Cache Cypress
+      inputs:
+        key: cypress | $(cacheVersion) | $(Agent.OS) | package-lock.json
+        restoreKeys: cypress | $(cacheVersion) | $(Agent.OS)
+        path: $(cyCacheDir)
+        cacheHitVar: CYPRESS_CACHE_RESTORED
 
   - task: Cache@2
     displayName: Cache nextjs
