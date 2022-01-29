@@ -1,0 +1,121 @@
+# Node.js Express Web App to Linux on Azure
+# Build a Node.js Express app and deploy it to Azure as a Linux web app.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+parameters:
+  - name: deployToDev
+    type: boolean
+    default: false
+
+  - name: mockCI
+    type: boolean
+    default: false
+
+  - name: skipE2eTests
+    type: boolean
+    default: false
+
+
+variables:
+# app
+  appName: aw-aux-checkout-microsite
+
+# stages
+  isCI: $[in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')]
+  skipE2eTests: ${{ eq(parameters.skipE2eTests, true) }}
+
+# artifact
+  buildPackageName: $(System.DefinitionName)-$(Build.BuildNumber)
+  ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
+
+# azure
+  azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
+
+# pipeline
+  cyCacheDir: /home/vsts/.cache/Cypress
+  npm_config_cache: $(Pipeline.Workspace)/.npm
+  nextCacheDir: $(System.DefaultWorkingDirectory)/.next/cache
+  cacheVersion: v1
+
+
+stages:
+- stage: stageBuild
+  displayName: Build
+  jobs:
+  - template: templates/build.yml
+
+- stage: stageDeployDev
+  displayName: Dev
+  dependsOn: stageBuild
+  condition: and(succeeded(), or(eq(variables.isCI, 'true'), eq(${{ parameters.deployToDev }}, 'true')))
+  jobs:
+  - template: templates/deploy.yml
+    parameters:
+      environmentType: Dev
+      slotName: service-staging
+      serviceConnection: $(azureSubscription)
+      regions:
+        - East
+
+  - template: templates/swapSlot.yml
+    parameters:
+      environmentType: Dev
+      slotName: service-staging
+      serviceConnection: $(azureSubscription)
+      regions:
+        - East
+
+- stage: stageDeployQA
+  displayName: QA
+  dependsOn: stageDeployDev
+  condition: and(succeeded(), or(eq(variables.isCI, 'true'), eq(${{ parameters.mockCI }}, 'true')))
+  jobs:
+  - template: templates/deploy.yml
+    parameters:
+      manualApproval: true
+      environmentType: Dev  # mocking production environment
+      slotName: service-staging
+      serviceConnection: $(azureSubscription)
+      regions:
+        - East
+
+  - template: templates/swapSlot.yml
+    parameters:
+      environmentType: Dev  # mocking production environment
+      slotName: service-staging
+      serviceConnection: $(azureSubscription)
+      regions:
+        - East
+
+- stage: stageDeployStaging
+  displayName: Staging Prod
+  dependsOn: stageDeployQA
+  jobs:
+  - template: templates/deploy.yml
+    parameters:
+      manualApproval: true
+      environmentType: Dev  # mocking production environment
+      slotName: service-staging
+      serviceConnection: $(azureSubscription)
+      regions:
+        - East
+
+- stage: stageDeployProd
+  displayName: Prod
+  dependsOn: stageDeployStaging
+  jobs:
+  - template: templates/swapSlot.yml
+    parameters:
+      environmentType: Dev  # mocking production environment
+      slotName: service-staging
+      dependsOnDeployJob: false
+      serviceConnection: $(azureSubscription)
+      regions:
+        - East

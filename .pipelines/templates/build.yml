@@ -1,0 +1,65 @@
+jobs:
+- job: Build
+  pool:
+    vmImage: ubuntu-latest
+
+  steps:
+    - script: env | sort
+      displayName: Pipeline Environment
+
+    - template: npmInstall.yml
+
+    - script: npm run build
+      displayName: App Build
+
+    - script: npm run test:cover
+      displayName: Unit Tests
+
+    - script: npm run test:e2e:ci
+      displayName: E2E Tests
+      condition: eq(variables.skipE2eTests, 'false')
+
+    - task: PublishTestResults@2
+      displayName: Publish Unit Test
+      condition: succeededOrFailed()
+      inputs:
+        testResultsFiles: 'coverage/jest-junit/junit.xml'
+
+    - task: PublishCodeCoverageResults@1
+      displayName: Publish Code Coverage
+      condition: succeededOrFailed()
+      inputs:
+        failIfCoverageEmpty: true
+        codeCoverageTool: Cobertura
+        summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
+
+    - task: PublishHtmlReport@1
+      displayName: Publish Unit Test Report
+      condition: succeededOrFailed()
+      inputs:
+        reportDir: 'coverage/html-report.html'
+        tabName: Unit Tests
+
+    - task: CopyFiles@2
+      displayName: Deploy scripts
+      inputs:
+        contents: $(System.DefaultWorkingDirectory)/.pipelines/.artifactignore
+        targetFolder: $(System.DefaultWorkingDirectory)
+        flattenFolders: true
+
+    - script: |
+        cat << EOF >> .env
+        CI_BUILD_NUMBER = $(ciBuildNumber)
+        CYPRESS_INSTALL_BINARY = 0
+        NODE_ENV = production
+        EOF
+      displayName: app .env
+      env:
+        MAPPED_SECRET_PASSWORD: $(JFROG_PASSWORD)
+
+    - task: PublishPipelineArtifact@1
+      displayName: Publish Artifact
+      inputs:
+        targetPath: $(System.DefaultWorkingDirectory)
+        artifactType: 'pipeline'
+        artifactName: $(buildPackageName)

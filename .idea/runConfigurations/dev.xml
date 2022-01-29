@@ -5,7 +5,8 @@
     <scripts>
       <script value="dev" />
     </scripts>
-    <node-interpreter value="project" />
+    <node-interpreter value="$USER_HOME$/.volta/tools/image/node/16.13.2/bin/node" />
+    <package-manager value="npm" />
     <envs />
     <method v="2" />
   </configuration>

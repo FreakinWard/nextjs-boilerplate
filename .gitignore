@@ -31,9 +31,13 @@ yarn-error.log*
 # vercel
 .vercel
 
-#story-book
+# story-book
 /storybook-static
 /docs-build
 
 # jetbrains
 .idea/sonarlint
+
+# cypress
+cypress/videos
+cypress/screenshots

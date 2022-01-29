@@ -107,6 +107,10 @@ Tests are configured for both unit and integration tests. Unit tests are perform
 
 # Scripts
 
+# Scripts
+
+## Unit tests
+
 ```bash
 npm run test    # runs all tests, creating test report
 ```
@@ -122,6 +126,30 @@ npm run test:cover    # runs all tests, creating coverage report
 ```bash
 npm run test:cover:open    # opens the coverage report
 ```
+
+## End-to-end (e2e)
+
+```bash
+npm run test:e2e    # within the cli, runs end-to-end (e2e) tests
+```
+
+```bash
+npm run test:e2e:open    # visualize end-to-end (e2e) tests
+```
+
+```bash
+npm run test:e2e:verify    # validates end-to-end (e2e) tests ability to run
+```
+
+```bash
+npm run test:e2e:ci    # runs end-to-end (e2e) tests for continuous integration (ci) pipeline
+```
+
+```bash
+npm run test:e2e:report    # opens html report from end-to-end (e2e) test results
+```
+
+## Static code analysis
 
 ```bash
 npm run lint    # runs lint check, produces report
