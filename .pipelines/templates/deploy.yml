@@ -23,100 +23,100 @@ parameters:
     default: false
 
 jobs:
-- ${{ if parameters.manualApproval }}:
-  - job: jobManualApproval
-    displayName: Manual Approval
-    pool: server
-    steps:
-      - task: ManualValidation@0
-        timeoutInMinutes: 1
-        inputs:
-          instructions: |
-            ✅ Acceptance criteria is met
-            ✅ Regressions pass
-          onTimeout: 'reject'
+  - ${{ if parameters.manualApproval }}:
+      - job: jobManualApproval
+        displayName: Manual Approval
+        pool: server
+        steps:
+          - task: ManualValidation@0
+            timeoutInMinutes: 1
+            inputs:
+              instructions: |
+                ✅ Acceptance criteria is met
+                ✅ Regressions pass
+              onTimeout: 'reject'
 
-- ${{ each region in parameters.regions }}:
-    - deployment: jobDeploy${{ region }}
-      displayName: Deploy ${{ region }}
-      environment: ${{ parameters.environmentType }}
-      ${{ if parameters.manualApproval }}:
-        dependsOn: jobManualApproval
-      pool:
-        vmImage: ubuntu-latest
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-              - script: |
-                  cat << EOF >> .env
-                  CI_BUILD_NUMBER = $(ciBuildNumber)
-                  CYPRESS_INSTALL_BINARY = 0
-                  NODE_ENV = production
-                  EOF
-                displayName: .env create
-                workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
+  - ${{ each region in parameters.regions }}:
+      - deployment: jobDeploy${{ region }}
+        displayName: Deploy ${{ region }}
+        environment: ${{ parameters.environmentType }}
+        ${{ if parameters.manualApproval }}:
+          dependsOn: jobManualApproval
+        pool:
+          vmImage: ubuntu-latest
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: |
+                    cat << EOF >> .env
+                    CI_BUILD_NUMBER = $(ciBuildNumber)
+                    CYPRESS_INSTALL_BINARY = 0
+                    NODE_ENV = production
+                    EOF
+                  displayName: .env create
+                  workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
 
-              - task: AzureAppServiceSettings@1
-                displayName: Set App Settings
-                inputs:
-                  appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
-                  azureSubscription: ${{ parameters.serviceConnection }}
-                  resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
-                  appSettings: |
-                    [
-                      {
-                        "name": "CYPRESS_INSTALL_BINARY",
-                        "value": "0",
-                        "slotSetting": true
-                      },
-                      {
-                        "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
-                        "value": "true", 
-                        "slotSetting": true
-                      }
-                    ]
-                  generalSettings: |
-                    [
-                      {
-                        "startupCommand": ""
-                      }
-                    ]
+                - task: AzureAppServiceSettings@1
+                  displayName: Set App Settings
+                  inputs:
+                    appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
+                    azureSubscription: ${{ parameters.serviceConnection }}
+                    resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
+                    appSettings: |
+                      [
+                        {
+                          "name": "CYPRESS_INSTALL_BINARY",
+                          "value": "0",
+                          "slotSetting": true
+                        },
+                        {
+                          "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+                          "value": "true", 
+                          "slotSetting": true
+                        }
+                      ]
+                    generalSettings: |
+                      [
+                        {
+                          "startupCommand": ""
+                        }
+                      ]
 
-              - task: AzureWebApp@1
-                name: taskDeployAppService
-                displayName: Azure Deploy
-                inputs:
-                  azureSubscription: ${{ parameters.serviceConnection }}
-                  resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
-                  appType: webAppLinux
-                  appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
-                  runtimeStack: 'NODE|16-lts'
-                  package: $(Pipeline.Workspace)/$(buildPackageName)
-                  slotName: ${{ parameters.slotName }}
+                - task: AzureWebApp@1
+                  name: taskDeployAppService
+                  displayName: Azure Deploy
+                  inputs:
+                    azureSubscription: ${{ parameters.serviceConnection }}
+                    resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
+                    appType: webAppLinux
+                    appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
+                    runtimeStack: 'NODE|16-lts'
+                    package: $(Pipeline.Workspace)/$(buildPackageName)
+                    slotName: ${{ parameters.slotName }}
 
-              - bash: echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(taskDeployAppService.AppServiceApplicationUrl)"
-                name: setDeploymentResults
-                displayName: Set deployedAppUrl
+                - bash: echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(taskDeployAppService.AppServiceApplicationUrl)"
+                  name: setDeploymentResults
+                  displayName: Set deployedAppUrl
 
-              - template: smokeTest.yml
-                parameters:
-                  appUrl: $(taskDeployAppService.AppServiceApplicationUrl)
+                - template: smokeTest.yml
+                  parameters:
+                    appUrl: $(taskDeployAppService.AppServiceApplicationUrl)
 
-              - script: env | sort
-                displayName: Pipeline Environment
+                - script: env | sort
+                  displayName: Pipeline Environment
 
-    - job: jobDeployValidation${{ region }}
-      displayName: E2E Tests ${{ region }}
-      dependsOn: jobDeploy${{ region }}
-      condition: ${{ eq(variables.skipE2eTests, false) }}
-      variables:
-        deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedAppUrl'] ]
-      steps:
-        - script: env | sort
-          displayName: Pipeline Environment
+      - job: jobDeployValidation${{ region }}
+        displayName: E2E Tests ${{ region }}
+        dependsOn: jobDeploy${{ region }}
+        condition: eq('false', variables.skipE2eTests)
+        variables:
+          deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedAppUrl'] ]
+        steps:
+          - script: env | sort
+            displayName: Pipeline Environment
 
-        - template: npmInstall.yml
+          - template: npmInstall.yml
 
-        - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(ciBuildNumber)
-          displayName: Cypress
+          - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(ciBuildNumber)
+            displayName: Cypress
