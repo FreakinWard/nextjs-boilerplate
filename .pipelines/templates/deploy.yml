@@ -72,6 +72,11 @@ jobs:
                           "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
                           "value": "true", 
                           "slotSetting": true
+                        },
+                        {
+                          "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
+                          "value": "true", 
+                          "slotSetting": true
                         }
                       ]
                     generalSettings: |
