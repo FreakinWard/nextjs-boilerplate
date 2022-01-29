@@ -150,6 +150,7 @@ npm run test:e2e:report    # opens html report from end-to-end (e2e) test result
 ```
 
 ## Static code analysis
+
 ```bash
 npm run lint    # runs lint check, produces report
 ```

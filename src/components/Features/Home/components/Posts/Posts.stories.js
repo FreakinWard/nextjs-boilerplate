@@ -3,6 +3,7 @@ import React from 'react';
 import Posts from './index';
 
 //👇 This default export determines where your story goes in the story list
+// eslint-disable-next-line import/no-anonymous-default-export
 export default {
   title: 'App/Posts',
   component: Posts,

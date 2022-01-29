@@ -1,6 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const nextJest = require('next/jest');
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const packageJson = require('./package.json');
 
 // Providing the path to your Next.js app which will enable loading next.config.js and .env files

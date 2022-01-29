@@ -1,6 +1,7 @@
-node_modules
-.*
-
-# tests
+.idea
+.next
+.prettierignore
+.vscode
 coverage
+node_modules
 out
