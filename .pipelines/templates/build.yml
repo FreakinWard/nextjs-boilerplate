@@ -16,7 +16,7 @@ jobs:
         displayName: Unit Tests
 
       - script: npm run test:e2e:ci
-        displayName: E2E Tests
+        displayName: E2E Tests CI
         condition: eq('false', variables.skipE2eTests)
 
       - task: PublishTestResults@2
@@ -40,12 +40,8 @@ jobs:
           reportDir: 'coverage/html-report.html'
           tabName: Unit Tests
 
-      - task: CopyFiles@2
-        displayName: Deploy scripts
-        inputs:
-          contents: $(System.DefaultWorkingDirectory)/.pipelines/.artifactignore
-          targetFolder: $(System.DefaultWorkingDirectory)
-          flattenFolders: true
+      - script: mv .pipelines/.artifactignore ./
+        displayName: Prepare artifact
 
       - script: |
           cat << EOF >> .env

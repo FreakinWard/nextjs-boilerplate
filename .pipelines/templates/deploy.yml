@@ -48,6 +48,9 @@ jobs:
           runOnce:
             deploy:
               steps:
+                - download: current
+                  artifact: $(buildPackageName)
+
                 - script: |
                     cat << EOF >> .env
                     CI_BUILD_NUMBER = $(ciBuildNumber)
