@@ -15,9 +15,7 @@ jobs:
     - task: CopyFiles@2
       displayName: Deploy scripts
       inputs:
-        contents: |
-          $(System.DefaultWorkingDirectory)/.pipelines/kudu/*
-          $(System.DefaultWorkingDirectory)/.pipelines/.artifactignore
+        contents: $(System.DefaultWorkingDirectory)/.pipelines/.artifactignore
         targetFolder: $(System.DefaultWorkingDirectory)
         flattenFolders: true
 
