@@ -58,7 +58,7 @@ jobs:
                     appUrl: 'https://$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
 
       - job: jobSwapValidation${{ region }}
-        displayName: E2E Tests ${{ region }} -> Production
+        displayName: E2E - ${{ region }} -> Production
         dependsOn: jobSwapSlot${{ region }}
         condition: eq('false', variables.skipE2eTests)
         variables:
