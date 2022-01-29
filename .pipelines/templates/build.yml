@@ -16,7 +16,7 @@ jobs:
         displayName: Unit Tests
 
       - script: npm run test:e2e:ci
-        displayName: E2E - CI
+        displayName: E2E CI
         condition: eq('false', variables.skipE2eTests)
 
       - task: PublishTestResults@2

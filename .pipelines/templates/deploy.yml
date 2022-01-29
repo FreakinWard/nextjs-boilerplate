@@ -110,7 +110,7 @@ jobs:
                   displayName: Pipeline Environment
 
       - job: jobDeployValidation${{ region }}
-        displayName: E2E - ${{ region }}-${{ parameters.slotName }}
+        displayName: E2E ${{ region }}-${{ parameters.slotName }}
         dependsOn: jobDeploy${{ region }}
         condition: and(succeeded(), eq('false', variables.skipE2eTests))
         variables:
