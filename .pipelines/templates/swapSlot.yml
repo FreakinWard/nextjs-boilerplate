@@ -23,7 +23,7 @@ parameters:
 jobs:
   - ${{ each region in parameters.regions }}:
       - deployment: jobSwapSlot${{ region }}
-        displayName: Swap Slot ${{ region }} -> Production
+        displayName: SwapSlot ${{ region }}-production
         environment: ${{ parameters.environmentType }}
         ${{ if eq(parameters.dependsOnDeployJob, 'false') }}:
           dependsOn:
@@ -44,7 +44,7 @@ jobs:
                 - download: none
 
                 - task: AzureAppServiceManage@0
-                  displayName: Swap slot ${{ region }}
+                  displayName: SwapSlot
                   inputs:
                     azureSubscription: ${{ parameters.serviceConnection }}
                     appType: webAppLinux
@@ -58,7 +58,7 @@ jobs:
                     appUrl: 'https://$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
 
       - job: jobSwapValidation${{ region }}
-        displayName: E2E - ${{ region }} -> Production
+        displayName: E2E - ${{ region }}-production
         dependsOn: jobSwapSlot${{ region }}
         condition: eq('false', variables.skipE2eTests)
         variables:
