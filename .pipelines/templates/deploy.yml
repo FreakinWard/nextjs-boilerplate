@@ -65,7 +65,7 @@ jobs:
                   resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
                   appType: webAppLinux
                   appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
-                  runtimeStack: 'NODE|14-lts'
+                  runtimeStack: 'NODE|16-lts'
                   package: $(Pipeline.Workspace)/$(buildPackageName)
                   startUpCommand: ''
                   slotName: ${{ parameters.slotName }}

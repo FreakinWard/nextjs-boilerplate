@@ -35,10 +35,5 @@ steps:
       npm set-script postinstall ""
     displayName: Disable Scripts
 
-  - task: NodeTool@0
-    displayName: Use node 14
-    inputs:
-      versionSpec: '14.x'
-
   - script: npm ci --cache $(npm_config_cache)
     displayName: Install

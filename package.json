@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "engines": {
-    "node": "~14",
-    "npm": "~6"
+    "node": "~16",
+    "npm": "~8"
   },
   "description": "This repo serves at a boilerplate to help stand up a new nextjs app",
   "scripts": {
