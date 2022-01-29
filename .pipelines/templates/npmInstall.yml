@@ -9,10 +9,6 @@ steps:
       path: $(npm_config_cache)
       cacheHitVar: NPM_CACHE_RESTORED
 
-  # TODO: Can this be removed since --cache is called with npm ci?
-  - script: npm config set cache $(npm_config_cache)
-    displayName: npm set cache
-
   - ${{ if parameters.skipE2eTests }}:
     - task: Cache@2
       displayName: Cache Cypress

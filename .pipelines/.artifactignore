@@ -1,14 +1,13 @@
+# ignore all files
 **/*
 
+# include only production files
 !/.env
-
-!/package.json
+!/next-env.d.ts
+!/next.config.js
 !/package-lock.json
-
+!/package.json
 !/public
 !/src
 !/styles
-
-!/next.config.js
 !/tsconfig.json
-!/next-env.d.ts

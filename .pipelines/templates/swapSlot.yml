@@ -36,21 +36,6 @@ jobs:
         deploy:
           steps:
             - download: none
-            - script: echo swapSlot
-              displayName: Swap Slot
-            - task: PowerShell@2
-              displayName: 'Wait for endpoint to respond'
-              inputs:
-                targetType: 'inline'
-                script: |
-                  Do {
-                    try {
-                      $response = Invoke-WebRequest -Uri 'https://aw-aux-checkout-microsite-dev-east-service-staging.azurewebsites.net' -TimeoutSec 5
-                    } catch {}
-                    Start-Sleep -Seconds 2
-                  }
-                  while (-not $response)
-                pwsh: true
 
             - task: AzureAppServiceManage@0
               displayName: Swap slot ${{ region }}

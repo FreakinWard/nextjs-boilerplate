@@ -24,19 +24,26 @@ parameters:
 
 
 variables:
+# app
   appName: aw-aux-checkout-microsite
 
-  azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
-  buildPackageName: $(System.DefinitionName)-$(Build.BuildNumber)
+# stages
+  isCI: $[in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')]
+  skipE2eTests: ${{ eq(parameters.skipE2eTests, true) }}
 
-  npm_config_cache: $(Pipeline.Workspace)/.npm
+# artifact
+  buildPackageName: $(System.DefinitionName)-$(Build.BuildNumber)
+  ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
+
+# azure
+  azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
+
+# pipeline
   cyCacheDir: /home/vsts/.cache/Cypress
+  npm_config_cache: $(Pipeline.Workspace)/.npm
   nextCacheDir: $(System.DefaultWorkingDirectory)/.next/cache
   cacheVersion: v1
 
-  isCI: $[in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')]
-  ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
-  skipE2eTests: ${{ eq(parameters.skipE2eTests, true) }}
 
 stages:
 - stage: stageBuild
@@ -73,7 +80,7 @@ stages:
   - template: templates/deploy.yml
     parameters:
       manualApproval: true
-      environmentType: Dev
+      environmentType: Dev  # mocking production environment
       slotName: service-staging
       serviceConnection: $(azureSubscription)
       regions:
@@ -81,7 +88,7 @@ stages:
 
   - template: templates/swapSlot.yml
     parameters:
-      environmentType: Dev
+      environmentType: Dev  # mocking production environment
       slotName: service-staging
       serviceConnection: $(azureSubscription)
       regions:
@@ -94,7 +101,7 @@ stages:
   - template: templates/deploy.yml
     parameters:
       manualApproval: true
-      environmentType: Dev
+      environmentType: Dev  # mocking production environment
       slotName: service-staging
       serviceConnection: $(azureSubscription)
       regions:
@@ -102,11 +109,11 @@ stages:
 
 - stage: stageDeployProd
   displayName: Prod
-  dependsOn: stageDeployQA
+  dependsOn: stageDeployStaging
   jobs:
   - template: templates/swapSlot.yml
     parameters:
-      environmentType: Dev
+      environmentType: Dev  # mocking production environment
       slotName: service-staging
       dependsOnDeployJob: false
       serviceConnection: $(azureSubscription)

@@ -57,6 +57,32 @@ jobs:
                 displayName: .env create
                 workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
 
+              - task: AzureAppServiceSettings@1
+                displayName: Set App Settings
+                inputs:
+                  appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
+                  azureSubscription: ${{ parameters.serviceConnection }}
+                  resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
+                  appSettings: |
+                    [
+                      {
+                        "name": "CYPRESS_INSTALL_BINARY",
+                        "value": "0",
+                        "slotSetting": true
+                      },
+                      {
+                        "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
+                        "value": "true", 
+                        "slotSetting": true
+                      }
+                    ]
+                  generalSettings: |
+                    [
+                      {
+                        "startupCommand": ""
+                      }
+                    ]
+
               - task: AzureWebApp@1
                 name: taskDeployAppService
                 displayName: Azure Deploy
@@ -67,14 +93,9 @@ jobs:
                   appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
                   runtimeStack: 'NODE|16-lts'
                   package: $(Pipeline.Workspace)/$(buildPackageName)
-                  startUpCommand: ''
                   slotName: ${{ parameters.slotName }}
-#                  appSettings: -CI_BUILD_NUMBER $(ciBuildNumber) -CYPRESS_INSTALL_BINARY "0" -SCM_DO_BUILD_DURING_DEPLOYMENT "true" -WEBSITE_ENABLE_SYNC_UPDATE_SITE true -WEBSITE_SWAP_WARMUP_PING_PATH "/api/health" -WEBSITE_WARMUP_PATH "/health" -WEBSITE_SWAP_WARMUP_PING_STATUSES "200, 202"
 
-              - bash: |
-                  echo "AppServiceApplicationUrl is $(taskDeployAppService.AppServiceApplicationUrl)"
-                  echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(taskDeployAppService.AppServiceApplicationUrl)"
-                  echo "##vso[task.setvariable variable=ciBuildNumber;isOutput=true;]$(taskDeployAppService.ciBuildNumber)"
+              - bash: echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(taskDeployAppService.AppServiceApplicationUrl)"
                 name: setDeploymentResults
                 displayName: Set deployedAppUrl
 
