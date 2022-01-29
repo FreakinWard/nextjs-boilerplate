@@ -32,8 +32,8 @@ jobs:
           condition: |
             and
             (
-              in(dependencies.jobDeployEast.result, 'Succeeded', 'Skipped'),
-              in(dependencies.jobDeployValidationEast.result, 'Succeeded', 'Skipped')
+              in(dependencies.jobDeploy${{ region }}.result, 'Succeeded', 'Skipped'),
+              in(dependencies.jobDeployValidation${{ region }}.result, 'Succeeded', 'Skipped')
             )
         pool:
           vmImage: ubuntu-latest
