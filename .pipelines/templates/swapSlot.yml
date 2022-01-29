@@ -32,7 +32,7 @@ jobs:
           condition: |
             and
             (
-              in(dependencies.jobDeploy${{ region }}.result, 'Succeeded', 'Skipped'),
+              in(dependencies.jobDeploy${{ region }}.result, 'Succeeded'),
               in(dependencies.jobDeployValidation${{ region }}.result, 'Succeeded', 'Skipped')
             )
         pool:
