@@ -107,7 +107,7 @@ jobs:
       - job: jobDeployValidation${{ region }}
         displayName: E2E - ${{ region }}-${{ parameters.slotName }}
         dependsOn: jobDeploy${{ region }}
-        condition: eq('false', variables.skipE2eTests)
+        condition: and(succeeded(), eq('false', variables.skipE2eTests))
         variables:
           deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedAppUrl'] ]
         steps:
