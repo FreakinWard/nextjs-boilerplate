@@ -38,7 +38,7 @@ jobs:
 
   - ${{ each region in parameters.regions }}:
       - deployment: jobDeploy${{ region }}
-        displayName: Deploy ${{ region }}
+        displayName: Deploy ${{ region }} -> ${{ parameters.slotName }}
         environment: ${{ parameters.environmentType }}
         ${{ if parameters.manualApproval }}:
           dependsOn: jobManualApproval
@@ -107,7 +107,7 @@ jobs:
                   displayName: Pipeline Environment
 
       - job: jobDeployValidation${{ region }}
-        displayName: E2E Tests ${{ region }}
+        displayName: E2E Tests ${{ region }} -> ${{ parameters.slotName }}
         dependsOn: jobDeploy${{ region }}
         condition: eq('false', variables.skipE2eTests)
         variables:
