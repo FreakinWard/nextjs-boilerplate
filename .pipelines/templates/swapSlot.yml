@@ -60,7 +60,7 @@ jobs:
       - job: jobSwapValidation${{ region }}
         displayName: E2E - ${{ region }}-production
         dependsOn: jobSwapSlot${{ region }}
-        condition: eq('false', variables.skipE2eTests)
+        condition: and(succeeded(), eq('false', variables.skipE2eTests))
         variables:
           deployedAppUrl: 'https://$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
         steps:

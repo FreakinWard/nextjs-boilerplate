@@ -51,6 +51,15 @@ jobs:
                 - download: current
                   artifact: $(buildPackageName)
 
+                - script: |
+                    cat << EOF >> .env
+                    CI_BUILD_NUMBER = $(ciBuildNumber)
+                    CYPRESS_INSTALL_BINARY = 0
+                    NODE_ENV = production
+                    EOF
+                  displayName: .env create
+                  workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
+
                 - task: AzureAppServiceSettings@1
                   displayName: Set App Settings
                   inputs:
@@ -59,21 +68,6 @@ jobs:
                     resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
                     appSettings: |
                       [
-                        {
-                          "name": "CI_BUILD_NUMBER",
-                          "value": "$(ciBuildNumber)",
-                          "slotSetting": false
-                        },
-                        {
-                          "name": "NODE_ENV",
-                          "value": "production",
-                          "slotSetting": false
-                        },
-                        {
-                          "name": "CYPRESS_INSTALL_BINARY",
-                          "value": "0",
-                          "slotSetting": true
-                        },
                         {
                           "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
                           "value": "true", 
@@ -111,7 +105,7 @@ jobs:
                   displayName: Pipeline Environment
 
       - job: jobDeployValidation${{ region }}
-        displayName: E2E - ${{ region }}-${{ parameters.slotName }}
+        displayName: E2E - ${{ region }} -> ${{ parameters.slotName }}
         dependsOn: jobDeploy${{ region }}
         condition: eq('false', variables.skipE2eTests)
         variables:
