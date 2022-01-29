@@ -27,8 +27,8 @@ jobs:
         environment: ${{ parameters.environmentType }}
         ${{ if eq(parameters.dependsOnDeployJob, 'false') }}:
           dependsOn:
-            - jobDeployEast
-            - jobDeployValidationEast
+            - jobDeploy${{ region }}
+            - jobDeployValidation${{ region }}
           condition: |
             and
             (
