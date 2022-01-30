@@ -52,20 +52,19 @@ stages:
   - stage: stageDeployDev
     displayName: Dev
     dependsOn: stageBuild
-    condition: and(succeeded(), or(eq('true', variables.isCI), eq('true', ${{ parameters.deployToDev }})))
+    condition: and(succeeded(), or(eq('true', variables.isCI), eq('true', ${{ parameters.deployToDev }}), eq('true', ${{ parameters.mockCI }}) ))
     jobs:
       - template: templates/deploy.yml
         parameters:
           environmentType: Dev
-          slotName: service-staging
           serviceConnection: $(azureSubscription)
+          slotName: staging
           regions:
             - East
 
       - template: templates/swapSlot.yml
         parameters:
           environmentType: Dev
-          slotName: service-staging
           serviceConnection: $(azureSubscription)
           regions:
             - East
@@ -79,15 +78,14 @@ stages:
         parameters:
           manualApproval: true
           environmentType: Dev # mocking production environment
-          slotName: service-staging
           serviceConnection: $(azureSubscription)
+          slotName: staging
           regions:
             - East
 
       - template: templates/swapSlot.yml
         parameters:
           environmentType: Dev # mocking production environment
-          slotName: service-staging
           serviceConnection: $(azureSubscription)
           regions:
             - East
@@ -100,8 +98,8 @@ stages:
         parameters:
           manualApproval: true
           environmentType: Dev # mocking production environment
-          slotName: service-staging
           serviceConnection: $(azureSubscription)
+          slotName: staging
           regions:
             - East
 
@@ -112,7 +110,6 @@ stages:
       - template: templates/swapSlot.yml
         parameters:
           environmentType: Dev # mocking production environment
-          slotName: service-staging
           dependsOnDeployJob: false
           serviceConnection: $(azureSubscription)
           regions:
