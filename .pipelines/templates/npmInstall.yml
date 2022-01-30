@@ -9,14 +9,13 @@ steps:
       path: $(npm_config_cache)
       cacheHitVar: NPM_CACHE_RESTORED
 
-  - ${{ if ne('false', variables.skipE2eTests) }}:
-      - task: Cache@2
-        displayName: Cache Cypress
-        inputs:
-          key: cypress | $(cacheVersion) | $(Agent.OS) | package-lock.json
-          restoreKeys: cypress | $(cacheVersion) | $(Agent.OS)
-          path: $(cyCacheDir)
-          cacheHitVar: CYPRESS_CACHE_RESTORED
+  - task: Cache@2
+    displayName: Cache Cypress
+    inputs:
+      key: cypress | $(cacheVersion) | $(Agent.OS) | package-lock.json
+      restoreKeys: cypress | $(cacheVersion) | $(Agent.OS)
+      path: $(cyCacheDir)
+      cacheHitVar: CYPRESS_CACHE_RESTORED
 
   - task: Cache@2
     displayName: Cache nextjs
