@@ -52,7 +52,7 @@ stages:
   - stage: stageDeployDev
     displayName: Dev
     dependsOn: stageBuild
-    condition: and(succeeded(), or(eq('true', variables.isCI), eq('true', ${{ parameters.deployToDev }})))
+    condition: and(succeeded(), or(eq('true', variables.isCI), eq('true', ${{ parameters.deployToDev }}), eq('true', ${{ parameters.mockCI }}) ))
     jobs:
       - template: templates/deploy.yml
         parameters:
