@@ -58,6 +58,7 @@ stages:
         parameters:
           environmentType: Dev
           serviceConnection: $(azureSubscription)
+          slotName: staging
           regions:
             - East
 
@@ -78,6 +79,7 @@ stages:
           manualApproval: true
           environmentType: Dev # mocking production environment
           serviceConnection: $(azureSubscription)
+          slotName: staging
           regions:
             - East
 
@@ -97,6 +99,7 @@ stages:
           manualApproval: true
           environmentType: Dev # mocking production environment
           serviceConnection: $(azureSubscription)
+          slotName: staging
           regions:
             - East
 
