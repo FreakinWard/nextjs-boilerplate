@@ -1,4 +1,4 @@
-import { Post } from '../services/postsService';
+import { Post } from '../../../../../services/postsService';
 
 interface Props {
   title: string;

@@ -1,14 +1,16 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+const nextJest = require('next/jest');
 const packageJson = require('./package.json');
 
-module.exports = {
-  testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/'],
-  setupFilesAfterEnv: ['./jest.setup.js'],
-  moduleNameMapper: {
-    // Resolve .css and similar files to identity-obj-proxy instead.
-    '.+\\.(css|styl|less|sass|scss)$': `identity-obj-proxy`,
-    // Resolve .jpg and similar files to __mocks__/file-mock.js
-    '.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$': `<rootDir>/__mocks__/file-mock.js`,
+// Providing the path to your Next.js app which will enable loading next.config.js and .env files
+const createJestConfig = nextJest({ dir: '.' });
+
+// Any custom config you want to pass to Jest
+const customJestConfig = {
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(test).[jt]s?(x)'],
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
   },
   coveragePathIgnorePatterns: ['src/core/mocks'],
   coverageThreshold: {
@@ -40,5 +42,8 @@ module.exports = {
       },
     ],
   ],
-  coverageReporters: ['text', 'cobertura'],
+  coverageReporters: ['text', 'cobertura', 'lcov'],
 };
+
+// createJestConfig is exported in this way to ensure that next/jest can load the Next.js configuration, which is async
+module.exports = createJestConfig(customJestConfig);

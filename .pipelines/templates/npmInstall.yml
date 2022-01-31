@@ -1,0 +1,34 @@
+steps:
+  - task: Cache@2
+    displayName: Cache npm
+    inputs:
+      key: npm | $(cacheVersion) | $(Agent.OS) | package-lock.json
+      restoreKeys: |
+        npm | $(cacheVersion) | $(Agent.OS)
+        npm | $(cacheVersion)
+      path: $(npm_config_cache)
+      cacheHitVar: NPM_CACHE_RESTORED
+
+  - task: Cache@2
+    displayName: Cache Cypress
+    inputs:
+      key: cypress | $(cacheVersion) | $(Agent.OS) | package-lock.json
+      restoreKeys: cypress | $(cacheVersion) | $(Agent.OS)
+      path: $(cyCacheDir)
+      cacheHitVar: CYPRESS_CACHE_RESTORED
+
+  - task: Cache@2
+    displayName: Cache nextjs
+    inputs:
+      key: next | $(cacheVersion) | $(Agent.OS) | package-lock.json
+      restoreKeys: next | $(cacheVersion) | $(Agent.OS)
+      path: $(nextCacheDir)
+      cacheHitVar: NEXT_CACHE_RESTORED
+
+  - script: |
+      npm set-script prepare ""
+      npm set-script postinstall ""
+    displayName: Disable Scripts
+
+  - script: npm ci --cache $(npm_config_cache)
+    displayName: Install
