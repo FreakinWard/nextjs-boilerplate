@@ -33,6 +33,14 @@ const customJestConfig = {
         pageTitle: packageJson.name,
       },
     ],
+    [
+      'jest-sonar',
+      {
+        outputDirectory: 'coverage',
+        outputName: 'sonarqube.xml',
+        reportedFilePath: 'absolute',
+      },
+    ],
   ],
   coverageReporters: ['text', 'cobertura', 'lcov'],
 };

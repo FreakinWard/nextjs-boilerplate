@@ -16,7 +16,7 @@
     "start:prod": "npm run build && npm run start:pm2",
     "start:pm2": "pm2 start ecosystem.config.js --no-daemon",
     "lint": "next lint . -f table",
-    "lint:fix": "eslint --fix . -f table",
+    "lint:fix": "npm run lint -- --fix",
     "test": "jest",
     "test:open": "open html-report/report.html",
     "test:cover": "jest --coverage",
@@ -42,6 +42,7 @@
     "@types/react": "^17.0.38",
     "cross-env": "^7.0.3",
     "http": "0.0.1-security",
+    "jest-sonar": "^0.2.12",
     "next": "^12.0.7",
     "pascalcase": "^1.0.0",
     "react": "^17.0.2",
@@ -92,6 +93,15 @@
   "validate-branch-name": {
     "pattern": "^(?!([mM]aster)|([mM]ain)$).*$",
     "errorMsg": "Avoid commiting witihout a branch. See readme for details."
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "collectCoverage": true,
+    "testResultsProcessor": "jest-sonar-reporter",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/test/"
+    ]
   },
   "storybook-deployer": {
     "gitUsername": "freakinward",
