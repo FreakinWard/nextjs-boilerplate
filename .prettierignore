@@ -1,3 +1,5 @@
+.artifactignore
+.deployment
 .idea
 .next
 .prettierignore

@@ -60,32 +60,6 @@ jobs:
                   displayName: .env create
                   workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
 
-                - task: AzureAppServiceSettings@1
-                  displayName: Set App Settings
-                  inputs:
-                    appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
-                    azureSubscription: ${{ parameters.serviceConnection }}
-                    resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
-                    appSettings: |
-                      [
-                        {
-                          "name": "SCM_DO_BUILD_DURING_DEPLOYMENT",
-                          "value": "true", 
-                          "slotSetting": true
-                        },
-                        {
-                          "name": "WEBSITE_ENABLE_SYNC_UPDATE_SITE",
-                          "value": "true", 
-                          "slotSetting": true
-                        }
-                      ]
-                    generalSettings: |
-                      [
-                        {
-                          "startupCommand": ""
-                        }
-                      ]
-
                 - task: AzureWebApp@1
                   name: taskDeployAppService
                   displayName: Azure Deploy

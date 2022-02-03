@@ -40,7 +40,9 @@ jobs:
           reportDir: 'coverage/html-report.html'
           tabName: Unit Tests
 
-      - script: mv .pipelines/.artifactignore ./
+      - script: |
+          mv .pipelines/.artifactignore ./
+          mv .pipelines/.deployment ./
         displayName: Prepare artifact
 
       - task: PublishPipelineArtifact@1
