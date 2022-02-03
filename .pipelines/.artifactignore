@@ -2,6 +2,7 @@
 **/*
 
 # include only production files
+!/.deployment
 !/.env
 !/next-env.d.ts
 !/next.config.js
