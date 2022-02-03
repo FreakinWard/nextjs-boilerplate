@@ -54,10 +54,8 @@ jobs:
                 - script: |
                     cat << EOF >> .env
                     CI_BUILD_NUMBER = $(ciBuildNumber)
-                    CYPRESS_INSTALL_BINARY = 0
-                    NODE_ENV = production
                     EOF
-                  displayName: .env create
+                  displayName: .BuildNumber
                   workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
 
                 - task: AzureWebApp@1
