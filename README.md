@@ -22,6 +22,8 @@ The purpose of this repo is to accelerate startup time when creating a new [Next
 
 # Getting Started
 
+## RemoveMe3
+
 First, install npm packages
 
 ```bash
@@ -104,8 +106,6 @@ Tests are configured for both unit and integration tests. Unit tests are perform
 | [husky](https://www.npmjs.com/package/husky)                               | Creates sharable git-commit hooks                            |
 | [lint-staged](https://www.npmjs.com/package/lint-staged)                   | Ensure code is linted before committing to branch            |
 | [validate-branch-name](https://www.npmjs.com/package/validate-branch-name) | Ensures a branch is created before committing to master/main |
-
-# Scripts
 
 # Scripts
 
