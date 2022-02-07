@@ -4,7 +4,11 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
 trigger:
-  - main
+  batch: true
+  branches:
+    include:
+      - main
+
 pr: none
 
 pool:
