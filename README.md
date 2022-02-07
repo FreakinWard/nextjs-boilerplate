@@ -11,6 +11,8 @@ The purpose of this repo is to accelerate startup time when creating a new [Next
 
 ## Contents
 
+TODO: remove - manual push
+
 - [Getting Started](#getting-started)
 - [Directory Structure](#directory-structure)
 - [Features](#features)
