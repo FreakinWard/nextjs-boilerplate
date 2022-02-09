@@ -1,7 +1,6 @@
 import { ReactPlugin } from '@microsoft/applicationinsights-react-js';
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 
-import packageJson from '../../../package.json';
 import { appConfigService } from '../../hooks/appConfigService';
 
 const createTelemetryService = () => {
@@ -23,7 +22,7 @@ const createTelemetryService = () => {
 
   appInsights.addTelemetryInitializer(function (envelope) {
     if (envelope.tags) {
-      envelope.tags['ai.cloud.role'] = packageJson.name;
+      envelope.tags['ai.cloud.role'] = process.env.applicationName;
     }
   });
 

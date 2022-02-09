@@ -1,7 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import packageJson from '../../../package.json';
-
 interface Health {
   version: string;
   status: string;
@@ -9,8 +7,8 @@ interface Health {
 
 export default function async(req: NextApiRequest, res: NextApiResponse<Health>) {
   const healthData = {
-    name: packageJson.name,
-    version: packageJson.version,
+    name: process.env.applicationName,
+    version: process.env.applicationVersion,
     buildNumber: process.env.CI_BUILD_NUMBER ?? 'not-set',
     status: 'ok',
   };
