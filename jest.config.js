@@ -21,6 +21,7 @@ const customJestConfig = {
       statements: 100,
     },
   },
+  resetMocks: true,
   reporters: [
     'default',
     ['jest-junit', { outputName: 'coverage/jest-junit/junit.xml' }],
