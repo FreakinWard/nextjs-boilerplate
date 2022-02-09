@@ -1,10 +1,13 @@
 import pascalCase from 'pascalcase';
 
 import styles from '../../styles/Home.module.css';
+import { useTelemetry } from '../components/AppTelemetry/TelemetryProvider';
 import useHealth from '../hooks/useHealth';
 
 export default function Health() {
   const { data: health } = useHealth();
+  const telemetry = useTelemetry();
+  const handleClick = () => telemetry.trackEvent({ name: 'testEvent', properties: { foo: 'bar' } });
 
   return (
     <div>
@@ -19,6 +22,7 @@ export default function Health() {
                 </div>
               );
             })}
+        <button onClick={handleClick}>Track Event</button>
       </div>
     </div>
   );

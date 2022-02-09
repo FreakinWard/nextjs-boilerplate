@@ -2,12 +2,12 @@ import '../../styles/globals.css';
 
 import type { AppProps } from 'next/app';
 
-import TelemetryProvider from '../components/AppTelemetry/TelemetryProvider';
+import { TelemetryProvider } from '../components/AppTelemetry/TelemetryProvider';
 import AppState from '../context/AppState';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({ Component, pageProps, router }: AppProps) {
   return (
-    <TelemetryProvider>
+    <TelemetryProvider component={Component} router={router}>
       <AppState>
         <Component {...pageProps} />
       </AppState>
