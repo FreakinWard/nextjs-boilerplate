@@ -8,31 +8,12 @@ pool:
 parameters:
   - name: skipE2eTests
     type: boolean
-    default: false
+    default: true   # set to false for e2e tests to run
 
 variables:
-  # app
-  appName: aw-aux-checkout-microsite
+  - template: templates/variables.yml
+    parameters:
+      skipE2eTests: ${{ parameters.skipE2eTests }}
 
-  # stages
-  isCI: $[in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')]
-  skipE2eTests: ${{ eq('true', parameters.skipE2eTests) }}
-
-  # artifact
-  buildPackageName: $(System.DefinitionName)-$(Build.BuildNumber)
-  ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
-
-  # azure
-  azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
-
-  # pipeline
-  cyCacheDir: /home/vsts/.cache/Cypress
-  npm_config_cache: $(Pipeline.Workspace)/.npm
-  nextCacheDir: $(System.DefaultWorkingDirectory)/.next/cache
-  cacheVersion: v1
-
-stages:
-  - stage: stageBuild
-    displayName: Build
-    jobs:
-      - template: templates/build.yml
+jobs:
+  - template: templates/build.yml

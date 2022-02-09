@@ -11,6 +11,8 @@ The purpose of this repo is to accelerate startup time when creating a new [Next
 
 ## Contents
 
+test
+
 - [Getting Started](#getting-started)
 - [Directory Structure](#directory-structure)
 - [Features](#features)

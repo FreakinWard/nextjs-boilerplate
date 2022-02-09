@@ -25,28 +25,12 @@ parameters:
 
   - name: skipE2eTests
     type: boolean
-    default: false
+    default: true   # set to false for e2e tests to run
 
 variables:
-  # app
-  appName: aw-aux-checkout-microsite
-
-  # stages
-  isCI: $[in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')]
-  skipE2eTests: ${{ eq('true', parameters.skipE2eTests) }}
-
-  # artifact
-  buildPackageName: $(System.DefinitionName)-$(Build.BuildNumber)
-  ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
-
-  # azure
-  azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
-
-  # pipeline
-  cyCacheDir: /home/vsts/.cache/Cypress
-  npm_config_cache: $(Pipeline.Workspace)/.npm
-  nextCacheDir: $(System.DefaultWorkingDirectory)/.next/cache
-  cacheVersion: v1
+  - template: templates/variables.yml
+    parameters:
+      skipE2eTests: ${{ parameters.skipE2eTests }}
 
 stages:
   - stage: stageBuild
@@ -77,7 +61,8 @@ stages:
   - stage: stageDeployQA
     displayName: QA
     dependsOn: stageDeployDev
-    condition: and(succeeded(), or(eq('true', variables.isCI), eq('true', ${{ parameters.mockCI }})))
+#    condition: and(succeeded(), or(eq('true', variables.isCI), eq('true', ${{ parameters.mockCI }})))
+    condition: false    # unmock
     jobs:
       - template: templates/deploy.yml
         parameters:

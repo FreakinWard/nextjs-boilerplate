@@ -1,0 +1,25 @@
+parameters:
+  - name: skipE2eTests
+    type: boolean
+
+variables:
+  # app
+  appName: aw-aux-checkout-microsite
+
+  # stages
+  isCI: $[in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')]
+  skipE2eTests: ${{ eq('true', parameters.skipE2eTests) }}
+
+  # artifact
+  buildPackageName: $(System.DefinitionName)-$(Build.BuildNumber)
+  buildArtifactName: $(Resources.Pipeline.Build.PipelineName)-$(Resources.Pipeline.Build.RunName)
+  ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
+
+  # azure
+  azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
+
+  # pipeline
+  cyCacheDir: /home/vsts/.cache/Cypress
+  npm_config_cache: $(Pipeline.Workspace)/.npm
+  nextCacheDir: $(System.DefaultWorkingDirectory)/.next/cache
+  cacheVersion: v1
