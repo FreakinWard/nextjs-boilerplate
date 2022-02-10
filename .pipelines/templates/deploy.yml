@@ -51,11 +51,8 @@ jobs:
                 - download: current
                   artifact: $(buildPackageName)
 
-                - script: |
-                    cat << EOF >> .env
-                    CI_BUILD_NUMBER = $(ciBuildNumber)
-                    EOF
-                  displayName: .BuildNumber
+                - script: npm run ci:set-build-number
+                  displayName: Set BuildNumber
                   workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
 
                 - task: AzureWebApp@1

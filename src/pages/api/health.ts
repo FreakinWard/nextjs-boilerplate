@@ -9,7 +9,7 @@ export default function async(req: NextApiRequest, res: NextApiResponse<Health>)
   const healthData = {
     name: process.env.applicationName,
     version: process.env.applicationVersion,
-    buildNumber: process.env.CI_BUILD_NUMBER ?? 'not-set',
+    buildNumber: process.env.appBuildNumber,
     status: 'ok',
   };
 
