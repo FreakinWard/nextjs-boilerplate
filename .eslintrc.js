@@ -8,6 +8,6 @@ module.exports = {
     'simple-import-sort/exports': 'error',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    // 'import/no-anonymous-default-export': ["error", {"allowObject": true, "allowArray": true}]
+    'import/no-anonymous-default-export': ['error', { allowObject: true, allowArray: true }],
   },
 };
