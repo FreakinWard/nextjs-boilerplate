@@ -7,8 +7,8 @@ interface Health {
 
 export default function async(req: NextApiRequest, res: NextApiResponse<Health>) {
   const healthData = {
-    name: process.env.applicationName,
-    version: process.env.applicationVersion,
+    name: process.env.appName,
+    version: process.env.appVersion,
     buildNumber: process.env.appBuildNumber,
     status: 'ok',
   };
