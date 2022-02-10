@@ -26,7 +26,7 @@ const createTelemetryService = () => {
     }
   });
 
-  return { reactPlugin };
+  return reactPlugin;
 };
 
 // eslint-disable-next-line import/prefer-default-export

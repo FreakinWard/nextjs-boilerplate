@@ -12,9 +12,9 @@ interface Props {
 }
 
 function TelemetryProvider({ children, component, router: { query, route, pathname } }: Props) {
-  const { reactPlugin } = appInsights;
-
   useEffect(() => {
+    if (!appInsights) return;
+
     const renamedQueryKeys = Object.keys(query).reduce(
       (acc, key) => (acc[`query.${key}`] = query[key]),
       {}
@@ -25,13 +25,13 @@ function TelemetryProvider({ children, component, router: { query, route, pathna
       ...renamedQueryKeys,
     };
 
-    reactPlugin.trackPageView({
+    appInsights.trackPageView({
       uri: pathname,
       properties,
     });
-  }, [component.displayName, reactPlugin, pathname, query, route]);
+  }, [component.displayName, pathname, query, route]);
 
-  return <AppInsightsContext.Provider value={reactPlugin}>{children}</AppInsightsContext.Provider>;
+  return <AppInsightsContext.Provider value={appInsights}>{children}</AppInsightsContext.Provider>;
 }
 
 function useTelemetry() {
