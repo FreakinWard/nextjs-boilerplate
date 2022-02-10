@@ -1,6 +1,7 @@
 {
   "name": "nextjs-boilerplate",
   "version": "0.1.0",
+  "buildNumber": "set-in-ci-pipeline",
   "private": true,
   "engines": {
     "node": "~16",
@@ -34,7 +35,8 @@
     "analyze": "cross-env ANALYZE=true next build",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook -o docs-build",
-    "ci:prod": "npm set-script prepare '' && npm set-script postinstall '' && npm ci --production"
+    "ci:prod": "npm set-script prepare '' && npm set-script postinstall '' && npm ci --production",
+    "ci:set-build-number": "json -I -f package.json -e \"this.buildNumber='$CIBUILDNUMBER'\""
   },
   "dependencies": {
     "@microsoft/applicationinsights-react-js": "^3.2.0",
@@ -85,6 +87,7 @@
     "jest": "^27.4.3",
     "jest-html-reporters": "^2.1.6",
     "jest-junit": "^13.0.0",
+    "json": "^11.0.0",
     "lint-staged": "^12.1.2",
     "msw": "^0.36.1",
     "prettier": "^2.4.1",

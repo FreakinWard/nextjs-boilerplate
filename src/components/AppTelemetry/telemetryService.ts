@@ -22,7 +22,7 @@ const createTelemetryService = () => {
 
   appInsights.addTelemetryInitializer(function (envelope) {
     if (envelope.tags) {
-      envelope.tags['ai.cloud.role'] = process.env.applicationName;
+      envelope.tags['ai.cloud.role'] = process.env.appName;
     }
   });
 

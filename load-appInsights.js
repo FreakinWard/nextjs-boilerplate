@@ -19,6 +19,6 @@ appInsights
 appInsights.defaultClient.setAutoPopulateAzureProperties(true);
 
 const cloudRoleKey = appInsights.defaultClient.context.keys.cloudRole;
-appInsights.defaultClient.context.tags[cloudRoleKey] = process.env.applicationName;
+appInsights.defaultClient.context.tags[cloudRoleKey] = process.env.appName;
 
 appInsights.start();

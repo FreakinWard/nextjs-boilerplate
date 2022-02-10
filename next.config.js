@@ -7,8 +7,9 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = withBundleAnalyzer({
   env: {
-    applicationName: packageJson.name,
-    applicationVersion: packageJson.version,
+    appName: packageJson.name,
+    appVersion: packageJson.version,
+    appBuildNumber: packageJson.buildNumber,
     APPLICATIONINSIGHTS_CONNECTION_STRING: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
   },
   swcMinify: true,
