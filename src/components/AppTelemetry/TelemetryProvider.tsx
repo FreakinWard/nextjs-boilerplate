@@ -1,57 +1,45 @@
-import { withAITracking } from '@microsoft/applicationinsights-react-js';
-import getConfig from 'next/config';
-import { Component, ReactNode } from 'react';
+import { AppInsightsContext, useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
+import { NextComponentType } from 'next';
+import { NextRouter } from 'next/router';
+import { ReactNode, useEffect } from 'react';
 
-import { ai } from './telemetryService';
-
-/**
- * This Component provides telemetry with Azure App Insights
- *
- * NOTE: the package '@microsoft/applicationinsights-react-js' has a HOC withAITracking that requires this to be a Class Component rather than a Functional Component
- */
-
-interface ClientAppConfig {
-  userId: string;
-  applicationInsightsInstrumentationKey: string;
-}
-
-declare global {
-  interface Window {
-    clientAppConfig: ClientAppConfig;
-  }
-}
+import { appInsights } from './telemetryService';
 
 interface Props {
   children?: ReactNode;
+  component: NextComponentType;
+  router: NextRouter;
 }
 
-type State = {
-  initialized: boolean;
-};
+function TelemetryProvider({ children, component, router: { query, route, pathname } }: Props) {
+  useEffect(() => {
+    if (!appInsights) return;
 
-class TelemetryProvider extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      initialized: false,
+    const renamedQueryKeys = Object.keys(query).reduce(
+      (acc, key) => (acc[`query.${key}`] = query[key]),
+      {}
+    );
+
+    const properties = {
+      router: route,
+      ...renamedQueryKeys,
     };
-  }
 
-  componentDidMount() {
-    const { initialized } = this.state;
+    appInsights.trackPageView({
+      uri: pathname,
+      properties,
+    });
+  }, [component.displayName, pathname, query, route]);
 
-    const appInsightsConnectionString = process.env.appInsightsConnectionString;
-
-    if (!initialized && Boolean(appInsightsConnectionString)) {
-      ai.initialize(appInsightsConnectionString);
-      this.setState({ initialized: true });
-    }
-  }
-
-  render() {
-    const { children } = this.props;
-    return <>{children}</>;
-  }
+  return <AppInsightsContext.Provider value={appInsights}>{children}</AppInsightsContext.Provider>;
 }
 
-export default withAITracking(ai.reactPlugin, TelemetryProvider);
+function useTelemetry() {
+  if (AppInsightsContext === undefined) {
+    throw new Error('useTelemetry must be used within a TelemetryProvider');
+  }
+
+  return useAppInsightsContext();
+}
+
+export { TelemetryProvider, useTelemetry };

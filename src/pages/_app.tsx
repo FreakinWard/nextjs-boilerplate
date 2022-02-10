@@ -2,17 +2,20 @@ import '../../styles/globals.css';
 
 import type { AppProps } from 'next/app';
 
-import TelemetryProvider from '../components/AppTelemetry/TelemetryProvider';
+import { TelemetryProvider } from '../components/AppTelemetry/TelemetryProvider';
+import LayoutContainer from '../components/Features/Home/components/LayoutContainer';
 import AppState from '../context/AppState';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function App({ Component, pageProps, router }: AppProps) {
   return (
-    <TelemetryProvider>
+    <TelemetryProvider component={Component} router={router}>
       <AppState>
-        <Component {...pageProps} />
+        <LayoutContainer>
+          <Component {...pageProps} />
+        </LayoutContainer>
       </AppState>
     </TelemetryProvider>
   );
 }
 
-export default MyApp;
+export default App;

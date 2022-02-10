@@ -1,6 +1,6 @@
 import pascalCase from 'pascalcase';
 
-import styles from '../../styles/Home.module.css';
+import AppHead from '../components/Features/Home/components/AppHead';
 import useHealth from '../hooks/useHealth';
 
 export default function Health() {
@@ -8,18 +8,17 @@ export default function Health() {
 
   return (
     <div>
-      <div className={styles.card}>
-        <h2>Health Check</h2>
-        {!health
-          ? null
-          : Object.keys(health)?.map(prop => {
-              return (
-                <div key={prop}>
-                  <span>{`${pascalCase(prop)}: ${health[prop]}`}</span>
-                </div>
-              );
-            })}
-      </div>
+      <AppHead title="Health" />
+      <h2>Health Check</h2>
+      {!health
+        ? null
+        : Object.keys(health)?.map(prop => {
+            return (
+              <div key={prop}>
+                <span>{`${pascalCase(prop)}: ${health[prop]}`}</span>
+              </div>
+            );
+          })}
     </div>
   );
 }

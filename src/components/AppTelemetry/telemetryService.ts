@@ -1,31 +1,33 @@
 import { ReactPlugin } from '@microsoft/applicationinsights-react-js';
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 
-let reactPlugin: ReactPlugin;
-let appInsights: ApplicationInsights;
+import { appConfigService } from '../../hooks/appConfigService';
 
 const createTelemetryService = () => {
-  const initialize = (connectionString: string) => {
-    if (!connectionString) {
-      throw new Error('Instrumentation key not provided');
+  const connectionString = appConfigService.APPLICATIONINSIGHTS_CONNECTION_STRING;
+
+  if (!connectionString) return null;
+
+  const reactPlugin = new ReactPlugin();
+  const appInsights = new ApplicationInsights({
+    config: {
+      connectionString: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
+      extensions: [reactPlugin],
+      maxBatchInterval: 5000,
+      disableFetchTracking: false,
+    },
+  });
+
+  appInsights.loadAppInsights();
+
+  appInsights.addTelemetryInitializer(function (envelope) {
+    if (envelope.tags) {
+      envelope.tags['ai.cloud.role'] = process.env.applicationName;
     }
+  });
 
-    reactPlugin = new ReactPlugin();
-
-    appInsights = new ApplicationInsights({
-      config: {
-        connectionString,
-        maxBatchInterval: 0,
-        disableFetchTracking: false,
-        extensions: [reactPlugin],
-      },
-    });
-
-    appInsights.loadAppInsights();
-  };
-
-  return { reactPlugin, appInsights, initialize };
+  return reactPlugin;
 };
 
-export const ai = createTelemetryService();
-export const getAppInsights = () => appInsights;
+// eslint-disable-next-line import/prefer-default-export
+export const appInsights = createTelemetryService();
