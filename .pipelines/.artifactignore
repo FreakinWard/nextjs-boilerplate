@@ -3,6 +3,7 @@
 
 # include only production files
 !/.deployment
+!/load-appinsights.js
 !/next-env.d.ts
 !/next.config.js
 !/package-lock.json
