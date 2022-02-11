@@ -87,7 +87,6 @@
     "jest": "^27.4.3",
     "jest-html-reporters": "^2.1.6",
     "jest-junit": "^13.0.0",
-    "json": "^11.0.0",
     "lint-staged": "^12.1.2",
     "msw": "^0.36.1",
     "prettier": "^2.4.1",

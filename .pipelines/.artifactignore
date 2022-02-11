@@ -2,6 +2,7 @@
 **/*
 
 # include only production files
+!/.env
 !/.deployment
 !/load-appinsights.js
 !/next-env.d.ts
