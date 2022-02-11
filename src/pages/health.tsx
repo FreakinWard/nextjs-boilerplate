@@ -1,24 +1,24 @@
 import pascalCase from 'pascalcase';
 
-import AppHead from '../components/Features/Home/components/AppHead';
 import useHealth from '../hooks/useHealth';
 
 export default function Health() {
   const { data: health } = useHealth();
 
+  if (!health) return null;
+
   return (
     <div>
-      <AppHead title="Health" />
       <h2>Health Check</h2>
-      {!health
-        ? null
-        : Object.keys(health)?.map(prop => {
-            return (
-              <div key={prop}>
-                <span>{`${pascalCase(prop)}: ${health[prop]}`}</span>
-              </div>
-            );
-          })}
+      {Object.keys(health)?.map(prop => {
+        return (
+          <div key={prop}>
+            <span>{`${pascalCase(prop)}: ${health[prop]}`}</span>
+          </div>
+        );
+      })}
     </div>
   );
 }
+
+Health.title = 'Health';
