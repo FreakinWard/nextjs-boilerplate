@@ -22,3 +22,5 @@ export async function getStaticProps(): Promise<Props> {
 export default function Home({ posts }: InferGetStaticPropsType<typeof getStaticProps>) {
   return <HomePage posts={posts} />;
 }
+
+Home.title = 'Home';
