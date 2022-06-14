@@ -7,7 +7,7 @@ import { TelemetryProvider } from '../components/AppTelemetry/TelemetryProvider'
 import AppHead from '../components/Features/Home/components/AppHead';
 import LayoutContainer from '../components/Features/Home/components/LayoutContainer';
 import AppState from '../context/AppState';
-import { setupMsw } from '../core/msw';
+// import { setupMsw } from '../core/msw';
 
 type Page<P = {}, IP = P> = NextPage<P, IP> & {
   title: string;
@@ -17,7 +17,7 @@ type Props<P = {}> = AppProps<P> & {
   Component: Page<P>;
 };
 
-setupMsw();
+// setupMsw();
 
 function App({ Component, pageProps, router }: Props) {
   return (
