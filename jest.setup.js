@@ -1,11 +1,13 @@
 import '@testing-library/jest-dom';
 import 'whatwg-fetch';
 
-import mswServer from './src/core/mocks/mswServer';
+import { resetMswHandlers, setupMsw } from './src/core/msw';
 
-beforeAll(() => mswServer.listen({ onUnhandledRequest: 'error' }));
-afterEach(() => mswServer.resetHandlers());
-afterAll(() => mswServer.close());
+let mswCleanup;
+
+beforeAll(() => (mswCleanup = setupMsw()));
+afterEach(() => resetMswHandlers());
+afterAll(() => mswCleanup());
 
 global.console.log = message => {
   throw message;
