@@ -35,16 +35,22 @@ async function uploadFile(fileData) {
   return await blockBlobClient.upload(fileData, fileData.length);
 }
 
-export default async function upload(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === 'POST') {
-    const data = 'Hello, World!';
-    const uploadBlobResponse = await uploadFile(data);
+import nextConnect from 'next-connect';
 
-    console.log('Blob was uploaded successfully. requestId: ', uploadBlobResponse.requestId);
-
-    res.status(200).json(uploadBlobResponse);
-  } else {
-    // Handle any other HTTP method
+const apiRoute = nextConnect({
+  // Handle any other HTTP method
+  onNoMatch(req: NextApiRequest, res: NextApiResponse) {
     res.status(405).json({ error: `Method '${req.method}' Not Allowed` });
-  }
-}
+  },
+});
+
+apiRoute.post(async (req: NextApiRequest, res: NextApiResponse) => {
+  const data = 'Hello, World!';
+  const uploadBlobResponse = await uploadFile(data);
+
+  console.log('Blob was uploaded successfully. requestId: ', uploadBlobResponse.requestId);
+
+  res.status(200).json(uploadBlobResponse);
+});
+
+export default apiRoute;
