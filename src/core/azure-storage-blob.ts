@@ -3,6 +3,7 @@
 // <snippet_package>
 // THIS IS SAMPLE CODE ONLY - NOT MEANT FOR PRODUCTION USE
 import { BlobServiceClient, ContainerClient } from '@azure/storage-blob';
+import { v4 as uuid } from 'uuid';
 
 const containerName = process.env.REACT_APP_CONTAINERNAME;
 const sasToken = process.env.REACT_APP_STORAGESASTOKEN;
@@ -12,7 +13,7 @@ const storageAccountName = process.env.REACT_APP_STORAGERESOURCENAME;
 // <snippet_isStorageConfigured>
 // Feature flag - disable storage feature to app if not configured
 export const isStorageConfigured = () => {
-  return !storageAccountName || !sasToken ? false : true;
+  return !(!storageAccountName || !sasToken);
 };
 // </snippet_isStorageConfigured>
 
@@ -36,8 +37,13 @@ const getBlobsInContainer = async (containerClient: ContainerClient) => {
 
 // <snippet_createBlobInContainer>
 const createBlobInContainer = async (containerClient: ContainerClient, file: File) => {
+  const uniqueId = uuid();
+  const extension = file.name.split('.').pop();
+  const fileNameGenerated = `${uniqueId}.${extension}`;
+  console.log('test', { fileNameGenerated }, { extension }, { file });
+
   // create blobClient for container
-  const blobClient = containerClient.getBlockBlobClient(file.name);
+  const blobClient = containerClient.getBlockBlobClient(fileNameGenerated);
 
   // set mimetype as determined from browser with file upload control
   const options = { blobHTTPHeaders: { blobContentType: file.type } };

@@ -11,6 +11,9 @@ module.exports = withBundleAnalyzer({
     appVersion: packageJson.version,
     ciBuildNumber: process.env.CI_BUILD_NUMBER,
     APPLICATIONINSIGHTS_CONNECTION_STRING: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
+    REACT_APP_STORAGERESOURCENAME: process.env.REACT_APP_STORAGERESOURCENAME,
+    REACT_APP_STORAGESASTOKEN: process.env.REACT_APP_STORAGESASTOKEN,
+    REACT_APP_CONTAINERNAME: process.env.REACT_APP_CONTAINERNAME,
   },
   swcMinify: true,
   eslint: {
