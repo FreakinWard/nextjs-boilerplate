@@ -26,8 +26,8 @@
     "test:e2e:ci": "start-test start 3000 test:e2e",
     "test:e2e:env": "./node_modules/.bin/cypress run",
     "test:e2e:docker": "docker run -it -v $PWD:/e2e -w /e2e cypress/included:9.2.0",
-    "format": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}' --config prettier.config.js",
-    "format:fix": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config prettier.config.js",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
     "pre-commit": "validate-branch-name && lint-staged",
     "analyze": "cross-env ANALYZE=true next build",
     "storybook": "start-storybook -p 6006",
@@ -96,13 +96,28 @@
     "validate-branch-name": "^1.0.6",
     "whatwg-fetch": "^3.6.2"
   },
-  "validate-branch-name": {
-    "pattern": "^(?!([mM]aster)|([mM]ain)$).*$",
-    "errorMsg": "Avoid commiting witihout a branch. See readme for details."
+  "lint-staged": {
+    "./**/*.[jt]s?(x)": [
+      "eslint --fix"
+    ],
+    "*": [
+      "prettier --write"
+    ]
+  },
+  "prettier": {
+    "semi": true,
+    "printWidth": 100,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "arrowParens": "avoid"
   },
   "storybook-deployer": {
     "gitUsername": "freakinward",
     "gitEmail": "aaron.l.ward@gmail.com",
     "commitMessage": "Deploy Storybook [skip ci]"
+  },
+  "validate-branch-name": {
+    "pattern": "^(?!([mM]aster)|([mM]ain)$).*$",
+    "errorMsg": "Avoid commiting witihout a branch. See readme for details."
   }
 }
