@@ -3,10 +3,6 @@
   "version": "0.1.0",
   "buildNumber": "set-in-ci-pipeline",
   "private": true,
-  "engines": {
-    "node": "~16",
-    "npm": "~8"
-  },
   "description": "This repo serves at a boilerplate to help stand up a new nextjs app",
   "scripts": {
     "prepare": "husky install",
@@ -89,6 +85,7 @@
     "jest-junit": "^13.0.0",
     "lint-staged": "^12.1.2",
     "msw": "^0.36.1",
+    "next-test-api-route-handler": "^3.1.7",
     "prettier": "^2.4.1",
     "start-server-and-test": "^1.14.0",
     "validate-branch-name": "^1.0.6",

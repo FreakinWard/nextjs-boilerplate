@@ -1,5 +1,7 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+import { resetMswHandlers, setupMsw } from './msw';
+
 const queryConfig = {
   defaultOptions: {
     queries: {
@@ -8,7 +10,20 @@ const queryConfig = {
   },
 };
 
-// eslint-disable-next-line import/prefer-default-export
 export const queryWrapper = ({ children }: { children: JSX.Element }) => (
   <QueryClientProvider client={new QueryClient(queryConfig)}>{children}</QueryClientProvider>
 );
+
+export const mswMock = () => {
+  let mswCleanup;
+
+  beforeAll(() => {
+    mswCleanup = setupMsw();
+  });
+
+  afterEach(() => resetMswHandlers());
+
+  afterAll(() => {
+    mswCleanup();
+  });
+};

@@ -1,3 +1,5 @@
+/* istanbul ignore file */ // TODO: determine a way to test
+
 import '../../styles/globals.css';
 
 import { NextPage } from 'next';
@@ -17,7 +19,6 @@ type Props<P = {}> = AppProps<P> & {
 };
 
 function App({ Component, pageProps, router }: Props) {
-  console.log('test', Component.title, Component.name);
   return (
     <TelemetryProvider component={Component} router={router}>
       <AppState>

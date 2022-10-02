@@ -1,11 +1,13 @@
 import { render, screen } from '@testing-library/react';
 
-import seedPosts from '../core/mocks/seed/seedPosts';
-import { queryWrapper as wrapper } from '../core/test.utils';
-import Home, { getStaticProps } from '../pages/index';
-import { Post } from '../services/postsService';
+import seedPosts from '../../core/msw/seed/seedPosts';
+import { mswMock, queryWrapper as wrapper } from '../../core/test.utils';
+import Home, { getStaticProps } from '../../pages';
+import { Post } from '../../services/postsService';
 
 describe('index', () => {
+  mswMock();
+
   const posts: Post[] = [
     {
       id: 11,
