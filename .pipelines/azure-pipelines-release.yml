@@ -8,6 +8,7 @@ trigger:
   branches:
     include:
       - main
+      - master
 
 pr: none
 
@@ -15,22 +16,24 @@ pool:
   vmImage: 'ubuntu-latest'
 
 parameters:
-  - name: deployToDev
-    type: boolean
-    default: false
-
-  - name: mockCI
-    type: boolean
-    default: false
+  - name: manualDeployment
+    displayName: Manual Deployment
+    type: string
+    default: no-deployment
+    values:
+      - no-deployment
+      - dev-only
+      - full-ci
 
   - name: skipE2eTests
     type: boolean
-    default: true   # set to false for e2e tests to run
+    default: false
 
 variables:
   - template: templates/variables.yml
     parameters:
       skipE2eTests: ${{ parameters.skipE2eTests }}
+      manualDeployment: ${{ parameters.manualDeployment }}
 
 stages:
   - stage: stageBuild
@@ -41,7 +44,7 @@ stages:
   - stage: stageDeployDev
     displayName: Dev
     dependsOn: stageBuild
-    condition: and(succeeded(), or(eq('true', variables.isCI), eq('true', ${{ parameters.deployToDev }}), eq('true', ${{ parameters.mockCI }}) ))
+    condition: and(succeeded(), or(eq(variables.isCI, 'True'), eq(variables.isDevOnly, 'True'), eq(variables.isFullCI, 'True') ))
     jobs:
       - template: templates/deploy.yml
         parameters:
@@ -54,20 +57,19 @@ stages:
       - template: templates/swapSlot.yml
         parameters:
           environmentType: Dev
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnectionDev)
           regions:
             - East
 
   - stage: stageDeployQA
     displayName: QA
     dependsOn: stageDeployDev
-#    condition: and(succeeded(), or(eq('true', variables.isCI), eq('true', ${{ parameters.mockCI }})))
-    condition: false    # unmock
+    #    condition: and(succeeded(), or(eq(variables.isCI, 'True'), eq(variables.isFullCI, 'True') ))
+    condition: false #TODO: unmock
     jobs:
       - template: templates/deploy.yml
         parameters:
-          manualApproval: true
-          environmentType: Dev # mocking production environment
+          environmentType: QA
           serviceConnection: $(azureSubscription)
           slotName: staging
           regions:
@@ -75,10 +77,14 @@ stages:
 
       - template: templates/swapSlot.yml
         parameters:
-          environmentType: Dev # mocking production environment
+          environmentType: QA
           serviceConnection: $(azureSubscription)
           regions:
             - East
+
+      - template: templates/release.yml
+        parameters:
+          displayName: Create Release
 
   - stage: stageDeployStaging
     displayName: Staging Prod
@@ -86,12 +92,15 @@ stages:
     jobs:
       - template: templates/deploy.yml
         parameters:
-          manualApproval: true
-          environmentType: Dev # mocking production environment
+          environmentType: Prod
           serviceConnection: $(azureSubscription)
           slotName: staging
           regions:
             - East
+
+      - template: templates/release.yml
+        parameters:
+          displayName: Create Release
 
   - stage: stageDeployProd
     displayName: Prod
@@ -99,8 +108,13 @@ stages:
     jobs:
       - template: templates/swapSlot.yml
         parameters:
-          environmentType: Dev # mocking production environment
+          environmentType: Prod
           dependsOnDeployJob: false
           serviceConnection: $(azureSubscription)
           regions:
             - East
+
+      - template: templates/release.yml
+        parameters:
+          displayName: Promote Release
+          promoteRelease: true

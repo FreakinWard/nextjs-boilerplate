@@ -25,6 +25,15 @@ jobs:
       - deployment: jobSwapSlot${{ region }}
         displayName: SwapSlot ${{ region }}-production
         environment: ${{ parameters.environmentType }}
+        variables:
+          - name: appUrl
+            value: 'https://$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
+          - name: ciBuildNumber
+            ${{ if eq(parameters.dependsOnDeployJob, 'true') }}:
+              value: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedBuildNumber'] ]
+            ${{ else }}:
+              value: $[ stageDependencies.stageDeployStaging.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedBuildNumber'] ]
+
         ${{ if eq(parameters.dependsOnDeployJob, 'false') }}:
           dependsOn:
             - jobDeploy${{ region }}
@@ -43,31 +52,49 @@ jobs:
               steps:
                 - download: none
 
+                - script: env | sort
+                  displayName: Pipeline Environment
+
                 - task: AzureAppServiceManage@0
                   displayName: SwapSlot
                   inputs:
                     azureSubscription: ${{ parameters.serviceConnection }}
                     appType: webAppLinux
                     webAppName: $(appName)-${{ parameters.environmentType }}-${{ region }}
-                    resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
+                    resourceGroupName: $(resourceGroupPrefix)-${{ parameters.environmentType }}-${{ region }}-$(resourceGroupSlugName)
                     sourceSlot: ${{ parameters.slotName }}
                     swapWithProduction: true
 
+                - bash: |
+                    echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(appUrl)"
+                    echo "##vso[task.setvariable variable=deployedBuildNumber;isOutput=true;]$(ciBuildNumber)"
+                  name: setDeploymentResults
+                  displayName: Set Deployed App References
+
                 - template: smokeTest.yml
                   parameters:
-                    appUrl: 'https://$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
+                    appUrl: $(appUrl)
+                    ciBuildNumber: $(ciBuildNumber)
 
       - job: jobSwapValidation${{ region }}
         displayName: E2E ${{ region }}-production
         dependsOn: jobSwapSlot${{ region }}
         condition: and(succeeded(), eq('false', variables.skipE2eTests))
         variables:
-          deployedAppUrl: 'https://$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
+          deployedAppUrl: $[ dependencies.jobSwapSlot${{ region }}.outputs['jobSwapSlot${{ region }}.setDeploymentResults.deployedAppUrl'] ]
+          deployedBuildNumber: $[ dependencies.jobSwapSlot${{ region }}.outputs['jobSwapSlot${{ region }}.setDeploymentResults.deployedBuildNumber'] ]
+
         steps:
           - script: env | sort
             displayName: Pipeline Environment
 
           - template: npmInstall.yml
 
-          - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(Build.BuildNumber)
-            displayName: Cypress
+          - template: e2eTest.yml
+            parameters:
+              environmentType: ${{ parameters.environmentType }}
+              slotName: ${{ parameters.slotName }}
+              region: ${{ region }}
+              serviceConnection: ${{ parameters.serviceConnection }}
+              deployedAppUrl: $(deployedAppUrl)
+              ciBuildNumber: $(deployedBuildNumber)

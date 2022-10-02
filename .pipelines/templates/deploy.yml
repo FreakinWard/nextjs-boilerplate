@@ -18,30 +18,14 @@ parameters:
   - name: serviceConnection
     type: string
 
-  - name: manualApproval
-    type: boolean
-    default: false
-
 jobs:
-  - ${{ if parameters.manualApproval }}:
-      - job: jobManualApproval
-        displayName: Manual Approval
-        pool: server
-        steps:
-          - task: ManualValidation@0
-            timeoutInMinutes: 1
-            inputs:
-              instructions: |
-                ✅ Acceptance criteria is met
-                ✅ Regressions pass
-              onTimeout: 'reject'
-
   - ${{ each region in parameters.regions }}:
       - deployment: jobDeploy${{ region }}
         displayName: Deploy ${{ region }}-${{ parameters.slotName }}
         environment: ${{ parameters.environmentType }}
-        ${{ if parameters.manualApproval }}:
-          dependsOn: jobManualApproval
+        variables:
+          - name: ciBuildNumber
+            value: $(Build.BuildNumber)x$(System.JobAttempt)
         pool:
           vmImage: ubuntu-latest
         strategy:
@@ -63,20 +47,24 @@ jobs:
                   displayName: Azure Deploy
                   inputs:
                     azureSubscription: ${{ parameters.serviceConnection }}
-                    resourceGroupName: kmx-${{ parameters.environmentType }}-${{ region }}-$(appName)
+                    resourceGroupName: $(resourceGroupPrefix)-${{ parameters.environmentType }}-${{ region }}-$(resourceGroupSlugName)
                     appType: webAppLinux
                     appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
-                    runtimeStack: 'NODE|16-lts'
+                    runtimeStack: $(runtimeStack)
                     package: $(Pipeline.Workspace)/$(buildPackageName)
                     slotName: ${{ parameters.slotName }}
+                    startUpCommand: 'npm run start:prod'
 
-                - bash: echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(taskDeployAppService.AppServiceApplicationUrl)"
+                - bash: |
+                    echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(taskDeployAppService.AppServiceApplicationUrl)"
+                    echo "##vso[task.setvariable variable=deployedBuildNumber;isOutput=true;]$(ciBuildNumber)"
                   name: setDeploymentResults
-                  displayName: Set deployedAppUrl
+                  displayName: Set Deployed App References
 
                 - template: smokeTest.yml
                   parameters:
                     appUrl: $(taskDeployAppService.AppServiceApplicationUrl)
+                    ciBuildNumber: $(ciBuildNumber)
 
                 - script: env | sort
                   displayName: Pipeline Environment
@@ -87,11 +75,18 @@ jobs:
         condition: and(succeeded(), eq('false', variables.skipE2eTests))
         variables:
           deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedAppUrl'] ]
+          deployedBuildNumber: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedBuildNumber'] ]
         steps:
           - script: env | sort
             displayName: Pipeline Environment
 
           - template: npmInstall.yml
 
-          - script: npm run test:e2e -- --config baseUrl=$(deployedAppUrl) -- --env $(ciBuildNumber)
-            displayName: Cypress
+          - template: e2eTest.yml
+            parameters:
+              environmentType: ${{ parameters.environmentType }}
+              slotName: ${{ parameters.slotName }}
+              region: ${{ region }}
+              serviceConnection: ${{ parameters.serviceConnection }}
+              deployedAppUrl: $(deployedAppUrl)
+              ciBuildNumber: $(deployedBuildNumber)

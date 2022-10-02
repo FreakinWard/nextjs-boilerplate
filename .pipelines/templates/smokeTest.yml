@@ -2,12 +2,15 @@ parameters:
   - name: appUrl
     type: string
 
+  - name: ciBuildNumber
+    type: string
+
 steps:
   - task: PowerShell@2
     displayName: 'Smoke Test'
     timeoutInMinutes: 5
     env:
-      ciBuildNumber: $(ciBuildNumber)
+      ciBuildNumber: ${{ parameters.ciBuildNumber }}
       appUrl: ${{ parameters.appUrl }}/api/health
     inputs:
       targetType: 'inline'

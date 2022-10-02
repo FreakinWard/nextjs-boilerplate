@@ -2,6 +2,9 @@ jobs:
   - job: Build
     pool:
       vmImage: ubuntu-latest
+    variables:
+      - name: NEXT_PUBLIC_API_MOCKING
+        value: enabled
 
     steps:
       - script: env | sort
@@ -17,7 +20,6 @@ jobs:
 
       - script: npm run test:e2e:ci
         displayName: E2E CI
-        condition: eq('false', variables.skipE2eTests)
 
       - task: PublishTestResults@2
         displayName: Publish Unit Test
@@ -31,13 +33,13 @@ jobs:
         inputs:
           failIfCoverageEmpty: true
           codeCoverageTool: Cobertura
-          summaryFileLocation: $(System.DefaultWorkingDirectory)/coverage/cobertura-coverage.xml
+          summaryFileLocation: 'coverage/cobertura-coverage.xml'
 
       - task: PublishHtmlReport@1
         displayName: Publish Unit Test Report
         condition: succeededOrFailed()
         inputs:
-          reportDir: 'coverage/html-report.html'
+          reportDir: 'html-report/report.html'
           tabName: Unit Tests
 
       - script: |
@@ -51,3 +53,10 @@ jobs:
           targetPath: $(System.DefaultWorkingDirectory)
           artifactType: 'pipeline'
           artifactName: $(buildPackageName)
+
+      - task: PublishHtmlReport@1
+        displayName: Publish Integration Test Report
+        condition: succeededOrFailed()
+        inputs:
+          reportDir: 'cypress/reports/index.html'
+          tabName: 'Integration Tests'

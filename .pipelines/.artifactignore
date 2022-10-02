@@ -4,7 +4,8 @@
 # include only production files
 !/.env
 !/.deployment
-!/load-appinsights.js
+!/.npmrc
+!/load-appInsights.js
 !/next-env.d.ts
 !/next.config.js
 !/package-lock.json

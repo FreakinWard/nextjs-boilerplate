@@ -2,21 +2,28 @@ parameters:
   - name: skipE2eTests
     type: boolean
 
+  - name: manualDeployment
+    type: string
+    default: no-deployment
+
 variables:
   # app
-  appName: aw-aux-checkout-microsite
+  appName: nextjs-template
 
   # stages
   isCI: $[in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')]
   skipE2eTests: ${{ eq('true', parameters.skipE2eTests) }}
+  isDevOnly: ${{ eq('dev-only', parameters.manualDeployment) }}
+  isFullCI: ${{ eq('full-ci', parameters.manualDeployment) }}
 
   # artifact
   buildPackageName: $(System.DefinitionName)-$(Build.BuildNumber)
-  buildArtifactName: $(Resources.Pipeline.Build.PipelineName)-$(Resources.Pipeline.Build.RunName)
-  ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
 
   # azure
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
+  resourceGroupSlugName: 'rg-nextjs'
+  resourceGroupPrefix: 'abc'
+  runtimeStack: 'NODE|16-lts'
 
   # pipeline
   cyCacheDir: /home/vsts/.cache/Cypress
