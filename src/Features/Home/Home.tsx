@@ -1,5 +1,4 @@
-import { Post } from '../../../services/postsService';
-import Footer from './components/Footer';
+import { Post } from '../../services/postsService';
 import NextInfo from './components/NextInfo';
 import RenderExamples from './components/RenderExamples';
 
@@ -12,8 +11,6 @@ export default function Home({ posts }: Props) {
     <>
       <RenderExamples posts={posts} />
       <NextInfo />
-
-      <Footer />
     </>
   );
 }

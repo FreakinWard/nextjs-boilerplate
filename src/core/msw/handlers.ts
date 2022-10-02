@@ -1,7 +1,7 @@
 import { rest } from 'msw';
 
 import seedHealth from './seed/seedHealth';
-import seedPromotions from './seed/seedPosts';
+import seedPosts from './seed/seedPosts';
 
 const mockHandler = (statusText = null, statusCode = 200) => {
   return async (req, res, ctx) => {
@@ -14,7 +14,7 @@ const mockRequestGet = (url, responseData, statusCode = 200) => {
 };
 
 export default [
-  mockRequestGet('*/api/posts', seedPromotions),
+  mockRequestGet('*/api/posts', seedPosts),
   mockRequestGet('*/api/health', seedHealth),
-  mockRequestGet('https://my-json-server.typicode.com/typicode/demo/posts', seedPromotions),
+  mockRequestGet('https://my-json-server.typicode.com/typicode/demo/posts', seedPosts),
 ];

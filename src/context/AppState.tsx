@@ -5,6 +5,7 @@ interface Props {
   children: ReactNode;
 }
 
+/* istanbul ignore next */
 async () => {
   if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
     const { setupMsw } = await import('../core/msw');
