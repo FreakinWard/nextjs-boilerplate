@@ -17,7 +17,6 @@ describe('health', () => {
     // act
     // assert
     // cy.findByText(`BuildNumber: ${buildNumber}`);
-    // eslint-disable-next-line jest/valid-expect
     expect(Cypress.env('CI_BUILD_NUMBER')).to.equal(buildNumber);
   });
 });
