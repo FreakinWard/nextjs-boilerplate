@@ -1,6 +1,7 @@
 parameters:
   - name: skipE2eTests
     type: boolean
+    default: false
 
   - name: manualDeployment
     type: string
@@ -21,8 +22,7 @@ variables:
 
   # azure
   azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
-  resourceGroupSlugName: 'rg-nextjs'
-  resourceGroupPrefix: 'abc'
+  resourceGroupPrefix: 'demo'
   runtimeStack: 'NODE|16-lts'
 
   # pipeline

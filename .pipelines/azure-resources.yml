@@ -1,0 +1,62 @@
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+      - main
+
+parameters:
+  - name: manualDeployment
+    displayName: Manual Deployment
+    type: string
+    default: no-deployment
+    values:
+      - no-deployment
+      - dev-only
+      - full-ci
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - template: templates/variables.yml
+
+stages:
+  - stage: Validate
+    jobs:
+      - template: templates-resources/validate.yml
+        parameters:
+          serviceConnection: $(azureSubscription)
+          environmentTypes:
+            - Dev
+          regions:
+            - East
+
+  #      - template: templates-resources/validate.yml
+  #        parameters:
+  #          serviceConnection: $(azureSubscription)
+  #          environmentTypes:
+  #            - QA
+  #            - Prod
+  #          regions:
+  #            - East
+  #            - West
+
+  - stage: Deploy
+    jobs:
+      - template: templates-resources/deploy.yml
+        parameters:
+          serviceConnection: $(azureSubscription)
+          environmentTypes:
+            - Dev
+          regions:
+            - East
+#      - template: templates-resources/deploy.yml
+#        parameters:
+#          serviceConnection: $(azureSubscription)
+#          environmentTypes:
+#            - QA
+#            - Prod
+#          regions:
+#            - East
+#            - West

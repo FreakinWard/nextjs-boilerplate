@@ -1,0 +1,36 @@
+parameters:
+  - name: action
+    type: object
+    values:
+      - create
+      - validate
+
+  - name: environmentName
+    type: string
+
+  - name: regionName
+    type: string
+
+  - name: serviceConnection
+    type: string
+
+steps:
+  - script: |
+      echo $(System.DefaultWorkingDirectory)
+      echo $(resourceGroupPrefix)-$(appName)-$(environmentName)-$(regionName)
+      echo $(System.DefaultWorkingDirectory)/.pipelines/templates-resources/main.bicep
+      ls -l .
+    displayName: Log paths
+
+  - task: AzureCLI@2
+    name:
+    displayName: Azure - ${{ parameters.environmentName }} - ${{ parameters.regionName }}
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az deployment group validate \
+          --resource-group $(resourceGroupPrefix)-$(appName)-$(environmentName)-$(regionName) \
+          --template-file $(System.DefaultWorkingDirectory)/.pipelines/templates-resources/main.bicep \
+          --parameters webAppName=$(appName) environmentType=$(environmentName) region=$(regionName)

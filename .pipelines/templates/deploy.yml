@@ -47,7 +47,7 @@ jobs:
                   displayName: Azure Deploy
                   inputs:
                     azureSubscription: ${{ parameters.serviceConnection }}
-                    resourceGroupName: $(resourceGroupPrefix)-${{ parameters.environmentType }}-${{ region }}-$(resourceGroupSlugName)
+                    resourceGroupName: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}
                     appType: webAppLinux
                     appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
                     runtimeStack: $(runtimeStack)

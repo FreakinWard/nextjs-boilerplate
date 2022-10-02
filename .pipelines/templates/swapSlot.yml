@@ -61,7 +61,7 @@ jobs:
                     azureSubscription: ${{ parameters.serviceConnection }}
                     appType: webAppLinux
                     webAppName: $(appName)-${{ parameters.environmentType }}-${{ region }}
-                    resourceGroupName: $(resourceGroupPrefix)-${{ parameters.environmentType }}-${{ region }}-$(resourceGroupSlugName)
+                    resourceGroupName: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}
                     sourceSlot: ${{ parameters.slotName }}
                     swapWithProduction: true
 
