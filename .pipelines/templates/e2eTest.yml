@@ -25,13 +25,6 @@ parameters:
     type: string
 
 steps:
-  - task: AzureKeyVault@2
-    inputs:
-      connectedServiceName: ${{ parameters.serviceConnection }}
-      keyVaultName: aux-chkin-${{ parameters.environmentType }}-vault
-      secretsFilter: 'AUCTION--USER--NAME, AUCTION--USER--PASSWORD, NEXTAUTH--SECRET, CLIENT--ID, AUTH--TOKEN--URL'
-      runAsPreJob: false # Runs before the job starts
-
   - task: PowerShell@2
     displayName: Cypress Env
     inputs:
