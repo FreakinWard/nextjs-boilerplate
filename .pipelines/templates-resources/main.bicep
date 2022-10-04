@@ -1,7 +1,17 @@
 param webAppName string
+param webAppNameShort string
 param location string = resourceGroup().location
-param environmentType string
-param region string
+
+resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
+  name: '${webAppNameShort}-appinsights'
+  location: location
+  kind: 'web'
+  properties: {
+    Application_Type: 'web'
+    publicNetworkAccessForIngestion: 'Enabled'
+    publicNetworkAccessForQuery: 'Enabled'
+  }
+}
 
 resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   name: webAppName
@@ -11,8 +21,6 @@ resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
   }
   sku: {
     name: 'P1V2'
-    tier: 'PremiumV2'
-    capacity: 1
   }
   kind: 'linux'
 }
@@ -24,6 +32,12 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
     serverFarmId: appServicePlan.id
     siteConfig: {
       linuxFxVersion: 'node|16-lts'
+      appSettings: [
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appInsights.properties.InstrumentationKey
+        }
+      ]
     }
   }
 }

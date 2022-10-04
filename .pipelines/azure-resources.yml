@@ -20,6 +20,8 @@ pool:
 
 variables:
   - template: templates/variables.yml
+    parameters:
+      manualDeployment: ${{ parameters.manualDeployment }}
 
 stages:
   - stage: Validate
@@ -43,6 +45,7 @@ stages:
   #            - West
 
   - stage: Deploy
+    condition: and(succeeded(), or(eq(variables.isCI, 'True'), eq(variables.isDevOnly, 'True'), eq(variables.isFullCI, 'True') ))
     jobs:
       - template: templates-resources/deploy.yml
         parameters:

@@ -16,9 +16,11 @@ parameters:
 
 steps:
   - script: |
-      echo $(System.DefaultWorkingDirectory)
-      echo $(resourceGroupPrefix)-$(appName)-$(environmentName)-$(regionName)
-      echo $(System.DefaultWorkingDirectory)/.pipelines/templates-resources/main.bicep
+      echo action: ${{ parameters.action }}
+      echo resourceGroup: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-$(regionName)
+      echo templateFile: $(System.DefaultWorkingDirectory)/.pipelines/templates-resources/main.bicep
+      echo webAppName: $(appName)-${{ parameters.environmentName }}-${{ parameters.regionName }}
+      echo webAppNameShort: $(appName)-${{ parameters.environmentName }}
       ls -l .
     displayName: Log paths
 
@@ -30,7 +32,7 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az deployment group validate \
-          --resource-group $(resourceGroupPrefix)-$(appName)-$(environmentName)-$(regionName) \
+        az deployment group ${{ parameters.action }} \
+          --resource-group $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-$(regionName) \
           --template-file $(System.DefaultWorkingDirectory)/.pipelines/templates-resources/main.bicep \
-          --parameters webAppName=$(appName) environmentType=$(environmentName) region=$(regionName)
+          --parameters webAppName=$(appName)-${{ parameters.environmentName }}-${{ parameters.regionName }} webAppNameShort=$(appName)-${{ parameters.environmentName }}
