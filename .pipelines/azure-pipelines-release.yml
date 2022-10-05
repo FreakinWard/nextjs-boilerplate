@@ -57,7 +57,7 @@ stages:
       - template: templates/swapSlot.yml
         parameters:
           environmentType: Dev
-          serviceConnection: $(serviceConnectionDev)
+          serviceConnection: $(azureSubscription)
           regions:
             - East
 
@@ -82,10 +82,6 @@ stages:
           regions:
             - East
 
-      - template: templates/release.yml
-        parameters:
-          displayName: Create Release
-
   - stage: stageDeployStaging
     displayName: Staging Prod
     dependsOn: stageDeployQA
@@ -98,10 +94,6 @@ stages:
           regions:
             - East
 
-      - template: templates/release.yml
-        parameters:
-          displayName: Create Release
-
   - stage: stageDeployProd
     displayName: Prod
     dependsOn: stageDeployStaging
@@ -113,8 +105,3 @@ stages:
           serviceConnection: $(azureSubscription)
           regions:
             - East
-
-      - template: templates/release.yml
-        parameters:
-          displayName: Promote Release
-          promoteRelease: true
