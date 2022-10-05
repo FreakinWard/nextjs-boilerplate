@@ -10,7 +10,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "start:prod": "npm run build && npm run start:pm2",
+    "start:prod": "node --require ./load-appInsights.js node_modules/next/dist/bin/next start",
     "start:insights": "node --require ./load-appinsights.js node_modules/next/dist/bin/next start",
     "start:pm2": "pm2 start ecosystem.config.js --no-daemon",
     "lint": "next lint . -f table",

@@ -11,7 +11,7 @@ steps:
     timeoutInMinutes: 5
     env:
       ciBuildNumber: ${{ parameters.ciBuildNumber }}
-      appUrl: ${{ parameters.appUrl }}/api/health
+      appUrl: ${{ parameters.appUrl }}/health
     inputs:
       targetType: 'inline'
       script: |
