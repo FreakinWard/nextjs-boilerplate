@@ -41,3 +41,20 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
     }
   }
 }
+
+resource appServiceStagingSlot 'Microsoft.Web/sites/slots@2020-06-01' = {
+  name: '${webAppName}/Staging'
+  location: location
+  properties: {
+    serverFarmId: appServicePlan.id
+    siteConfig: {
+      linuxFxVersion: 'node|16-lts'
+      appSettings: [
+        {
+          name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
+          value: appInsights.properties.InstrumentationKey
+        }
+      ]
+    }
+  }
+}
