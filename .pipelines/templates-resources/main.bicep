@@ -45,6 +45,9 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
 resource appServiceStagingSlot 'Microsoft.Web/sites/slots@2020-06-01' = {
   name: '${webAppName}/staging'
   location: location
+  dependsOn: [
+    appService
+  ]
   properties: {
     serverFarmId: appServicePlan.id
     siteConfig: {
