@@ -31,13 +31,19 @@ resource appService 'Microsoft.Web/sites@2020-06-01' = {
   properties: {
     serverFarmId: appServicePlan.id
     siteConfig: {
-      linuxFxVersion: 'node|16-lts'
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
           value: appInsights.properties.InstrumentationKey
         }
+        {
+          name: 'ApplicationInsightsAgent_EXTENSION_VERSION'
+          value: '~3'
+        }
       ]
+      httpLoggingEnabled: true
+      linuxFxVersion: 'node|16-lts'
+      logsDirectorySizeLimit: 35
     }
   }
 }
@@ -51,13 +57,20 @@ resource appServiceStagingSlot 'Microsoft.Web/sites/slots@2020-06-01' = {
   properties: {
     serverFarmId: appServicePlan.id
     siteConfig: {
-      linuxFxVersion: 'node|16-lts'
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
           value: appInsights.properties.InstrumentationKey
         }
+        {
+          name: 'ApplicationInsightsAgent_EXTENSION_VERSION'
+          value: '~3'
+        }
       ]
+      httpLoggingEnabled: true
+      linuxFxVersion: 'node|16-lts'
+      logsDirectorySizeLimit: 35
+
     }
   }
 }
