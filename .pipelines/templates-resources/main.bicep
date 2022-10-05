@@ -72,16 +72,6 @@ resource appServiceStagingSlot 'Microsoft.Web/sites/slots@2020-06-01' = {
   }
 }
 
-resource appServiceSlotConfig 'Microsoft.Web/sites/slots/config@2022-03-01' = {
-  name: 'web'
-  parent: appService
-  properties: {
-    healthCheckPath: '/health'
-    httpLoggingEnabled: true
-    logsDirectorySizeLimit: 35
-  }
-}
-
 resource appServiceStagingSlotConfig 'Microsoft.Web/sites/slots/config@2022-03-01' = {
   name: 'web'
   parent: appServiceStagingSlot
