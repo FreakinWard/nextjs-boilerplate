@@ -2,6 +2,43 @@ param webAppName string
 param webAppNameShort string
 param location string = resourceGroup().location
 
+resource kv 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
+  name: '${webAppNameShort}-kv'
+  location: location
+  properties: {
+    enabledForDeployment: enabledForDeployment
+    enabledForDiskEncryption: enabledForDiskEncryption
+    enabledForTemplateDeployment: enabledForTemplateDeployment
+    tenantId: tenantId
+    accessPolicies: [
+      {
+        objectId: objectId
+        tenantId: tenantId
+        permissions: {
+          keys: keysPermissions
+          secrets: secretsPermissions
+        }
+      }
+    ]
+    sku: {
+      name: skuName
+      family: 'A'
+    }
+    networkAcls: {
+      defaultAction: 'Allow'
+      bypass: 'AzureServices'
+    }
+  }
+}
+
+resource secret 'Microsoft.KeyVault/vaults/secrets@2021-11-01-preview' = {
+  parent: kv
+  name: secretName
+  properties: {
+    value: secretValue
+  }
+}
+
 resource appInsights 'Microsoft.Insights/components@2020-02-02-preview' = {
   name: '${webAppNameShort}-appinsights'
   location: location
