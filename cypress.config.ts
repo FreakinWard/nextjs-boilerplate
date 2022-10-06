@@ -24,6 +24,7 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       return require('./cypress/plugins/index.js')(on, config);
     },
+    // baseUrl: 'http://nextjs-template-dev-east-staging.azurewebsites.net',
     baseUrl: 'http://localhost:3000',
   },
   video: false,

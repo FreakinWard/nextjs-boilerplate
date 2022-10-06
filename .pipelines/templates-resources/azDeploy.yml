@@ -35,4 +35,7 @@ steps:
         az deployment group ${{ parameters.action }} \
           --resource-group $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-$(regionName) \
           --template-file $(System.DefaultWorkingDirectory)/.pipelines/templates-resources/main.bicep \
-          --parameters webAppName=$(appName)-${{ parameters.environmentName }}-${{ parameters.regionName }} webAppNameShort=$(appName)-${{ parameters.environmentName }}
+          --parameters appName=$(appName) \
+              environmentName=${{ parameters.environmentName }} \
+              regionName=${{ parameters.regionName }} \
+              resourceGroupPrefix=$(resourceGroupPrefix)
