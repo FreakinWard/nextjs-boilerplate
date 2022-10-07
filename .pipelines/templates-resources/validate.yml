@@ -22,6 +22,7 @@ jobs:
             variables:
               regionName: ${{ lower(region) }}
               environmentName: ${{ lower(environmentType) }}
+              rgName: $(resourceGroupPrefix)-$(appName)-$(environmentName)-$(regionName)
             steps:
               - template: azDeploy.yml
                 parameters:
@@ -29,6 +30,7 @@ jobs:
                   environmentName: $(environmentName)
                   regionName: $(regionName)
                   serviceConnection: ${{ parameters.serviceConnection }}
+                  rgName: $(rgName)
 #              - task: AzureCLI@2
 #                name:
 #                displayName: Validation - ${{ region }}

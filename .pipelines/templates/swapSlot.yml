@@ -27,12 +27,14 @@ jobs:
         environment: ${{ parameters.environmentType }}
         variables:
           - name: appUrl
-            value: 'https://$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
+            value: 'https://$(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
           - name: ciBuildNumber
             ${{ if eq(parameters.dependsOnDeployJob, 'true') }}:
               value: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedBuildNumber'] ]
             ${{ else }}:
               value: $[ stageDependencies.stageDeployStaging.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedBuildNumber'] ]
+          - name: resourceGroupName
+            value: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}
 
         ${{ if eq(parameters.dependsOnDeployJob, 'false') }}:
           dependsOn:
@@ -60,8 +62,8 @@ jobs:
                   inputs:
                     azureSubscription: ${{ parameters.serviceConnection }}
                     appType: webAppLinux
-                    webAppName: $(appName)-${{ parameters.environmentType }}-${{ region }}
-                    resourceGroupName: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}
+                    webAppName: $(resourceGroupName)
+                    resourceGroupName: $(resourceGroupName)
                     sourceSlot: ${{ parameters.slotName }}
                     swapWithProduction: true
 
@@ -92,9 +94,7 @@ jobs:
 
           - template: e2eTest.yml
             parameters:
-              environmentType: ${{ parameters.environmentType }}
               slotName: ${{ parameters.slotName }}
               region: ${{ region }}
-              serviceConnection: ${{ parameters.serviceConnection }}
               deployedAppUrl: $(deployedAppUrl)
               ciBuildNumber: $(deployedBuildNumber)

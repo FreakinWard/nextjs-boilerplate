@@ -24,8 +24,8 @@ jobs:
         displayName: Deploy ${{ region }}-${{ parameters.slotName }}
         environment: ${{ parameters.environmentType }}
         variables:
-          - name: ciBuildNumber
-            value: $(Build.BuildNumber)x$(System.JobAttempt)
+          ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
+          resourceGroupName: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}
         pool:
           vmImage: ubuntu-latest
         strategy:
@@ -47,9 +47,9 @@ jobs:
                   displayName: Azure Deploy
                   inputs:
                     azureSubscription: ${{ parameters.serviceConnection }}
-                    resourceGroupName: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}
+                    resourceGroupName: $(resourceGroupName)
                     appType: webAppLinux
-                    appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
+                    appName: $(resourceGroupName)
                     runtimeStack: $(runtimeStack)
                     package: $(Pipeline.Workspace)/$(buildPackageName)
                     slotName: ${{ parameters.slotName }}
@@ -84,9 +84,7 @@ jobs:
 
           - template: e2eTest.yml
             parameters:
-              environmentType: ${{ parameters.environmentType }}
               slotName: ${{ parameters.slotName }}
               region: ${{ region }}
-              serviceConnection: ${{ parameters.serviceConnection }}
               deployedAppUrl: $(deployedAppUrl)
               ciBuildNumber: $(deployedBuildNumber)

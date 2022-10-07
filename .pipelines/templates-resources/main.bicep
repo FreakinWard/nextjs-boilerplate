@@ -7,17 +7,7 @@ param resourceGroupPrefix string
 var webAppName = '${resourceGroupPrefix}-${appName}-${environmentName}-${regionName}'
 var webAppNameShort = '${resourceGroupPrefix}-${appName}-${environmentName}'
 
-module rg './bicep/resourceGroup.bicep' = {
-  name: 'resourceGroup'
-  scope: subscription()
-  params: {
-    webAppName: webAppName
-    regionName: regionName
-    resourceGroupPrefix: resourceGroupPrefix
-  }
-}
-
-module appInisghts './bicep/appInsights.bicep' = {
+module appInsights './bicep/appInsights.bicep' = {
   name: 'appInsights'
   scope: resourceGroup()
   params: {
@@ -32,6 +22,6 @@ module appServicePlan './bicep/appService.bicep' = {
   params: {
     webAppName: webAppName
     location: location
-    instrumentationKey: appInisghts.outputs.InstrumentationKey
+    instrumentationKey: appInsights.outputs.InstrumentationKey
   }
 }
