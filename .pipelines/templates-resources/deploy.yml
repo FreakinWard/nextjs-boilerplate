@@ -23,6 +23,13 @@ jobs:
               regionName: ${{ lower(region) }}
               environmentName: ${{ lower(environmentType) }}
             steps:
+              - template: azDeploy-resourceGroup.yml
+                parameters:
+                  action: create
+                  environmentName: $(environmentName)
+                  regionName: $(regionName)
+                  serviceConnection: ${{ parameters.serviceConnection }}
+
               - template: azDeploy.yml
                 parameters:
                   action: create
