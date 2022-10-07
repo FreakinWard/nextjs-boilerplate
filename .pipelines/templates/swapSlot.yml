@@ -27,7 +27,7 @@ jobs:
         environment: ${{ parameters.environmentType }}
         variables:
           - name: appUrl
-            value: 'https://$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
+            value: 'https://$(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}.azurewebsites.net'
           - name: ciBuildNumber
             ${{ if eq(parameters.dependsOnDeployJob, 'true') }}:
               value: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedBuildNumber'] ]
