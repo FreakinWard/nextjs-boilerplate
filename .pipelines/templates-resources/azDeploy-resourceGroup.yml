@@ -32,10 +32,10 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az deployment sub ${{ parameters.action }} \
-          --location ${{ parameters.regionName }}us2 \
-          --template-file $(System.DefaultWorkingDirectory)/.pipelines/templates-resources/main-resourceGroup.bicep \
-          --parameters appName=$(appName) \
-              environmentName=${{ parameters.environmentName }} \
-              regionName=${{ parameters.regionName }} \
-              resourceGroupPrefix=$(resourceGroupPrefix)
+        $rgName = $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-${{ parameters.regionName }}
+
+        $groupExists = az group exists -n $rgName
+
+        if($groupExists -eq 'false') {
+          az deployment sub -n $rgName -l ${{ parameters.regionName }}us2
+        }
