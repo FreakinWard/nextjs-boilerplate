@@ -32,7 +32,7 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az deployment ${{ parameters.subgroup }} ${{ parameters.action }} \
+        az deployment sub ${{ parameters.action }} \
           --resource-group $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-$(regionName) \
           --template-file $(System.DefaultWorkingDirectory)/.pipelines/templates-resources/main-resourceGroup.bicep \
           --parameters appName=$(appName) \
