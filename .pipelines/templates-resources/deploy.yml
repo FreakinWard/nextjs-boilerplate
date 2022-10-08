@@ -35,7 +35,7 @@ jobs:
                     $groupExists = az group exists -n $(rgName)
 
                     if($groupExists -eq 'false') {
-                      az deployment sub -n $(resourceGroupName) -l "$(rgName)us2"
+                      az deployment sub -n "$(resourceGroupName)" -l "$(rgName)us2"
                     }
 
               - template: azDeploy.yml
