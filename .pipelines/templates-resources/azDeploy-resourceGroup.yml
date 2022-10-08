@@ -29,7 +29,7 @@ steps:
     displayName: Azure - ${{ parameters.environmentName }} - ${{ parameters.regionName }}
     inputs:
       azureSubscription: ${{ parameters.serviceConnection }}
-      scriptType: bash
+      scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
         $rgName = $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-${{ parameters.regionName }}
