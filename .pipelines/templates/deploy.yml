@@ -25,7 +25,7 @@ jobs:
         environment: ${{ parameters.environmentType }}
         variables:
           ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
-          resourceGroupName: $(resourceGroupPrefix)-$(appName)-$(environmentName)-$(regionName)
+          resourceGroupName: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-$(region)
         pool:
           vmImage: ubuntu-latest
         strategy:
