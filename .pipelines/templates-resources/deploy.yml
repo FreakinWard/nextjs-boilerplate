@@ -24,23 +24,10 @@ jobs:
               environmentName: ${{ lower(environmentType) }}
               rgName: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-${{ parameters.regionName }}
             steps:
-              - task: AzureCLI@2
-                name:
-                displayName: Azure - $(environmentName) - $(regionName)
-                inputs:
-                  azureSubscription: ${{ parameters.serviceConnection }}
-                  scriptType: pscore
-                  scriptLocation: inlineScript
-                  inlineScript: |
-                    $groupExists = az group exists -n $(rgName)
-
-                    if($groupExists -eq 'false') {
-                      az deployment sub -n "$(resourceGroupName)" -l "$(rgName)us2"
-                    }
-
               - template: azDeploy.yml
                 parameters:
                   action: create
                   environmentName: $(environmentName)
                   regionName: $(regionName)
                   serviceConnection: ${{ parameters.serviceConnection }}
+                  rgName: $(rgName)

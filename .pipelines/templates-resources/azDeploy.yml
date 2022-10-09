@@ -11,6 +11,9 @@ parameters:
   - name: regionName
     type: string
 
+  - name: rgName
+    type: string
+
   - name: serviceConnection
     type: string
 
@@ -26,14 +29,28 @@ steps:
 
   - task: AzureCLI@2
     name:
-    displayName: Azure - ${{ parameters.environmentName }} - ${{ parameters.regionName }}
+    displayName: Resource Group - $(environmentName) - $(regionName)
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        $groupExists = az group exists -n $(rgName)
+
+        if($groupExists -eq 'false') {
+          az deployment sub -n $(rgName) -l "$(rgName)us2"
+        }
+
+  - task: AzureCLI@2
+    name:
+    displayName: Resources - ${{ parameters.environmentName }} - ${{ parameters.regionName }}
     inputs:
       azureSubscription: ${{ parameters.serviceConnection }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
         az deployment group ${{ parameters.action }} \
-          --resource-group $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-$(regionName) \
+          --resource-group ${{ parameters.rgName }} \
           --template-file $(System.DefaultWorkingDirectory)/.pipelines/templates-resources/main.bicep \
           --parameters appName=$(appName) \
               environmentName=${{ parameters.environmentName }} \
