@@ -22,7 +22,7 @@ jobs:
             variables:
               regionName: ${{ lower(region) }}
               environmentName: ${{ lower(environmentType) }}
-              rgName: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-${{ parameters.regionName }}
+              rgName: $(resourceGroupPrefix)-$(appName)-$(environmentName)-$(regionName)
             steps:
               - template: azDeploy.yml
                 parameters:
