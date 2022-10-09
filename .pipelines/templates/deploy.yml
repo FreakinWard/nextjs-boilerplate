@@ -24,8 +24,8 @@ jobs:
         displayName: Deploy ${{ region }}-${{ parameters.slotName }}
         environment: ${{ parameters.environmentType }}
         variables:
-          - name: ciBuildNumber
-            value: $(Build.BuildNumber)x$(System.JobAttempt)
+          ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
+          resourceGroupName: $(resourceGroupPrefix)-$(appName)-$(environmentName)-$(regionName)
         pool:
           vmImage: ubuntu-latest
         strategy:
@@ -47,7 +47,7 @@ jobs:
                   displayName: Azure Deploy
                   inputs:
                     azureSubscription: ${{ parameters.serviceConnection }}
-                    resourceGroupName: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}
+                    resourceGroupName: $(resourceGroupName)
                     appType: webAppLinux
                     appName: $(appName)-${{ parameters.environmentType }}-${{ region }}
                     runtimeStack: $(runtimeStack)
