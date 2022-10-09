@@ -84,9 +84,7 @@ jobs:
 
           - template: e2eTest.yml
             parameters:
-              environmentType: ${{ parameters.environmentType }}
               slotName: ${{ parameters.slotName }}
               region: ${{ region }}
-              serviceConnection: ${{ parameters.serviceConnection }}
               deployedAppUrl: $(deployedAppUrl)
               ciBuildNumber: $(deployedBuildNumber)

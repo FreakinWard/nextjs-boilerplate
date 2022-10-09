@@ -1,11 +1,4 @@
 parameters:
-  - name: environmentType
-    type: string
-    values:
-      - Dev
-      - QA
-      - Prod
-
   - name: slotName
     type: string
     default: production
@@ -14,9 +7,6 @@ parameters:
     type: string
     default:
       - East
-
-  - name: serviceConnection
-    type: string
 
   - name: deployedAppUrl
     type: string

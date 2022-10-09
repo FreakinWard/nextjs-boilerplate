@@ -10,13 +10,21 @@ describe('health', () => {
     cy.findByText('Health Check');
   });
 
-  it('should show expected build number', () => {
+  it.skip('should set ciBuildNumber environment variable', () => {
     // arrange
     const buildNumber = process.env.CI_BUILD_NUMBER ?? 'not-set';
 
     // act
     // assert
-    // cy.findByText(`BuildNumber: ${buildNumber}`);
     expect(Cypress.env('CI_BUILD_NUMBER')).to.equal(buildNumber);
+  });
+
+  it.skip('should show expected build number', () => {
+    // arrange
+    const buildNumber = process.env.CI_BUILD_NUMBER ?? 'not-set';
+
+    // act
+    // assert
+    cy.findByText(`BuildNumber: ${buildNumber}`);
   });
 });
