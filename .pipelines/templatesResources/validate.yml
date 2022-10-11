@@ -41,5 +41,5 @@ jobs:
 #                  inlineScript: |
 #                    az deployment group validate \
 #                      --resource-group $(resourceGroupPrefix)-$(appName)-$(environmentName)-$(regionName) \
-#                      --template-file .pipelines/templates-resources/main.bicep \
+#                      --template-file .pipelines/templatesResources/main.bicep \
 #                      --parameters appName=$(appName) environmentType=$(environmentName) region=$(regionName)

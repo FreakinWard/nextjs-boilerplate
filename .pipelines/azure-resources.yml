@@ -26,7 +26,7 @@ variables:
 stages:
   - stage: Validate
     jobs:
-      - template: templates-resources/validate.yml
+      - template: templatesResources/validate.yml
         parameters:
           serviceConnection: $(azureSubscription)
           environmentTypes:
@@ -34,7 +34,7 @@ stages:
           regions:
             - East
 
-      - template: templates-resources/validate.yml
+      - template: templatesResources/validate.yml
         parameters:
           serviceConnection: $(azureSubscription)
           environmentTypes:
@@ -43,7 +43,7 @@ stages:
             - East
             - West
 
-      - template: templates-resources/validate.yml
+      - template: templatesResources/validate.yml
         parameters:
           serviceConnection: $(azureSubscription)
           environmentTypes:
@@ -56,7 +56,7 @@ stages:
     displayName: Dev
     condition: and(succeeded(), or(eq(variables.isCI, 'True'), eq(variables.isDevOnly, 'True'), eq(variables.isFullCI, 'True') ))
     jobs:
-      - template: templates-resources/deploy.yml
+      - template: templatesResources/deploy.yml
         parameters:
           serviceConnection: $(azureSubscription)
           environmentTypes:
@@ -70,7 +70,7 @@ stages:
     #    condition: and(succeeded(), or(eq(variables.isCI, 'True'), eq(variables.isDevOnly, 'True'), eq(variables.isFullCI, 'True') ))
     condition: false # TODO: remove when ready for multiple environments
     jobs:
-      - template: templates-resources/deploy.yml
+      - template: templatesResources/deploy.yml
         parameters:
           serviceConnection: $(azureSubscription)
           environmentTypes:
@@ -83,7 +83,7 @@ stages:
     displayName: Prod
     dependsOn: stageDeployQA
     jobs:
-      - template: templates-resources/deploy.yml
+      - template: templatesResources/deploy.yml
         parameters:
           serviceConnection: $(azureSubscription)
           environmentTypes:
