@@ -21,7 +21,7 @@ steps:
   - script: |
       echo action: ${{ parameters.action }}
       echo resourceGroup: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-$(regionName)
-      echo templateFile: $(System.DefaultWorkingDirectory)/.pipelines/templatesResources/main.bicep
+      echo templateFile: $(System.DefaultWorkingDirectory)/.pipelines/resources/bicep/main.bicep
       echo webAppName: $(appName)-${{ parameters.environmentName }}-${{ parameters.regionName }}
       echo webAppNameShort: $(appName)-${{ parameters.environmentName }}
       ls -l .
@@ -51,7 +51,7 @@ steps:
       inlineScript: |
         az deployment group ${{ parameters.action }} \
           --resource-group ${{ parameters.rgName }} \
-          --template-file $(System.DefaultWorkingDirectory)/.pipelines/templatesResources/main.bicep \
+          --template-file $(System.DefaultWorkingDirectory)/.pipelines/resources/bicep/main.bicep \
           --parameters appName=$(appName) \
               environmentName=${{ parameters.environmentName }} \
               regionName=${{ parameters.regionName }} \

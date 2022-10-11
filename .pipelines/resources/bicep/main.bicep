@@ -7,7 +7,7 @@ param resourceGroupPrefix string
 var webAppName = '${resourceGroupPrefix}-${appName}-${environmentName}-${regionName}'
 var webAppNameShort = '${resourceGroupPrefix}-${appName}-${environmentName}'
 
-module appInsights './bicep/appInsights.bicep' = {
+module appInsights './appInsights.bicep' = {
   name: 'appInsights'
   scope: resourceGroup()
   params: {
@@ -16,7 +16,7 @@ module appInsights './bicep/appInsights.bicep' = {
   }
 }
 
-module keyVault './bicep/keyVault.bicep' = {
+module keyVault './keyVault.bicep' = {
   name: 'keyVault'
   scope: resourceGroup()
   params: {
@@ -27,7 +27,7 @@ module keyVault './bicep/keyVault.bicep' = {
 }
 
 
-module appServicePlan './bicep/appService.bicep' = {
+module appServicePlan './appService.bicep' = {
   name: 'appServicePlan'
   scope: resourceGroup()
   params: {
