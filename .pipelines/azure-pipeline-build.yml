@@ -12,7 +12,7 @@ parameters:
     default: false
 
 variables:
-  - template: templates/variables.yml
+  - template: config.yml
     parameters:
       skipE2eTests: ${{ parameters.skipE2eTests }}
 
