@@ -43,8 +43,8 @@ jobs:
           tabName: Unit Tests
 
       - script: |
-          mv .pipelines/.artifactignore ./
-          mv .pipelines/.deployment ./
+          mv .pipelines/app/.artifactignore ./
+          mv .pipelines/app/.deployment ./
         displayName: Prepare artifact
 
       - task: PublishPipelineArtifact@1

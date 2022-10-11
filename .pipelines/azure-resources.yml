@@ -19,7 +19,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  - template: config.yml
+  - template: ../config.yml
     parameters:
       manualDeployment: ${{ parameters.manualDeployment }}
 
