@@ -2,7 +2,12 @@
 
 # Getting Started
 
-This project contains pipelines to help deploy both the app and its resources. Visit the following links to learn more.
+1. Configure app - ensure the app-specific details are supplied in [config.yml](/.pipelines/config.yml) file.
+2. Create pipelines - create the new pipeline within Azure DevOps. [see docs](https://learn.microsoft.com/en-us/azure/devops/pipelines/create-first-pipeline?view=azure-devops&tabs=java%2Ctfs-2018-2%2Cbrowser#create-your-first-pipeline-1)
 
-[app pipeline](/.pipelines/app/README.md)
-[resources pipeline](/.pipelines/resources/README.md)
+## Pipelines
+
+The following resources are required to get this app up and running. Click the links to learn more about each pipeline.
+
+1. [azure resources pipeline](/.pipelines/resources/README.md)
+2. [app pipeline](/.pipelines/app/README.md)

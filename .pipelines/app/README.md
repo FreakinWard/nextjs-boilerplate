@@ -1,8 +1,8 @@
-## Azure DevOps CI/CD Pipeline
+## Client-app CI/CD Pipeline
 
 # Getting Started
 
-The ci/cd pipeline is responsible for building, testing, deploying, and releasing this app.
+The ci/cd pipeline is responsible for building, testing, deploying, and releasing the client-app.
 
 ## Pipeline
 
