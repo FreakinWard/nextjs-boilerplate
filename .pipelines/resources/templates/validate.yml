@@ -31,15 +31,3 @@ jobs:
                   regionName: $(regionName)
                   serviceConnection: ${{ parameters.serviceConnection }}
                   rgName: $(rgName)
-#              - task: AzureCLI@2
-#                name:
-#                displayName: Validation - ${{ region }}
-#                inputs:
-#                  azureSubscription: ${{ parameters.serviceConnection }}
-#                  scriptType: bash
-#                  scriptLocation: inlineScript
-#                  inlineScript: |
-#                    az deployment group validate \
-#                      --resource-group $(resourceGroupPrefix)-$(appName)-$(environmentName)-$(regionName) \
-#                      --template-file .pipelines/templatesResources/main.bicep \
-#                      --parameters appName=$(appName) environmentType=$(environmentName) region=$(regionName)

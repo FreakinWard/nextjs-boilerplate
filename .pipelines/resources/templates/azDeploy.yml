@@ -20,7 +20,8 @@ parameters:
 steps:
   - script: |
       echo action: ${{ parameters.action }}
-      echo resourceGroup: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-$(regionName)
+      echo regionName: $(regionName)
+      echo rgName: $(rgName)
       echo templateFile: $(System.DefaultWorkingDirectory)/.pipelines/resources/bicep/main.bicep
       echo webAppName: $(appName)-${{ parameters.environmentName }}-${{ parameters.regionName }}
       echo webAppNameShort: $(appName)-${{ parameters.environmentName }}

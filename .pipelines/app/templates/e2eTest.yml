@@ -26,7 +26,7 @@ steps:
           "NEXTAUTH_SECRET": "$(NEXTAUTH--SECRET)",
           "CLIENT_ID": "$(CLIENT--ID)",
           "AUTH_TOKEN_URL": "$(AUTH--TOKEN--URL)",
-          "CI_BUILD_NUMBER": "${{ parameters.ciBuildNumber }}"                
+          "CI_BUILD_NUMBER": "${{ parameters.ciBuildNumber }}"
         }'
 
         $json | Out-File cypress.env.json

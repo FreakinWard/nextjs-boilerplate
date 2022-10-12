@@ -18,11 +18,30 @@ parameters:
   - name: serviceConnection
     type: string
 
+  - name: manualApproval
+    type: boolean
+    default: false
+
 jobs:
+  - ${{ if parameters.manualApproval }}:
+      - job: jobManualApproval
+        displayName: Manual Approval
+        pool: server
+        steps:
+          - task: ManualValidation@0
+            timeoutInMinutes: 1
+            inputs:
+              instructions: |
+                ✅ Acceptance criteria is met
+                ✅ Regressions pass
+              onTimeout: 'reject'
+
   - ${{ each region in parameters.regions }}:
       - deployment: jobDeploy${{ region }}
         displayName: Deploy ${{ region }}-${{ parameters.slotName }}
         environment: ${{ parameters.environmentType }}
+        ${{ if parameters.manualApproval }}:
+          dependsOn: jobManualApproval
         variables:
           ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
           resourceGroupName: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}
