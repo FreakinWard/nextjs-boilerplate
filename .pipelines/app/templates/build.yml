@@ -1,0 +1,62 @@
+jobs:
+  - job: Build
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      - name: NEXT_PUBLIC_API_MOCKING
+        value: enabled
+
+    steps:
+      - script: env | sort
+        displayName: Pipeline Environment
+
+      - template: npmInstall.yml
+
+      - script: npm run build
+        displayName: App Build
+
+      - script: npm run test:cover
+        displayName: Unit Tests
+
+      - script: npm run test:e2e:ci
+        displayName: E2E CI
+
+      - task: PublishTestResults@2
+        displayName: Publish Unit Test
+        condition: succeededOrFailed()
+        inputs:
+          testResultsFiles: 'coverage/jest-junit/junit.xml'
+
+      - task: PublishCodeCoverageResults@1
+        displayName: Publish Code Coverage
+        condition: succeededOrFailed()
+        inputs:
+          failIfCoverageEmpty: true
+          codeCoverageTool: Cobertura
+          summaryFileLocation: 'coverage/cobertura-coverage.xml'
+
+      - task: PublishHtmlReport@1
+        displayName: Publish Unit Test Report
+        condition: succeededOrFailed()
+        inputs:
+          reportDir: 'html-report/report.html'
+          tabName: Unit Tests
+
+      - script: |
+          mv .pipelines/app/.artifactignore ./
+          mv .pipelines/app/.deployment ./
+        displayName: Prepare artifact
+
+      - task: PublishPipelineArtifact@1
+        displayName: Publish Artifact
+        inputs:
+          targetPath: $(System.DefaultWorkingDirectory)
+          artifactType: 'pipeline'
+          artifactName: $(buildPackageName)
+
+      - task: PublishHtmlReport@1
+        displayName: Publish Integration Test Report
+        condition: succeededOrFailed()
+        inputs:
+          reportDir: 'cypress/reports/index.html'
+          tabName: 'Integration Tests'

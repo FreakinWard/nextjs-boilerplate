@@ -1,0 +1,32 @@
+parameters:
+  - name: skipE2eTests
+    type: boolean
+    default: false
+
+  - name: manualDeployment
+    type: string
+    default: no-deployment
+
+variables:
+  # app
+  appName: nextjs-template
+
+  # stages
+  isCI: $[in(variables['Build.Reason'], 'IndividualCI', 'BatchedCI')]
+  skipE2eTests: ${{ eq('true', parameters.skipE2eTests) }}
+  isDevOnly: ${{ eq('dev-only', parameters.manualDeployment) }}
+  isFullCI: ${{ eq('full-ci', parameters.manualDeployment) }}
+
+  # artifact
+  buildPackageName: $(System.DefinitionName)-$(Build.BuildNumber)
+
+  # azure
+  azureSubscription: '6001685e-2c0d-4d57-b07f-e198dfce3799'
+  resourceGroupPrefix: 'demo'
+  runtimeStack: 'NODE|16-lts'
+
+  # pipeline
+  cyCacheDir: /home/vsts/.cache/Cypress
+  npm_config_cache: $(Pipeline.Workspace)/.npm
+  nextCacheDir: $(System.DefaultWorkingDirectory)/.next/cache
+  cacheVersion: v1

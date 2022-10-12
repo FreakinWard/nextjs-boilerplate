@@ -1,9 +1,12 @@
-import { AppInsightsContext, useAppInsightsContext } from '@microsoft/applicationinsights-react-js';
+import {
+  AppInsightsContext,
+  ReactPlugin,
+  useAppInsightsContext,
+} from '@microsoft/applicationinsights-react-js';
+import { ApplicationInsights } from '@microsoft/applicationinsights-web';
 import { NextComponentType } from 'next';
 import { NextRouter } from 'next/router';
-import { ReactNode, useEffect } from 'react';
-
-import { appInsights } from './telemetryService';
+import { createContext, ReactNode, useEffect, useMemo } from 'react';
 
 interface Props {
   children?: ReactNode;
@@ -11,7 +14,37 @@ interface Props {
   router: NextRouter;
 }
 
+const TelemetryContext = createContext(undefined);
+
 function TelemetryProvider({ children, component, router: { query, route, pathname } }: Props) {
+  const createTelemetryService = () => {
+    const connectionString = process.env.APPLICATIONINSIGHTS_CONNECTION_STRING;
+
+    if (!connectionString) return null;
+
+    const reactPlugin = new ReactPlugin();
+    const appInsights = new ApplicationInsights({
+      config: {
+        connectionString,
+        extensions: [reactPlugin],
+        maxBatchInterval: 5000,
+        disableFetchTracking: false,
+      },
+    });
+
+    appInsights.loadAppInsights();
+
+    appInsights.addTelemetryInitializer(function (envelope) {
+      if (envelope.tags) {
+        envelope.tags['ai.cloud.role'] = process.env.appName;
+        envelope.tags['ai.application.ver'] = process.env.ciBuildNumber;
+      }
+    });
+
+    return reactPlugin;
+  };
+  const appInsights = useMemo(() => createTelemetryService(), []);
+
   useEffect(() => {
     if (!appInsights) return;
 
@@ -21,7 +54,7 @@ function TelemetryProvider({ children, component, router: { query, route, pathna
     );
 
     const properties = {
-      router: route,
+      route,
       ...renamedQueryKeys,
     };
 
@@ -29,13 +62,14 @@ function TelemetryProvider({ children, component, router: { query, route, pathna
       uri: pathname,
       properties,
     });
-  }, [component.displayName, pathname, query, route]);
+  }, [appInsights, component.displayName, pathname, query, route]);
 
   return <AppInsightsContext.Provider value={appInsights}>{children}</AppInsightsContext.Provider>;
 }
 
 function useTelemetry() {
-  if (AppInsightsContext === undefined) {
+  /* istanbul ignore next */
+  if (TelemetryContext === undefined) {
     throw new Error('useTelemetry must be used within a TelemetryProvider');
   }
 

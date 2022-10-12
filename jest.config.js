@@ -12,7 +12,9 @@ const customJestConfig = {
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
   },
-  coveragePathIgnorePatterns: ['src/core/mocks'],
+  collectCoverage: true,
+  collectCoverageFrom: ['src/**/*.[jt]s?(x)', '!src/**/*.stories.[jt]s?(x)'],
+  coveragePathIgnorePatterns: ['src/core/msw'],
   coverageThreshold: {
     global: {
       branches: 100,
@@ -28,10 +30,11 @@ const customJestConfig = {
     [
       'jest-html-reporters',
       {
-        publicPath: './coverage',
-        filename: 'html-report.html',
+        publicPath: './html-report',
+        filename: 'report.html',
         expand: false,
         pageTitle: packageJson.name,
+        inlineSource: true,
       },
     ],
   ],

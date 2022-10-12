@@ -1,0 +1,107 @@
+# Node.js Express Web App to Linux on Azure
+# Build a Node.js Express app and deploy it to Azure as a Linux web app.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - main
+      - master
+
+pr: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+parameters:
+  - name: manualDeployment
+    displayName: Manual Deployment
+    type: string
+    default: no-deployment
+    values:
+      - no-deployment
+      - dev-only
+      - full-ci
+
+  - name: skipE2eTests
+    type: boolean
+    default: false
+
+variables:
+  - template: ../config.yml
+    parameters:
+      skipE2eTests: ${{ parameters.skipE2eTests }}
+      manualDeployment: ${{ parameters.manualDeployment }}
+
+stages:
+  - stage: stageBuild
+    displayName: Build
+    jobs:
+      - template: templates/build.yml
+
+  - stage: stageDeployDev
+    displayName: Dev
+    dependsOn: stageBuild
+    condition: and(succeeded(), or(eq(variables.isCI, 'True'), eq(variables.isDevOnly, 'True'), eq(variables.isFullCI, 'True') ))
+    jobs:
+      - template: templates/deploy.yml
+        parameters:
+          environmentType: Dev
+          serviceConnection: $(azureSubscription)
+          slotName: staging
+          regions:
+            - East
+
+      - template: templates/swapSlot.yml
+        parameters:
+          environmentType: Dev
+          serviceConnection: $(azureSubscription)
+          regions:
+            - East
+
+  - stage: stageDeployQA
+    displayName: QA
+    dependsOn: stageDeployDev
+    #    condition: and(succeeded(), or(eq(variables.isCI, 'True'), eq(variables.isFullCI, 'True') ))
+    condition: false #TODO: unmock
+    jobs:
+      - template: templates/deploy.yml
+        parameters:
+          environmentType: QA
+          serviceConnection: $(azureSubscription)
+          slotName: staging
+          regions:
+            - East
+
+      - template: templates/swapSlot.yml
+        parameters:
+          environmentType: QA
+          serviceConnection: $(azureSubscription)
+          regions:
+            - East
+
+  - stage: stageDeployStaging
+    displayName: Staging Prod
+    dependsOn: stageDeployQA
+    jobs:
+      - template: templates/deploy.yml
+        parameters:
+          environmentType: Prod
+          serviceConnection: $(azureSubscription)
+          slotName: staging
+          regions:
+            - East
+
+  - stage: stageDeployProd
+    displayName: Prod
+    dependsOn: stageDeployStaging
+    jobs:
+      - template: templates/swapSlot.yml
+        parameters:
+          environmentType: Prod
+          dependsOnDeployJob: false
+          serviceConnection: $(azureSubscription)
+          regions:
+            - East

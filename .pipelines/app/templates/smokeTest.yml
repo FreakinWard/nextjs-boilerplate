@@ -1,0 +1,29 @@
+parameters:
+  - name: appUrl
+    type: string
+
+  - name: ciBuildNumber
+    type: string
+
+steps:
+  - task: PowerShell@2
+    displayName: 'Smoke Test'
+    timeoutInMinutes: 5
+    env:
+      ciBuildNumber: ${{ parameters.ciBuildNumber }}
+      appUrl: ${{ parameters.appUrl }}/api/health
+    inputs:
+      targetType: 'inline'
+      script: |
+        Write-Host "ping: " $env:appUrl
+
+        Do {
+          try {
+            $response = Invoke-RestMethod -Uri $env:appUrl -TimeoutSec 5
+            Write-Host "Expected:" $env:ciBuildNumber -> Received: $response.buildNumber
+          } catch { Write-Host "No Response" }
+          Start-Sleep -Seconds 2
+        }
+        while (-not $response -or $response.buildNumber -ne $env:ciBuildNumber)
+        Write-Host "App deployed, hooray! 🚀"
+      pwsh: true

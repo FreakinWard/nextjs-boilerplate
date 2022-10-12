@@ -1,10 +1,12 @@
 import { renderHook } from '@testing-library/react-hooks';
 
-import seedHealth from '../../core/mocks/seed/seedHealth';
-import { queryWrapper as wrapper } from '../../core/test.utils';
+import seedHealth from '../../core/msw/seed/seedHealth';
+import { mswMock, queryWrapper as wrapper } from '../../core/test.utils';
 import useHealth from '../useHealth';
 
 describe('useHealth', () => {
+  mswMock();
+
   it('should do return seeded posts', async () => {
     // arrange
     // act

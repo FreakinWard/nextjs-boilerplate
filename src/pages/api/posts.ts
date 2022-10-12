@@ -2,11 +2,11 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import { fetchPosts, Post } from '../../services/postsService';
 
-interface Response {
+export interface PostsTypes {
   posts: Post[];
 }
 
-export default async function posts(req: NextApiRequest, res: NextApiResponse<Response>) {
+export default async function posts(req: NextApiRequest, res: NextApiResponse<PostsTypes>) {
   const posts = await fetchPosts();
 
   res.status(200).json(posts);

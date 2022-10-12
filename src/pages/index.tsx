@@ -1,6 +1,6 @@
 import { InferGetStaticPropsType } from 'next';
 
-import HomePage from '../components/Features/Home/';
+import HomePage from '../Features/Home/';
 import { fetchPosts, Post } from '../services/postsService';
 
 interface Props {

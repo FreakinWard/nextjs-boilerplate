@@ -1,0 +1,20 @@
+trigger: none
+pr:
+  - main
+  - master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+parameters:
+  - name: skipE2eTests
+    type: boolean
+    default: false
+
+variables:
+  - template: ../config.yml
+    parameters:
+      skipE2eTests: ${{ parameters.skipE2eTests }}
+
+jobs:
+  - template: templates/build.yml

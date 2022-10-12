@@ -1,11 +1,11 @@
 plugins:
   eslint:
     enabled: true
-    channel: "eslint-7"
+    channel: 'eslint-7'
   markdownlint:
     enabled: true
   fixme:
     enabled: true
 exclude_patterns:
-  - "node_modules"
-  - "./.*"
+  - 'node_modules'
+  - './.*'

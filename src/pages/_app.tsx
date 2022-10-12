@@ -1,11 +1,13 @@
+/* istanbul ignore file */ // TODO: determine a way to test
+
 import '../../styles/globals.css';
 
 import { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 
+import AppHead from '../components/AppHead/AppHead';
 import { TelemetryProvider } from '../components/AppTelemetry/TelemetryProvider';
-import AppHead from '../components/Features/Home/components/AppHead';
-import LayoutContainer from '../components/Features/Home/components/LayoutContainer';
+import Layout from '../components/Layout';
 import AppState from '../context/AppState';
 
 type Page<P = {}, IP = P> = NextPage<P, IP> & {
@@ -16,18 +18,15 @@ type Props<P = {}> = AppProps<P> & {
   Component: Page<P>;
 };
 
-function App({ Component, pageProps, router }: Props) {
-  console.log('test', Component.title, Component.name);
+export default function App({ Component, pageProps, router }: Props) {
   return (
     <TelemetryProvider component={Component} router={router}>
       <AppState>
-        <LayoutContainer>
+        <Layout>
           <AppHead title={Component.title} />
           <Component {...pageProps} />
-        </LayoutContainer>
+        </Layout>
       </AppState>
     </TelemetryProvider>
   );
 }
-
-export default App;

@@ -9,5 +9,6 @@ module.exports = {
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'import/no-anonymous-default-export': ['error', { allowObject: true, allowArray: true }],
+    'no-console': 'error',
   },
 };

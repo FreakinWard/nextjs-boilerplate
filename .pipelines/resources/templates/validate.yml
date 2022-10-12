@@ -1,0 +1,33 @@
+parameters:
+  - name: environmentTypes
+    type: object
+    values:
+      - Dev
+      - QA
+      - Prod
+
+  - name: regions
+    type: object
+    default:
+      - East
+
+  - name: serviceConnection
+    type: string
+
+jobs:
+  - ${{ each environmentType in parameters.environmentTypes }}:
+      - ${{ each region in parameters.regions }}:
+          - job: validateBicepCode_${{ environmentType }}_${{ region }}
+            displayName: Validate ${{ environmentType }} - ${{ region }}
+            variables:
+              regionName: ${{ lower(region) }}
+              environmentName: ${{ lower(environmentType) }}
+              rgName: $(resourceGroupPrefix)-$(appName)-$(environmentName)-$(regionName)
+            steps:
+              - template: azDeploy.yml
+                parameters:
+                  action: validate
+                  environmentName: $(environmentName)
+                  regionName: $(regionName)
+                  serviceConnection: ${{ parameters.serviceConnection }}
+                  rgName: $(rgName)

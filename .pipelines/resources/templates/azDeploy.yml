@@ -1,0 +1,59 @@
+parameters:
+  - name: action
+    type: object
+    values:
+      - create
+      - validate
+
+  - name: environmentName
+    type: string
+
+  - name: regionName
+    type: string
+
+  - name: rgName
+    type: string
+
+  - name: serviceConnection
+    type: string
+
+steps:
+  - script: |
+      echo action: ${{ parameters.action }}
+      echo regionName: $(regionName)
+      echo rgName: $(rgName)
+      echo templateFile: $(System.DefaultWorkingDirectory)/.pipelines/resources/bicep/main.bicep
+      echo webAppName: $(appName)-${{ parameters.environmentName }}-${{ parameters.regionName }}
+      echo webAppNameShort: $(appName)-${{ parameters.environmentName }}
+      ls -l .
+    displayName: Log paths
+
+  - task: AzureCLI@2
+    name:
+    displayName: Resource Group - $(environmentName) - $(regionName)
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      scriptType: pscore
+      scriptLocation: inlineScript
+      inlineScript: |
+        $groupExists = az group exists -n $(regionName)
+
+        if($groupExists -eq 'false') {
+          az group create -n $(rgName) -l "$(regionName)us2"
+        }
+
+  - task: AzureCLI@2
+    name:
+    displayName: Resources - ${{ parameters.environmentName }} - ${{ parameters.regionName }}
+    inputs:
+      azureSubscription: ${{ parameters.serviceConnection }}
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az deployment group ${{ parameters.action }} \
+          --resource-group ${{ parameters.rgName }} \
+          --template-file $(System.DefaultWorkingDirectory)/.pipelines/resources/bicep/main.bicep \
+          --parameters appName=$(appName) \
+              environmentName=${{ parameters.environmentName }} \
+              regionName=${{ parameters.regionName }} \
+              resourceGroupPrefix=$(resourceGroupPrefix)

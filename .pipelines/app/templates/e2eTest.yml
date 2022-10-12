@@ -1,0 +1,47 @@
+parameters:
+  - name: slotName
+    type: string
+    default: production
+
+  - name: region
+    type: string
+    default:
+      - East
+
+  - name: deployedAppUrl
+    type: string
+
+  - name: ciBuildNumber
+    type: string
+
+steps:
+  - task: PowerShell@2
+    displayName: Cypress Env
+    inputs:
+      targetType: 'inline'
+      script: |
+        $json = '{
+          "USER_NAME": "$(USER--NAME)",
+          "USER_PASSWORD": "$(USER--PASSWORD)",
+          "NEXTAUTH_SECRET": "$(NEXTAUTH--SECRET)",
+          "CLIENT_ID": "$(CLIENT--ID)",
+          "AUTH_TOKEN_URL": "$(AUTH--TOKEN--URL)",
+          "CI_BUILD_NUMBER": "${{ parameters.ciBuildNumber }}"
+        }'
+
+        $json | Out-File cypress.env.json
+      pwsh: true # required for Linux
+
+  - script: cat cypress.env.json
+    displayName: Output Cypress Env
+
+  - script: npm run test:e2e -- --config baseUrl=${{ parameters.deployedAppUrl }}
+    displayName: Cypress
+
+  # tabName has a known bug w/multi-stages: https://github.com/JakubRumpca/azure-pipeline-html-report/issues/8
+  - task: PublishHtmlReport@1
+    displayName: Publish E2E Test Report
+    condition: succeededOrFailed()
+    inputs:
+      reportDir: 'cypress/reports/index.html'
+      tabName: 'E2E ${{ parameters.region }}-${{ parameters.slotName }}'

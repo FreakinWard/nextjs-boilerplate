@@ -4,7 +4,7 @@ export interface Post {
 }
 
 export async function fetchPosts() {
-  const url = 'http://my-json-server.typicode.com/typicode/demo/posts';
+  const url = 'https://my-json-server.typicode.com/typicode/demo/posts';
   const response = await fetch(url);
   return response.json();
 }

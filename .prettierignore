@@ -1,9 +1,17 @@
 .artifactignore
 .deployment
+.github
+.gitignore
+.husky
 .idea
 .next
+.npmrc
 .prettierignore
 .vscode
 coverage
+cypress/reports/
+html-report
 node_modules
 out
+package-lock.json
+*.bicep

@@ -1,4 +1,4 @@
-import seedPosts from '../../core/mocks/seed/seedPosts';
+import seedPosts from '../../core/msw/seed/seedPosts';
 import { fetchPosts } from '../postsService';
 
 describe('postsService', () => {

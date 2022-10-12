@@ -11,8 +11,6 @@ The purpose of this repo is to accelerate startup time when creating a new [Next
 
 ## Contents
 
-test
-
 - [Getting Started](#getting-started)
 - [Directory Structure](#directory-structure)
 - [Features](#features)
@@ -46,15 +44,21 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to start.
 ┃ ┗ 📜 index.test.tsx
 ┣ 📂 components              # components used within the app
 ┃ ┗ 📜 Posts.tsx
+┣ 📂 Features                # feature components
+┃ ┗ 📂 Home
+┃   ┣ 📜 Home.tsx
+┃   ┗ 📜 index.tsx
 ┣ 📂 context                 # application context providers
 ┃ ┗ 📜 AppState.tsx
 ┣ 📂 core                    # non-feature related core services
-┃ ┣ 📂 mocks
+┃ ┣ 📂 msw                   # msw used for mocking http requests
 ┃ ┃ ┣ 📂 seed
+┃ ┃ ┃ ┣ 📜 seedHealth.js
 ┃ ┃ ┃ ┣ 📜 seedPosts.js
 ┃ ┃ ┃ ┗ 📜 seedStyleMedia.js
-┃ ┃ ┣ 📜 mswHandlers.js
-┃ ┃ ┗ 📜 mswServer.js
+┃ ┃ ┣ 📜 handlers.js
+┃ ┃ ┗ 📜 browser.js
+┃ ┃ ┗ 📜 server.js
 ┃ ┗ 📜 test.utils.tsx
 ┣ 📂 hooks                   # hooks used within the app
 ┃ ┣ 📂 __tests__
@@ -106,8 +110,6 @@ Tests are configured for both unit and integration tests. Unit tests are perform
 | [husky](https://www.npmjs.com/package/husky)                               | Creates sharable git-commit hooks                            |
 | [lint-staged](https://www.npmjs.com/package/lint-staged)                   | Ensure code is linted before committing to branch            |
 | [validate-branch-name](https://www.npmjs.com/package/validate-branch-name) | Ensures a branch is created before committing to master/main |
-
-# Scripts
 
 # Scripts
 
