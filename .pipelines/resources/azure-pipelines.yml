@@ -5,6 +5,15 @@ trigger:
       - master
       - main
 
+  paths:
+    include:
+      - .pipelines/*
+
+pr:
+  paths:
+    include:
+      - .pipelines/*
+
 parameters:
   - name: manualDeployment
     displayName: Manual Deployment
