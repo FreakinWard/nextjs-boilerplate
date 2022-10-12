@@ -1,7 +1,19 @@
-trigger: none
+trigger:
+  branches:
+    include:
+      - master
+      - main
+  paths:
+    exclude:
+      - .pipelines/*
+
 pr:
-  - main
-  - master
+  branches:
+    include:
+      - '*'
+  paths:
+    exclude:
+      - .pipelines/*
 
 pool:
   vmImage: 'ubuntu-latest'
