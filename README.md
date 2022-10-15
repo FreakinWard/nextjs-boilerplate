@@ -5,6 +5,15 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/25a53970d9a620abcaf8/test_coverage)](https://codeclimate.com/github/FreakinWard/nextjs-boilerplate/test_coverage)
 [![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/FreakinWard/nextjs-boilerplate?color=F1CE0C&style=plastic)](https://codeclimate.com/github/FreakinWard/nextjs-boilerplate/issues)
 
+## In-progress work
+
+Following the announcement [Azure Static Web Apps now supports server-side rendering for Next.js applications🥳](https://github.com/Azure/static-web-apps/discussions/921), I'd like to try it out.
+
+- [Extending Next.js support in Azure Static Web Apps](https://techcommunity.microsoft.com/t5/apps-on-azure-blog/extending-next-js-support-in-azure-static-web-apps/ba-p/3627975)
+  - [demo: hybrid-next-on-swa](https://github.com/aaronpowell/hybrid-next-on-swa)
+
+Issue getting the api build to use node v16 - https://github.com/Azure/static-web-apps/discussions/921#discussioncomment-3886942
+
 # NextJs Boilerplate
 
 The purpose of this repo is to accelerate startup time when creating a new [NextJs](https://nextjs.org/docs) app.
