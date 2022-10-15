@@ -19,4 +19,8 @@ module.exports = withBundleAnalyzer({
   typescript: {
     ignoreBuildErrors: isProduction,
   },
+  images: {
+    loader: 'cloudinary',
+    path: '',
+  },
 });

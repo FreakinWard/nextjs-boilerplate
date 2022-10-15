@@ -11,6 +11,7 @@ export default function health(req: NextApiRequest, res: NextApiResponse<HealthT
     version: process.env.appVersion,
     buildNumber: process.env.ciBuildNumber ?? 'not-set',
     status: 'ok',
+    timestamp: new Date().toLocaleTimeString(),
   };
 
   res.status(200).json(healthData);
