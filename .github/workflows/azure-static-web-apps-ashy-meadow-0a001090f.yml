@@ -33,6 +33,7 @@ jobs:
           output_location: "" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
         env: # Add environment variables here
+          is_static_export: true
           ENABLE_PREVIEW_FEATURES: true
           FUNCTION_LANGUAGE: node
           FUNCTION_LANGUAGE_VERSION: 16
