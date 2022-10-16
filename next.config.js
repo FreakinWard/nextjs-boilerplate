@@ -11,6 +11,8 @@ module.exports = withBundleAnalyzer({
     appVersion: packageJson.version,
     ciBuildNumber: process.env.CI_BUILD_NUMBER,
     APPLICATIONINSIGHTS_CONNECTION_STRING: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
+    COSMOS_ENDPOINT: process.env.COSMOS_ENDPOINT,
+    COSMOS_KEY: process.env.COSMOS_KEY,
   },
   swcMinify: true,
   eslint: {
