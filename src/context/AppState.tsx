@@ -1,8 +1,14 @@
+import { DefaultSession } from 'next-auth';
+import { SessionProvider } from 'next-auth/react';
 import { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
 
+import AuthGuard from '../components/AuthGuard';
+
 interface Props {
   children: ReactNode;
+  requireAuth: boolean;
+  session: DefaultSession;
 }
 
 /* istanbul ignore next */
@@ -13,7 +19,7 @@ async () => {
   }
 };
 
-export default function AppState({ children }: Props) {
+export default function AppState({ children, requireAuth, session }: Props) {
   const queryConfig = {
     defaultOptions: {
       queries: {
@@ -24,5 +30,11 @@ export default function AppState({ children }: Props) {
   };
   const queryClient = new QueryClient(queryConfig);
 
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+  return (
+    <SessionProvider session={session}>
+      <AuthGuard requireAuth={requireAuth}>
+        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+      </AuthGuard>
+    </SessionProvider>
+  );
 }
