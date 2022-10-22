@@ -1,0 +1,8 @@
+# template.yml
+parameters:
+  - name: usersteps
+    type: stepList
+    default: []
+steps:
+  - ${{ each step in parameters.usersteps }}:
+      - ${{ step }}

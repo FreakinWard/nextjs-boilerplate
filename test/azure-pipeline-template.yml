@@ -1,0 +1,14 @@
+# azure-pipelines.yml
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: MyProject/MyTemplates
+      ref: refs/tags/v1
+
+extends:
+  template: template.yml@templates
+  parameters:
+    usersteps:
+      - script: echo This is my first step
+      - script: echo This is my second step
