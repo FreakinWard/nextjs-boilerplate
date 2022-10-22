@@ -13,7 +13,7 @@ az deployment group validate \
 Validate `main-resourceGroup.bicep` using `az deployment sub validate`
 
 ```shell
-az deployment sub create  \
+az deployment sub validate  \
   --template-file .pipelines/templates-resources/main-resourceGroup.bicep \
   --location eastus \
   --parameters appName=nextjs-template \

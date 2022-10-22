@@ -35,10 +35,10 @@ steps:
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
-        $groupExists = az group exists -n $(rgName)
+        $groupExists = az group exists -n $(regionName)
 
         if($groupExists -eq 'false') {
-          az deployment sub -n $(rgName) -l "$(rgName)us2"
+          az group create -n $(rgName) -l "$(regionName)us2"
         }
 
   - task: AzureCLI@2

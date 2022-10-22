@@ -11,6 +11,9 @@ parameters:
   - name: regionName
     type: string
 
+  - name: rgName
+    type: string
+
   - name: serviceConnection
     type: string
 
@@ -18,6 +21,7 @@ steps:
   - script: |
       echo action: ${{ parameters.action }}
       echo resourceGroup: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-$(regionName)
+      echo rgName: ${{ parameters.rgName }}
       echo templateFile: $(System.DefaultWorkingDirectory)/.pipelines/templates-resources/main.bicep
       echo webAppName: $(appName)-${{ parameters.environmentName }}-${{ parameters.regionName }}
       echo webAppNameShort: $(appName)-${{ parameters.environmentName }}
@@ -32,9 +36,7 @@ steps:
       scriptType: pscore
       scriptLocation: inlineScript
       inlineScript: |
-        $rgName = "$(resourceGroupPrefix)-$(appName)-${{ parameters.environmentName }}-${{ parameters.regionName }}"
-
-        $groupExists = az group exists -n $rgName
+        $groupExists = az group exists -n ${{ parameters.rgName }}
 
         if($groupExists -eq 'false') {
           az deployment sub -n $rgName -l "${{ parameters.regionName }}us2"
