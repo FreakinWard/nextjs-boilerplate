@@ -7,7 +7,8 @@
 #      ref: refs/tags/v1
 
 extends:
-  template: template.yml@templates
+  #  template: template.yml@templates
+  template: template.yml
   parameters:
     usersteps:
       - script: echo This is my first step
