@@ -2,7 +2,7 @@
   "name": "nextjs-boilerplate",
   "version": "0.1.0",
   "engines": {
-    "node": ">=16",
+    "node": "=16",
     "npm": ">=8"
   },
   "buildNumber": "set-in-ci-pipeline",
