@@ -1,9 +1,20 @@
 import { render, screen } from '@testing-library/react';
+import * as nextAuth from 'next-auth/react';
 
 import Layout from '../index';
 
 describe('Layout', () => {
-  it('should render Header', () => {
+  beforeEach(() => {
+    const useSessionMock = {
+      status: 'authenticated1',
+      data: { user: { name: 'nameValue', image: 'imageUrl' } },
+    };
+
+    // @ts-ignore
+    jest.spyOn(nextAuth, 'useSession').mockImplementation(() => useSessionMock);
+  });
+
+  it('should render Header logo, title, and sign-in', () => {
     // arrange
     const Component = () => <>child-component</>;
     const tree = (
@@ -16,8 +27,9 @@ describe('Layout', () => {
     render(tree);
 
     // assert
-    screen.getByText('Welcome to');
-    screen.getByText('Next.js!');
+    screen.getByText('LOGO');
+    screen.getByText('NextJs');
+    screen.getByText('Sign In');
   });
 
   it('should render Footer', () => {

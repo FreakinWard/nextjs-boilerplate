@@ -1,20 +1,21 @@
-import Image from 'next/image';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Toolbar from '@mui/material/Toolbar';
 
-import styles from '../../../styles/Home.module.css';
+import FooterContent from './components/FooterContent';
 
 export default function Footer() {
   return (
-    <footer className={styles.footer}>
-      <a
-        href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Powered by{' '}
-        <span className={styles.logo}>
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </span>
-      </a>
-    </footer>
+    <>
+      <Box marginTop={10} data-testid="footer" />
+      <AppBar sx={{ top: 'auto', bottom: 0, backgroundColor: 'white' }}>
+        <Container maxWidth="lg">
+          <Toolbar>
+            <FooterContent />
+          </Toolbar>
+        </Container>
+      </AppBar>
+    </>
   );
 }
