@@ -36,3 +36,13 @@ module appServicePlan './appService.bicep' = {
     instrumentationKey: appInsights.outputs.InstrumentationKey
   }
 }
+
+module staticSite './staticSite.bicep' = {
+  name: 'staticSite'
+  scope: resourceGroup()
+  params: {
+    webAppName: webAppName
+    location: location
+    instrumentationKey: appInsights.outputs.InstrumentationKey
+  }
+}
