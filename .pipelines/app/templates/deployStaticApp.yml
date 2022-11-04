@@ -54,32 +54,23 @@ jobs:
                     cat << EOF >> .env
                     CI_BUILD_NUMBER = $(ciBuildNumber)
                     EOF
-                  displayName: Set BuildNumber
+                  displayName: Create .env
                   workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
 
-                #                - task: AzureWebApp@1
-                #                  name: taskDeployAppService
-                #                  displayName: Azure Deploy
-                #                  inputs:
-                #                    azureSubscription: ${{ parameters.serviceConnection }}
-                #                    resourceGroupName: $(resourceGroupName)
-                #                    appType: webAppLinux
-                #                    appName: $(resourceGroupName)
-                #                    runtimeStack: $(runtimeStack)
-                #                    package: $(Pipeline.Workspace)/$(buildPackageName)
-                #                    slotName: ${{ parameters.slotName }}
-                #                    startUpCommand: 'npm run start:prod'
-
                 - task: AzureCLI@2
-                  displayName: 'Get ApiKey'
+                  displayName: Azure App References
+                  name: taskAzureApp
                   inputs:
                     azureSubscription: ${{ parameters.serviceConnection }}
                     scriptType: bash
                     scriptLocation: inlineScript
                     inlineScript: |
-                      resourceName=$(az resource list --resource-group $(resourceGroupName) --resource-type 'Microsoft.Web/staticSites' --query [].name --output tsv)
-                      APIKEY=$(az staticwebapp secrets list --name $resourceName | jq -r '.properties.apiKey')
+                      APIKEY=$(az staticwebapp secrets list --name $(resourceGroupName)-site | jq -r '.properties.apiKey')
+                      deployedAppUrl=$(az staticwebapp show --name $(resourceGroupName)-site | jq -r '.defaultHostname')
+
                       echo "##vso[task.setvariable variable=apiKey;issecret=true]$APIKEY"
+                      echo "##vso[task.setvariable variable=deployedBuildNumber;isOutput=true;]$(ciBuildNumber)"
+                      echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$deployedAppUrl"
 
                 - script: env | sort
                   displayName: Pipeline Environment
@@ -87,20 +78,17 @@ jobs:
                 - task: AzureStaticWebApp@0
                   displayName: Azure Deploy
                   inputs:
+                    workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
                     azure_static_web_apps_api_token: $(apiKey)
                     app_location: '/' # App source code path
                     api_location: '' # Api source code path - optional
-                    output_location: '' # Built app content directory - optional
-
-                - bash: |
-                    echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$(taskDeployAppService.AppServiceApplicationUrl)"
-                    echo "##vso[task.setvariable variable=deployedBuildNumber;isOutput=true;]$(ciBuildNumber)"
-                  name: setDeploymentResults
-                  displayName: Set Deployed App References
+                    output_location: '.next' # Built app content directory - optional
+                #                    skip_app_build: true
+                #                    is_static_export: true
 
                 - template: smokeTest.yml
                   parameters:
-                    appUrl: $(taskDeployAppService.AppServiceApplicationUrl)
+                    appUrl: $(taskAzureApp.deployedAppUrl)
                     ciBuildNumber: $(ciBuildNumber)
 
                 - script: env | sort
