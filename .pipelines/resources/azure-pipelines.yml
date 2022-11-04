@@ -43,23 +43,24 @@ stages:
           regions:
             - East
 
-      - template: templates/validate.yml
-        parameters:
-          serviceConnection: $(azureSubscription)
-          environmentTypes:
-            - QA
-          regions:
-            - East
-            - West
+      # TODO: implement when ready
+      # - template: templates/validate.yml
+      #   parameters:
+      #     serviceConnection: $(azureSubscription)
+      #     environmentTypes:
+      #       - QA
+      #     regions:
+      #       - East
+      #       - West
 
-      - template: templates/validate.yml
-        parameters:
-          serviceConnection: $(azureSubscription)
-          environmentTypes:
-            - Prod
-          regions:
-            - East
-            - West
+      # - template: templates/validate.yml
+      #   parameters:
+      #     serviceConnection: $(azureSubscription)
+      #     environmentTypes:
+      #       - Prod
+      #     regions:
+      #       - East
+      #       - West
 
   - stage: stageDeployDev
     displayName: Dev
