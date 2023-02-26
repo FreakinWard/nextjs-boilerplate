@@ -2,6 +2,7 @@
 **/*
 
 # include only production files
+!/.next
 !/.env
 !/.deployment
 !/.npmrc
