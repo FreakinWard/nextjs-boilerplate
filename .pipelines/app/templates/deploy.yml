@@ -65,7 +65,7 @@ jobs:
                     azureSubscription: ${{ parameters.serviceConnection }}
                     resourceGroupName: $(resourceGroupName)
                     appType: webAppLinux
-                    appName: $(resourceGroupName)
+                    appName: $(resourceGroupName)-site
                     runtimeStack: $(runtimeStack)
                     package: $(Pipeline.Workspace)/$(buildPackageName)
                     slotName: ${{ parameters.slotName }}
