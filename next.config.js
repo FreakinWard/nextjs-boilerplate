@@ -12,6 +12,10 @@ module.exports = withBundleAnalyzer({
     ciBuildNumber: packageJson.buildNumber,
     APPLICATIONINSIGHTS_CONNECTION_STRING: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
   },
+  // output: 'standalone',
+  experimental: {
+    outputStandalone: true,
+  },
   swcMinify: true,
   eslint: {
     ignoreDuringBuilds: isProduction,
