@@ -12,7 +12,7 @@ describe('useHealth', () => {
     // act
     const { result } = renderHook(() => useHealth(), { wrapper });
 
-    // assert
+    // assert - initial data
     expect(result.current.data).toBeUndefined();
     await waitFor(() => {
       expect(result.current.data).toEqual(seedHealth.data);

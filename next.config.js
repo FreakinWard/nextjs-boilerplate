@@ -12,19 +12,18 @@ module.exports = withBundleAnalyzer({
     ciBuildNumber: packageJson.buildNumber,
     APPLICATIONINSIGHTS_CONNECTION_STRING: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
   },
-  // output: 'standalone',
-  experimental: {
-    outputStandalone: true,
-  },
-  swcMinify: true,
+  output: 'standalone',
+  // experimental: {
+  //   outputStandalone: true,
+  // },
   eslint: {
     ignoreDuringBuilds: isProduction,
   },
   typescript: {
     ignoreBuildErrors: isProduction,
   },
-  images: {
-    loader: 'cloudinary',
-    path: '',
-  },
+  // images: {
+  //   loader: 'cloudinary',
+  //   path: '',
+  // },
 });
