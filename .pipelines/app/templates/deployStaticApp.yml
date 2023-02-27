@@ -65,12 +65,18 @@ jobs:
                     scriptType: bash
                     scriptLocation: inlineScript
                     inlineScript: |
-                      APIKEY=$(az staticwebapp secrets list --name $(resourceGroupName)-site | jq -r '.properties.apiKey')
+                      APIKEY=$(az staticwebapp secrets list --resource-group $(resourceGroupName) --name $(resourceGroupName)-site | jq -r '.properties.apiKey')
                       deployedAppUrl=$(az staticwebapp show --name $(resourceGroupName)-site | jq -r '.defaultHostname')
+
+                      if test -z "$APIKEY" 
+                      then
+                        echo "##vso[task.logissue type=error]Unable to locate azure resource"
+                        exit 1
+                      fi
 
                       echo "##vso[task.setvariable variable=apiKey;issecret=true]$APIKEY"
                       echo "##vso[task.setvariable variable=deployedBuildNumber;isOutput=true;]$(ciBuildNumber)"
-                      echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]$deployedAppUrl"
+                      echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]https://$deployedAppUrl"
 
                 - script: env | sort
                   displayName: Pipeline Environment
@@ -99,7 +105,7 @@ jobs:
         dependsOn: jobDeploy${{ region }}
         condition: and(succeeded(), eq('false', variables.skipE2eTests))
         variables:
-          deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedAppUrl'] ]
+          deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.taskAzureApp.deployedAppUrl'] ]
           deployedBuildNumber: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedBuildNumber'] ]
         steps:
           - script: env | sort

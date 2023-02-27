@@ -9,12 +9,16 @@ resource staticSite 'Microsoft.Web/staticSites@2022-03-01' = {
     name: 'Free'
     tier: 'Free'
   }
+  properties: { }
 }
 
-resource staticWebAppSettings 'config@2021-01-15' = {
-    name: 'appsettings'
-    properties: {
-      APPINSIGHTS_INSTRUMENTATIONKEY: instrumentationKey
-    }
+resource staticSiteConfig 'Microsoft.Web/staticSites/config@2022-03-01' = {
+  name: 'appsettings'
+  parent: staticSite
+  properties: {
+    APPINSIGHTS_INSTRUMENTATIONKEY: instrumentationKey
   }
+}
+
+
 

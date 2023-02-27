@@ -27,15 +27,15 @@ module keyVault './keyVault.bicep' = {
 }
 
 
-module appServicePlan './appService.bicep' = {
-  name: 'appServicePlan'
-  scope: resourceGroup()
-  params: {
-    webAppName: webAppName
-    location: location
-    instrumentationKey: appInsights.outputs.InstrumentationKey
-  }
-}
+// module appServicePlan './appService.bicep' = {
+//   name: 'appServicePlan'
+//   scope: resourceGroup()
+//   params: {
+//     webAppName: webAppName
+//     location: location
+//     instrumentationKey: appInsights.outputs.InstrumentationKey
+//   }
+// }
 
 module staticSite './staticSite.bicep' = {
   name: 'staticSite'
