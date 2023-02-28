@@ -9,7 +9,7 @@ resource staticSite 'Microsoft.Web/staticSites@2022-03-01' = {
     name: 'Free'
     tier: 'Free'
   }
-  properties: { }
+  properties: {}
 }
 
 resource staticSiteConfig 'Microsoft.Web/staticSites/config@2022-03-01' = {
@@ -19,6 +19,3 @@ resource staticSiteConfig 'Microsoft.Web/staticSites/config@2022-03-01' = {
     APPINSIGHTS_INSTRUMENTATIONKEY: instrumentationKey
   }
 }
-
-
-

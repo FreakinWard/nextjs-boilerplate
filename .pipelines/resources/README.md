@@ -46,5 +46,16 @@ az deployment group validate \
         resourceGroupPrefix=demo
 ```
 
+Azure App References
+
+```bash
+# deployment apiKey
+az staticwebapp secrets list --resource-group demo-nextjs-template-dev-east --name demo-nextjs-template-dev-east-site | jq -r '.properties.apiKey'
+
+# deployed app url
+az staticwebapp show --name demo-nextjs-template-dev-east-site | jq -r '.defaultHostname'
+
+```
+
 az keyvault recover --location westus2 --name demo-nextjs-template-dev --resource-group demo-nextjs-template-dev-east
 az keyvault recover --name demo-nextjs-template-dev --resource-group demo-nextjs-template-dev-east
