@@ -6,6 +6,10 @@ parameters:
       - QA
       - Prod
 
+  - name: slotName
+    type: string
+    default: production
+
   - name: regions
     type: object
     default:
@@ -84,6 +88,7 @@ jobs:
                 - task: AzureStaticWebApp@0
                   displayName: Azure Deploy
                   inputs:
+                    deployment_environment: ${{ parameters.slotName }}
                     workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
                     azure_static_web_apps_api_token: $(apiKey)
                     app_location: '/' # App source code path
