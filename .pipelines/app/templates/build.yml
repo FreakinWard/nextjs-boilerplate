@@ -55,7 +55,7 @@ jobs:
 
       - script: |
           mv .pipelines/app/.artifactignore ./
-        #          mv .pipelines/app/.deployment ./
+          mv .pipelines/app/.deployment ./
         displayName: Prepare artifact
 
       - task: PublishPipelineArtifact@1
