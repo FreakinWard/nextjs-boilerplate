@@ -43,6 +43,6 @@ module staticSite './staticSite.bicep' = {
   params: {
     webAppName: webAppName
     location: location
-    instrumentationKey: appInsights.outputs.InstrumentationKey
+    connectionString: appInsights.outputs.ConnectionString
   }
 }
