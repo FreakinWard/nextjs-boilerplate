@@ -1,4 +1,8 @@
 steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '16.13.x'
+
   - task: Cache@2
     displayName: Cache npm
     inputs:
@@ -26,9 +30,7 @@ steps:
       cacheHitVar: NEXT_CACHE_RESTORED
 
   - script: |
-      npm set-script prepare ""
-      npm set-script postinstall ""
-    displayName: Disable Scripts
-
-  - script: npm ci --cache $(npm_config_cache)
+      npm pkg delete scripts.prepare
+      npm pkg delete scripts.postinstall
+      npm ci --cache $(npm_config_cache)
     displayName: Install
