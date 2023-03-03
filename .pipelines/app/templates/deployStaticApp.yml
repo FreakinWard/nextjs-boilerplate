@@ -94,8 +94,13 @@ jobs:
                     app_location: '/' # App source code path
                     api_location: '' # Api source code path - optional
                     output_location: '.next' # Built app content directory - optional
-                #                    skip_app_build: true
-                #                    is_static_export: true
+                  env: CYPRESS_INSTALL_BINARY=0
+                    ENABLE_ORYX_BUILD=true
+                    NODE_ENV=production
+                    SCM_DO_BUILD_DURING_DEPLOYMENT=true
+                    WEBSITE_ENABLE_SYNC_UPDATE_SITE=true
+                    NEXT_PUBLIC_API_MOCKING=enabled
+                    CUSTOM_BUILD_COMMAND="npm install --production"
 
                 - template: smokeTest.yml
                   parameters:
