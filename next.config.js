@@ -9,7 +9,7 @@ module.exports = withBundleAnalyzer({
   env: {
     appName: packageJson.name,
     appVersion: packageJson.version,
-    ciBuildNumber: process.env.CI_BUILD_NUMBER,
+    ciBuildNumber: packageJson.buildNumber,
     APPLICATIONINSIGHTS_CONNECTION_STRING: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
   },
   swcMinify: true,

@@ -2,7 +2,6 @@
 **/*
 
 # include only production files
-!/.env
 !/.deployment
 !/.npmrc
 !/load-appInsights.js
