@@ -12,7 +12,7 @@
     "prepare": "husky install",
     "postinstall": "next build",
     "dev": "next dev",
-    "build": "next build",
+    "build": "env | sort && next build",
     "start": "next start",
     "start:prod": "node --require ./load-appInsights.js node_modules/next/dist/bin/next start",
     "start:insights": "node --require ./load-appinsights.js node_modules/next/dist/bin/next start",
