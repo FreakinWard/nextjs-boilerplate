@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import seedPosts from '../../core/msw/seed/seedPosts';
 import { AppWrapper as wrapper, mswMock } from '../../core/test.utils';
@@ -10,15 +10,12 @@ describe('usePosts', () => {
   it('should do return seeded posts', async () => {
     // arrange
     // act
-    const { result, waitForNextUpdate } = renderHook(() => usePosts(), { wrapper });
+    const { result } = renderHook(() => usePosts(), { wrapper });
 
     // assert
     expect(result.current.data).toBeUndefined();
-
-    //act
-    await waitForNextUpdate();
-
-    // assert
-    expect(result.current.data).toEqual(seedPosts.data);
+    await waitFor(() => {
+      expect(result.current.data).toEqual(seedPosts.data);
+    });
   });
 });

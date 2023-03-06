@@ -1,6 +1,6 @@
 import * as appInsightsReactJs from '@microsoft/applicationinsights-react-js';
 import * as appInsightsWeb from '@microsoft/applicationinsights-web';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import Router from 'next/router';
 import * as nextAuth from 'next-auth/react';
 

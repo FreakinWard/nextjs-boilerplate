@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook, waitFor } from '@testing-library/react';
 
 import seedHealth from '../../core/msw/seed/seedHealth';
 import { AppWrapper as wrapper, mswMock } from '../../core/test.utils';
@@ -10,15 +10,12 @@ describe('useHealth', () => {
   it('should do return seeded posts', async () => {
     // arrange
     // act
-    const { result, waitForNextUpdate } = renderHook(() => useHealth(), { wrapper });
+    const { result } = renderHook(() => useHealth(), { wrapper });
 
     // assert
     expect(result.current.data).toBeUndefined();
-
-    //act
-    await waitForNextUpdate();
-
-    // assert
-    expect(result.current.data).toEqual(seedHealth.data);
+    await waitFor(() => {
+      expect(result.current.data).toEqual(seedHealth.data);
+    });
   });
 });
