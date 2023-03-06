@@ -2,6 +2,7 @@ import * as appInsightsReactJs from '@microsoft/applicationinsights-react-js';
 import * as appInsightsWeb from '@microsoft/applicationinsights-web';
 import { renderHook } from '@testing-library/react-hooks';
 import Router from 'next/router';
+import * as nextAuth from 'next-auth/react';
 
 import { TelemetryProvider, useTelemetry } from '../TelemetryProvider';
 
@@ -12,12 +13,23 @@ jest.mock('@microsoft/applicationinsights-react-js');
 jest.mock('@microsoft/applicationinsights-web');
 
 describe('TelemetryProvider', () => {
-  const Component = () => <>child-component</>;
+  const componentMock = { title: 'titleValue' };
+
   const wrapper = ({ children }: { children: JSX.Element }) => (
-    <TelemetryProvider component={Component} router={Router}>
+    <TelemetryProvider router={Router} pageTitle={componentMock.title}>
       {children}
     </TelemetryProvider>
   );
+
+  const useSessionMock = {
+    ...jest.requireActual('next-auth/react'),
+    status: 'authenticated',
+    data: { user: { username: 'usernameValue' } },
+  };
+
+  beforeEach(() => {
+    jest.spyOn(nextAuth, 'useSession').mockImplementation(() => useSessionMock);
+  });
 
   it('should not setup appInsights given connectionString is undefined', () => {
     // arrange
@@ -25,10 +37,10 @@ describe('TelemetryProvider', () => {
 
     const envelopeMock = 'envelopeMockValue';
     const appInsightsWebMock = {
+      ...jest.requireActual('@microsoft/applicationinsights-web'),
       addTelemetryInitializer: jest.fn().mockReturnValue(envelopeMock),
       loadAppInsights: jest.fn(),
     };
-    // @ts-ignore
     jest.spyOn(appInsightsWeb, 'ApplicationInsights').mockImplementation(() => appInsightsWebMock);
 
     // act
@@ -54,17 +66,19 @@ describe('TelemetryProvider', () => {
         const addTelemetryInitializerMock = envelopeCallback => envelopeCallback({ tags: tags });
 
         const appInsightsWebMock = {
+          ...jest.requireActual('@microsoft/applicationinsights-web'),
           addTelemetryInitializer: jest.fn().mockImplementation(addTelemetryInitializerMock),
           loadAppInsights: jest.fn(),
+          setAuthenticatedUserContext: jest.fn(),
         };
-        // @ts-ignore
-        // eslint-disable-next-line prettier/prettier
         jest
           .spyOn(appInsightsWeb, 'ApplicationInsights')
           .mockImplementation(() => appInsightsWebMock);
 
-        const reactPluginMock = 'reactPluginMock';
-        // @ts-ignore
+        const reactPluginMock = {
+          ...jest.requireActual('@microsoft/applicationinsights-web'),
+          trackPageView: jest.fn(),
+        };
         jest.spyOn(appInsightsReactJs, 'ReactPlugin').mockImplementation(() => reactPluginMock);
 
         const expectedApplicationInsightsConfig = {
@@ -89,47 +103,5 @@ describe('TelemetryProvider', () => {
         expect(appInsightsWebMock.addTelemetryInitializer).toHaveBeenCalled();
       }
     );
-
-    it('should setup appInsights as expected given connectionString exists and tags exist', () => {
-      // arrange
-      const connectionString = 'connectionStringValue';
-      process.env.APPLICATIONINSIGHTS_CONNECTION_STRING = connectionString;
-
-      const addTelemetryInitializerMock = envelopeCallback => envelopeCallback({ tags: null });
-      const appInsightsWebMock = {
-        addTelemetryInitializer: jest.fn().mockImplementation(addTelemetryInitializerMock),
-        loadAppInsights: jest.fn(),
-      };
-      // @ts-ignore
-      // eslint-disable-next-line prettier/prettier
-      jest
-        .spyOn(appInsightsWeb, 'ApplicationInsights')
-        .mockImplementation(() => appInsightsWebMock);
-
-      const reactPluginMock = 'reactPluginMock';
-      // @ts-ignore
-      jest.spyOn(appInsightsReactJs, 'ReactPlugin').mockImplementation(() => reactPluginMock);
-
-      const expectedApplicationInsightsConfig = {
-        config: {
-          connectionString,
-          extensions: expect.anything(),
-          maxBatchInterval: 5000,
-          disableFetchTracking: false,
-        },
-      };
-
-      // act
-      renderHook(() => useTelemetry(), { wrapper });
-
-      // assert
-      expect(appInsightsReactJs.ReactPlugin).toHaveBeenCalledWith();
-      expect(appInsightsWeb.ApplicationInsights).toHaveBeenCalled();
-      expect(appInsightsWeb.ApplicationInsights).toHaveBeenCalledWith(
-        expect.objectContaining(expectedApplicationInsightsConfig)
-      );
-      expect(appInsightsWebMock.loadAppInsights).toHaveBeenCalledWith();
-      expect(appInsightsWebMock.addTelemetryInitializer).toHaveBeenCalled();
-    });
   });
 });

@@ -14,7 +14,7 @@ const mockRequestGet = (url, responseData, statusCode = 200) => {
 };
 
 export default [
-  mockRequestGet('*/api/posts', seedPosts),
-  mockRequestGet('*/api/health', seedHealth),
-  mockRequestGet('https://my-json-server.typicode.com/typicode/demo/posts', seedPosts),
+  mockRequestGet(seedPosts.clientUrl, seedPosts.data),
+  mockRequestGet(seedPosts.serverUrl, seedPosts.data),
+  mockRequestGet(seedHealth.clientUrl, seedHealth.data),
 ];

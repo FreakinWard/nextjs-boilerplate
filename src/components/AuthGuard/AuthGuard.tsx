@@ -1,9 +1,9 @@
 import { useRouter } from 'next/router';
 import { signIn, signOut, useSession } from 'next-auth/react';
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 interface Props {
-  children: JSX.Element;
+  children: ReactNode;
   requireAuth: boolean;
 }
 

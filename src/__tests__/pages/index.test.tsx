@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 
 import seedPosts from '../../core/msw/seed/seedPosts';
-import { mswMock, queryWrapper as wrapper } from '../../core/test.utils';
+import { AppWrapper as wrapper, mswMock } from '../../core/test.utils';
 import Home, { getStaticProps } from '../../pages';
 import { Post } from '../../services/postsService';
 
