@@ -15,7 +15,7 @@ describe('health', () => {
     render(tree, { wrapper });
 
     // assert
-    expect(await screen.findByText(`Status: ${seedHealth.status}`)).toBeInTheDocument();
-    expect(await screen.findByText(`Version: ${seedHealth.version}`)).toBeInTheDocument();
+    expect(await screen.findByText(`Status: ${seedHealth.data.status}`)).toBeInTheDocument();
+    expect(await screen.findByText(`Version: ${seedHealth.data.version}`)).toBeInTheDocument();
   });
 });

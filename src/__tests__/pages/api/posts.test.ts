@@ -1,13 +1,16 @@
 import { testApiHandler } from 'next-test-api-route-handler';
 
 import seedPosts from '../../../core/msw/seed/seedPosts';
+import { mswMock } from '../../../core/test.utils';
 import posts, { PostsTypes } from '../../../pages/api/posts';
 
 describe('/api/posts', () => {
+  mswMock();
+
   it('should render expected health data', async () => {
     // arrange
     const handler = posts;
-    const expected = seedPosts;
+    const expected = seedPosts.data;
 
     await testApiHandler<PostsTypes>({
       handler,

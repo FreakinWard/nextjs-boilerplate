@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import seedPosts from '../../core/msw/seed/seedPosts';
 import { AppWrapper as wrapper, mswMock } from '../../core/test.utils';
 import Home, { getStaticProps } from '../../pages';
-import { Post } from '../../services/postsService';
+import { Post } from '../../pages/api/posts';
 
 describe('index', () => {
   mswMock();
@@ -37,7 +37,7 @@ describe('index', () => {
 
   it('should return expected context given getStaticProps is called', async () => {
     // arrange
-    const expected = { props: { posts: seedPosts } };
+    const expected = { props: { posts: seedPosts.data } };
 
     // act
     const response = await getStaticProps();
@@ -48,7 +48,7 @@ describe('index', () => {
 
   it('should render client-fetched posts', async () => {
     // arrange
-    const postLength = `Length: ${seedPosts.length}`;
+    const postLength = `Length: ${seedPosts.data.length}`;
 
     // act
     render(tree, { wrapper });
@@ -56,7 +56,7 @@ describe('index', () => {
     // assert
     expect(await screen.findByText(postLength)).toBeInTheDocument();
 
-    seedPosts.forEach(post => {
+    seedPosts.data.forEach(post => {
       expect(screen.getByText(`${post.id} - ${post.title}`)).toBeInTheDocument();
     });
   });

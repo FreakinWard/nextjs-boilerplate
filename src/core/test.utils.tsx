@@ -6,7 +6,7 @@ import { resetMswHandlers, setupMsw } from './msw';
 
 jest.mock('next/router', () => require('next-router-mock'));
 
-export const sessionMock = {
+const sessionMock = {
   error: null,
   expires: 'expiresValues',
   idToken: 'idTokenValue',

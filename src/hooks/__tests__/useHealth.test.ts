@@ -19,6 +19,6 @@ describe('useHealth', () => {
     await waitForNextUpdate();
 
     // assert
-    expect(result.current.data).toEqual(seedHealth);
+    expect(result.current.data).toEqual(seedHealth.data);
   });
 });
