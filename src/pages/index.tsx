@@ -1,6 +1,7 @@
 import { InferGetStaticPropsType } from 'next';
 
 import HomePage from '../Features/Home/';
+import { fetchPosts } from './api/posts';
 
 interface Post {
   id: number;
@@ -14,12 +15,6 @@ interface Props {
 }
 
 export async function getStaticProps(): Promise<Props> {
-  async function fetchPosts() {
-    const url = 'https://my-json-server.typicode.com/typicode/demo/posts';
-    const response = await fetch(url);
-    return response.json();
-  }
-
   const posts = await fetchPosts();
 
   return {

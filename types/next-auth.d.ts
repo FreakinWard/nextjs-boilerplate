@@ -21,7 +21,6 @@ declare module 'next-auth' {
     user: {
       email: string;
       name: string;
-      username: string;
     };
     signOutUrl: string;
   }

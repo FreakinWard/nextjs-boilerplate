@@ -1,3 +1,4 @@
+import { screen } from '@testing-library/react';
 import Router from 'next/router';
 import { Session } from 'next-auth';
 import * as nextAuth from 'next-auth/react';
@@ -13,8 +14,7 @@ const sessionMock = {
   idToken: 'idTokenValue',
   user: {
     email: 'emailValue',
-    name: 'nameValue',
-    username: 'usernameValue',
+    name: 'userNameValue',
   },
   signOutUrl: 'signOutUrlValue',
 };
@@ -56,5 +56,16 @@ export const mswMock = () => {
 
   afterAll(() => {
     mswCleanup();
+  });
+};
+
+export const getByTextContent = text => {
+  // Passing function to `getByText`
+  return screen.getByText((content, node) => {
+    const hasText = node => node.textContent === text;
+    const nodeHasText = hasText(node);
+    const childrenDontHaveText = Array.from(node.children).every(child => !hasText(child));
+
+    return nodeHasText && childrenDontHaveText;
   });
 };

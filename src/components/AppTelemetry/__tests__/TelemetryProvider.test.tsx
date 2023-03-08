@@ -24,7 +24,7 @@ describe('TelemetryProvider', () => {
   const useSessionMock = {
     ...jest.requireActual('next-auth/react'),
     status: 'authenticated',
-    data: { user: { username: 'usernameValue' } },
+    data: { user: { name: 'userNameValue' } },
   };
 
   beforeEach(() => {
