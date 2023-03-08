@@ -1,5 +1,6 @@
 import Router from 'next/router';
 import { Session } from 'next-auth';
+import * as nextAuth from 'next-auth/react';
 
 import AppState from '../context/AppState';
 import { resetMswHandlers, setupMsw } from './msw';
@@ -20,13 +21,22 @@ const sessionMock = {
 
 export const AppWrapper = ({
   children,
+  requireAuth = false,
   session = sessionMock,
+  sessionStatus = 'authenticated',
 }: {
   children: JSX.Element;
-  session: Session;
+  requireAuth?: boolean;
+  sessionStatus?: string;
+  session?: Session;
 }) => {
   const pageTitle = 'pageTitleValue';
-  const requireAuth = false;
+  const useSessionMock = {
+    ...jest.requireActual('next-auth/react'),
+    data: session,
+    status: sessionStatus,
+  };
+  jest.spyOn(nextAuth, 'useSession').mockImplementation(() => useSessionMock);
 
   return (
     <AppState pageTitle={pageTitle} requireAuth={requireAuth} session={session} router={Router}>
