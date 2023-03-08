@@ -26,6 +26,7 @@ export async function setupMsw() {
 
     return () => server.close();
   } else {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { worker } = require('./browser');
     void worker.start();
 
@@ -34,6 +35,7 @@ export async function setupMsw() {
 }
 
 export function resetMswHandlers() {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { server } = require('./server');
   server.resetHandlers();
 }

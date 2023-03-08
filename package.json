@@ -72,6 +72,7 @@
     "@testing-library/react": "^13.4.0",
     "@types/jest": "^29.4.0",
     "@types/pascalcase": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^5.54.1",
     "babel-jest": "^29.5.0",
     "babel-loader": "^9.1.2",
     "cypress": "^12.7.0",

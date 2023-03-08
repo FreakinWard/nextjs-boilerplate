@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
 import { AppWrapper as wrapper } from '../../core/test.utils';
-import AppState from '../AppState';
 
 describe('AppState', () => {
   const Child = () => <>child-component</>;

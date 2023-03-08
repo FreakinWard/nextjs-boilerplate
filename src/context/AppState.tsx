@@ -17,6 +17,7 @@ interface Props {
 
 /* istanbul ignore next */
 if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const { setupMsw } = require('../core/msw');
   void setupMsw();
 }
