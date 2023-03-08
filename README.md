@@ -22,13 +22,24 @@ The purpose of this repo is to accelerate startup time when creating a new [Next
 
 # Getting Started
 
-First, install npm packages
+First, create an `.env` file with the following:
+
+```dotenv
+#APPLICATIONINSIGHTS_CONNECTION_STRING=visit-azure-portal
+#NEXT_PUBLIC_API_MOCKING=enabled
+NEXT_PUBLIC_API_MOCKING=disabled
+
+GITHUB_ID=visit-https://github.com/settings/applications/1778388
+GITHUB_SECRET=visit-https://github.com/settings/applications/1778388
+```
+
+Next, install packages:
 
 ```bash
 npm install
 ```
 
-Then, run the development server:
+Finally, run the development server:
 
 ```bash
 npm run dev
