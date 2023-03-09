@@ -27,12 +27,22 @@ module keyVault './keyVault.bicep' = {
 }
 
 
-module appServicePlan './appService.bicep' = {
-  name: 'appServicePlan'
+// module appServicePlan './appService.bicep' = {
+//   name: 'appServicePlan'
+//   scope: resourceGroup()
+//   params: {
+//     webAppName: webAppName
+//     location: location
+//     instrumentationKey: appInsights.outputs.InstrumentationKey
+//   }
+// }
+
+module staticSite './staticSite.bicep' = {
+  name: 'staticSite'
   scope: resourceGroup()
   params: {
     webAppName: webAppName
     location: location
-    instrumentationKey: appInsights.outputs.InstrumentationKey
+    connectionString: appInsights.outputs.ConnectionString
   }
 }

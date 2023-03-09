@@ -49,20 +49,21 @@ stages:
     dependsOn: stageBuild
     condition: and(succeeded(), or(eq(variables.isCI, 'True'), eq(variables.isDevOnly, 'True'), eq(variables.isFullCI, 'True') ))
     jobs:
-      - template: templates/deploy.yml
+      #      - template: templates/deploy.yml
+      - template: templates/deployStaticApp.yml
         parameters:
           environmentType: Dev
           serviceConnection: $(azureSubscription)
-          slotName: staging
+          #          slotName: staging
           regions:
             - East
 
-      - template: templates/swapSlot.yml
-        parameters:
-          environmentType: Dev
-          serviceConnection: $(azureSubscription)
-          regions:
-            - East
+  #      - template: templates/swapSlot.yml
+  #        parameters:
+  #          environmentType: Dev
+  #          serviceConnection: $(azureSubscription)
+  #          regions:
+  #            - East
 
   - stage: stageDeployQA
     displayName: QA
