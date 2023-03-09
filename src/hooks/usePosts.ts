@@ -1,15 +1,5 @@
-import { useQuery } from 'react-query';
-
-const fetchPosts = async () => {
-  const response = await fetch('/api/posts');
-
-  return response.json();
-};
+import useFetch from './useFetch';
 
 export default function usePosts() {
-  const queryObject = {
-    queryKey: 'posts',
-    queryFn: fetchPosts,
-  };
-  return useQuery(queryObject);
+  return useFetch({ cacheKey: 'posts', url: '/api/posts' });
 }

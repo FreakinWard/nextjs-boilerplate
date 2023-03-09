@@ -29,10 +29,6 @@ Once the artifact has been deployed to Azure App Service, NPM modules are then i
 
 - Identify files to reference when building the pipeline artifact
 
-[`.artifactignore`](/.pipelines/app/.artifactignore)
-
-- Identify files to keep or ignore when creating the pipeline artifact
-
 ## Pipeline Templates
 
 [`npmInstall.yml`](/.pipelines/app/templates/npmInstall.yml)
@@ -71,3 +67,15 @@ Once the artifact has been deployed to Azure App Service, NPM modules are then i
 | Azure Pipeline Logs    | Contains logs around the actual build and deployment                                    |
 | Deployment Center Logs | Also contains the pipeline logs in addition to the service logs, deployment status, etc |
 | Application Insights   | Tracks telemetry once the service is up and running                                     |
+
+### Oryx deployment
+
+To list the deployed artifact, run the following command from [kudu bash](https://demo-nextjs-template-dev-east-staging.scm.azurewebsites.net/newui/kududebug):
+
+```bash
+# list deployed artifact
+ls -l -a ../tmp/zipdeploy/extracted
+
+# oryx build log:
+cat ../tmp/oryx-build.log
+```

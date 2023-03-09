@@ -45,3 +45,6 @@ az deployment group validate \
         regionName=east \
         resourceGroupPrefix=demo
 ```
+
+az keyvault recover --location westus2 --name demo-nextjs-template-dev --resource-group demo-nextjs-template-dev-east
+az keyvault recover --name demo-nextjs-template-dev --resource-group demo-nextjs-template-dev-east

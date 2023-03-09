@@ -1,7 +1,12 @@
 import { InferGetStaticPropsType } from 'next';
 
 import HomePage from '../Features/Home/';
-import { fetchPosts, Post } from '../services/postsService';
+import { fetchPosts } from './api/posts';
+
+interface Post {
+  id: number;
+  title: string;
+}
 
 interface Props {
   props: {

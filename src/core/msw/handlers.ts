@@ -1,5 +1,6 @@
 import { rest } from 'msw';
 
+import seedAuth from './seed/seedAuth';
 import seedHealth from './seed/seedHealth';
 import seedPosts from './seed/seedPosts';
 
@@ -14,7 +15,12 @@ const mockRequestGet = (url, responseData, statusCode = 200) => {
 };
 
 export default [
-  mockRequestGet('*/api/posts', seedPosts),
-  mockRequestGet('*/api/health', seedHealth),
-  mockRequestGet('https://my-json-server.typicode.com/typicode/demo/posts', seedPosts),
+  // auth
+  mockRequestGet('*/api/auth/session', seedAuth.session),
+  mockRequestGet('*/api/auth/providers', seedAuth.providers),
+
+  // app
+  mockRequestGet(seedPosts.clientUrl, seedPosts.data),
+  mockRequestGet(seedPosts.serverUrl, seedPosts.data),
+  mockRequestGet(seedHealth.clientUrl, seedHealth.data),
 ];

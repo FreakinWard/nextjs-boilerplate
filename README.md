@@ -22,13 +22,24 @@ The purpose of this repo is to accelerate startup time when creating a new [Next
 
 # Getting Started
 
-First, install npm packages
+First, create an `.env` file with the following:
+
+```dotenv
+#APPLICATIONINSIGHTS_CONNECTION_STRING=visit-azure-portal
+#NEXT_PUBLIC_API_MOCKING=enabled
+NEXT_PUBLIC_API_MOCKING=disabled
+
+GITHUB_ID=visit-https://github.com/settings/applications/1778388
+GITHUB_SECRET=visit-https://github.com/settings/applications/1778388
+```
+
+Next, install packages:
 
 ```bash
 npm install
 ```
 
-Then, run the development server:
+Finally, run the development server:
 
 ```bash
 npm run dev
@@ -97,13 +108,12 @@ Tests are configured for both unit and integration tests. Unit tests are perform
 | [eslint](https://www.npmjs.com/package/eslint)     | Helps identify code issues |
 | [prettier](https://www.npmjs.com/package/prettier) | code formatting tool       |
 
-| Testing                                                                                   | Description                              |
-| ----------------------------------------------------------------------------------------- | ---------------------------------------- |
-| [jest-junit](https://www.npmjs.com/package/jest-junit)                                    | Testing Library                          |
-| [msw](https://www.npmjs.com/package/msw)                                                  | Used to intercept and mock http requests |
-| [testing-library-react](https://www.npmjs.com/package/@testing-library/react)             | Helper for UI component tests            |
-| [testing-library-react-hooks](https://www.npmjs.com/package/@testing-library/react-hooks) | Helper for react-hook tests              |
-| [jest-html-reporters](https://www.npmjs.com/package/jest-html-reporters)                  | Test reporter for visualizing tests      |
+| Testing                                                                       | Description                              |
+| ----------------------------------------------------------------------------- | ---------------------------------------- |
+| [jest-junit](https://www.npmjs.com/package/jest-junit)                        | Testing Library                          |
+| [msw](https://www.npmjs.com/package/msw)                                      | Used to intercept and mock http requests |
+| [testing-library-react](https://www.npmjs.com/package/@testing-library/react) | Helper for UI component tests            |
+| [jest-html-reporters](https://www.npmjs.com/package/jest-html-reporters)      | Test reporter for visualizing tests      |
 
 | Git Hooks                                                                  | Description                                                  |
 | -------------------------------------------------------------------------- | ------------------------------------------------------------ |

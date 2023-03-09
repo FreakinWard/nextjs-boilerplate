@@ -4,20 +4,19 @@ import {
   useAppInsightsContext,
 } from '@microsoft/applicationinsights-react-js';
 import { ApplicationInsights } from '@microsoft/applicationinsights-web';
-import { NextComponentType } from 'next';
 import { NextRouter } from 'next/router';
 import { createContext, ReactNode, useEffect, useMemo } from 'react';
 
 interface Props {
   children?: ReactNode;
-  component: NextComponentType;
+  pageTitle: string;
   router: NextRouter;
 }
 
 const TelemetryContext = createContext(undefined);
 
-function TelemetryProvider({ children, component, router: { query, route, pathname } }: Props) {
-  const createTelemetryService = () => {
+function TelemetryProvider({ children, router: { query, route, pathname }, pageTitle }: Props) {
+  const appInsights = useMemo(function createTelemetryService() {
     const connectionString = process.env.APPLICATIONINSIGHTS_CONNECTION_STRING;
 
     if (!connectionString) return null;
@@ -42,8 +41,7 @@ function TelemetryProvider({ children, component, router: { query, route, pathna
     });
 
     return reactPlugin;
-  };
-  const appInsights = useMemo(() => createTelemetryService(), []);
+  }, []);
 
   useEffect(() => {
     if (!appInsights) return;
@@ -59,10 +57,11 @@ function TelemetryProvider({ children, component, router: { query, route, pathna
     };
 
     appInsights.trackPageView({
+      name: pageTitle,
       uri: pathname,
       properties,
     });
-  }, [appInsights, component.displayName, pathname, query, route]);
+  }, [appInsights, pathname, query, route, pageTitle]);
 
   return <AppInsightsContext.Provider value={appInsights}>{children}</AppInsightsContext.Provider>;
 }

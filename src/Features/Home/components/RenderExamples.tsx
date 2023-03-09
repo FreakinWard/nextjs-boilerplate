@@ -1,8 +1,7 @@
-import Link from 'next/link';
-
 import styles from '../../../../styles/Home.module.css';
 import usePosts from '../../../hooks/usePosts';
-import { Post } from '../../../services/postsService';
+import { Post } from '../../../pages/api/posts';
+import InformationBlock from './InformationBlock';
 import Posts from './Posts';
 
 interface Props {
@@ -22,12 +21,17 @@ export default function RenderExamples({ posts }: Props) {
         <Posts title="Client render" posts={clientPosts} />
       </div>
 
-      <Link href="/health" passHref>
-        <a className={styles.card}>
-          <h2>Health Check &rarr;</h2>
-          <p>Access application health data</p>
-        </a>
-      </Link>
+      <InformationBlock
+        url="/health"
+        title="Health Check"
+        description="Access application health data"
+      />
+
+      <InformationBlock
+        url="/secured"
+        title="Authentication"
+        description="Secure a page using Next-Auth"
+      />
     </div>
   );
 }

@@ -54,10 +54,7 @@ jobs:
                 - download: current
                   artifact: $(buildPackageName)
 
-                - script: |
-                    cat << EOF >> .env
-                    CI_BUILD_NUMBER = $(ciBuildNumber)
-                    EOF
+                - script: npm pkg set buildNumber=$(ciBuildNumber)
                   displayName: Set BuildNumber
                   workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
 

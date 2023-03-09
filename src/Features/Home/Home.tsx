@@ -1,4 +1,4 @@
-import { Post } from '../../services/postsService';
+import { Post } from '../../pages/api/posts';
 import NextInfo from './components/NextInfo';
 import RenderExamples from './components/RenderExamples';
 

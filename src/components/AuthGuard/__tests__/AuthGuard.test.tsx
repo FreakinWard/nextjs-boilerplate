@@ -4,78 +4,58 @@ import * as nextAuth from 'next-auth/react';
 import AuthGuard from '../index';
 
 jest.mock('next-auth/react');
+jest.mock('next/router', () => require('next-router-mock'));
 
 describe('AuthGuard', () => {
   const Component = () => <>child-component</>;
 
   const mockComponent = (requireAuth, status = 'loading', data = null) => {
     const useSessionMock = {
+      ...jest.requireActual('next-auth/react'),
       status,
       data,
     };
 
-    // @ts-ignore
-    jest.spyOn(nextAuth, 'useSession').mockImplementation(() => useSessionMock);
-    jest.spyOn(nextAuth, 'signIn');
+    jest.spyOn(nextAuth, 'useSession').mockReturnValue(useSessionMock);
 
-    return (
+    const tree = (
       <AuthGuard requireAuth={requireAuth}>
         <Component />
       </AuthGuard>
     );
-  };
 
-  it('should render', () => {
-    // arrange
-    const useSessionMock = {
-      useSession: jest.fn(),
-      signIn: jest.fn(),
-    };
-
-    // @ts-ignore
-    jest.spyOn(nextAuth, 'useSession').mockImplementation(() => useSessionMock);
-
-    const requireAuth = false;
-    const tree = mockComponent(requireAuth);
-
-    // act
     render(tree);
-
-    // assert
-  });
+  };
 
   it('should render render child component given auth is not required', () => {
     // arrange
     const requireAuth = false;
-    const tree = mockComponent(requireAuth);
 
     // act
-    render(tree);
+    mockComponent(requireAuth);
 
     // assert
     expect(screen.getByText('child-component')).toBeInTheDocument();
   });
 
-  it('should not render render child component given auth is required and user is not authenticated', () => {
+  it('should not render render child component given auth is required and user is unauthenticated', () => {
     // arrange
     const requireAuth = true;
-    const tree = mockComponent(requireAuth);
 
     // act
-    render(tree);
+    mockComponent(requireAuth);
 
     // assert
     expect(screen.queryByText('child-component')).not.toBeInTheDocument();
   });
 
-  it('should call signIn given user auth is required and user is not authenticated', () => {
+  it('should call signIn given user auth is required and user is unauthenticated', () => {
     // arrange
     const requireAuth = true;
     const status = 'unauthenticated';
-    const tree = mockComponent(requireAuth, status);
 
     // act
-    render(tree);
+    mockComponent(requireAuth, status);
 
     // assert
     expect(screen.queryByText('child-component')).not.toBeInTheDocument();
@@ -86,13 +66,11 @@ describe('AuthGuard', () => {
     // arrange
     const requireAuth = true;
     const status = 'authenticated';
-    const tree = mockComponent(requireAuth, status, { error: true });
 
     // act
-    render(tree);
+    mockComponent(requireAuth, status, { error: true });
 
     // assert
-
     expect(nextAuth.signOut).toHaveBeenCalled();
   });
 
@@ -104,10 +82,9 @@ describe('AuthGuard', () => {
       theory => {
         // arrange
         const requireAuth = true;
-        const tree = mockComponent(requireAuth, theory.status);
 
         // act
-        render(tree);
+        mockComponent(requireAuth, theory.status);
 
         // assert
         expect(nextAuth.signIn).not.toHaveBeenCalled();

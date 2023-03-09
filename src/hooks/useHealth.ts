@@ -1,16 +1,5 @@
-import { useQuery } from 'react-query';
-
-const fetchHealth = async () => {
-  const response = await fetch('/api/health');
-
-  return response.json();
-};
+import useFetch from './useFetch';
 
 export default function useHealth() {
-  const queryObject = {
-    queryKey: 'health',
-    queryFn: fetchHealth,
-    staleTime: 0,
-  };
-  return useQuery(queryObject);
+  return useFetch({ cacheKey: 'health', url: '/api/health' });
 }
