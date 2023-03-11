@@ -8,7 +8,7 @@ parameters:
 
   - name: slotName
     type: string
-    default: production
+    default: Production
 
   - name: regions
     type: object
@@ -60,6 +60,7 @@ jobs:
                     EOF
                   displayName: Create .env
                   workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
+
                 - task: AzureCLI@2
                   displayName: Azure App References
                   name: taskAzureApp
@@ -70,11 +71,19 @@ jobs:
                     inlineScript: |
                       APIKEY=$(az staticwebapp secrets list --resource-group $(resourceGroupName) --name $(resourceGroupName)-site | jq -r '.properties.apiKey')
                       deployedAppUrl=$(az staticwebapp show --name $(resourceGroupName)-site | jq -r '.defaultHostname')
+
                       if test -z "$APIKEY" 
                       then
                         echo "##vso[task.logissue type=error]Unable to locate azure resource"
                         exit 1
                       fi
+
+                      if test -z "$deployedAppUrl" 
+                      then
+                        echo "##vso[task.logissue type=error]Unable to locate deployed app url"
+                        exit 1
+                      fi
+
                       echo "##vso[task.setvariable variable=apiKey;issecret=true]$APIKEY"
                       echo "##vso[task.setvariable variable=deployedBuildNumber;isOutput=true;]$(ciBuildNumber)"
                       echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]https://$deployedAppUrl"
@@ -85,6 +94,7 @@ jobs:
                   displayName: Azure Deploy
                   inputs:
                     deployment_environment: ${{ parameters.slotName }}
+                    production_branch: ''
                     workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
                     azure_static_web_apps_api_token: $(apiKey)
                     app_location: '/' # App source code path

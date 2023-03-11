@@ -11,6 +11,7 @@
   "scripts": {
     "prepare": "husky install",
     "postinstall": "next build",
+    "postbuild": "cp -r public .next/standalone && cp -r .next/static .next/standalone",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
