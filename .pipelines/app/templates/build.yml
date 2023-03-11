@@ -74,7 +74,7 @@ jobs:
           tabName: 'Build Analysis - client'
 
       - script: |
-          npm uninstall cypress
+          npm uninstall cypress @testing-library/cypress eslint-plugin-cypress cypress-mochawesome-reporter cypress-multi-reporters
           mv .pipelines/app/.artifactignore ./
           mv .pipelines/app/.deployment ./
         displayName: Prepare artifact
