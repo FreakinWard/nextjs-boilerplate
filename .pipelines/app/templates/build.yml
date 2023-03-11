@@ -74,7 +74,7 @@ jobs:
           tabName: 'Build Analysis - client'
 
       - script: |
-          npm pkg delete devDependencies
+          npm uninstall cypress
           mv .pipelines/app/.artifactignore ./
           mv .pipelines/app/.deployment ./
         displayName: Prepare artifact
