@@ -8,7 +8,7 @@ parameters:
 
   - name: slotName
     type: string
-    default: production
+    default: Production
 
   - name: regions
     type: object
