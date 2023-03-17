@@ -54,11 +54,8 @@ jobs:
                 - download: current
                   artifact: $(buildPackageName)
 
-                - script: |
-                    cat << EOF >> .env
-                    CI_BUILD_NUMBER = $(ciBuildNumber)
-                    EOF
-                  displayName: Create .env
+                - script: npm pkg set buildNumber=$(ciBuildNumber)
+                  displayName: Set BuildNumber
                   workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
 
                 - task: AzureCLI@2
@@ -94,7 +91,6 @@ jobs:
                   displayName: Azure Deploy
                   inputs:
                     deployment_environment: ${{ parameters.slotName }}
-                    production_branch: 'deploy-static-webapp-v2'
                     workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
                     azure_static_web_apps_api_token: $(apiKey)
                     app_location: '/' # App source code path
