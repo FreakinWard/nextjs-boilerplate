@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 /// <reference types="cypress" />
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
@@ -13,6 +14,7 @@
 // the project's config changing)
 const { beforeRunHook, afterRunHook } = require('cypress-mochawesome-reporter/lib');
 const { execSync: exec } = require('child_process');
+const cucumber = require('cypress-cucumber-preprocessor').default;
 require('dotenv').config();
 
 /**
@@ -26,6 +28,8 @@ module.exports = (on, config) => {
   on('before:run', async details => {
     await beforeRunHook(details);
   });
+
+  on('file:preprocessor', cucumber());
 
   on('after:run', async () => {
     await exec('npx jrm ./cypress/reports/junitreport.xml ./cypress/reports/junit/*.xml');

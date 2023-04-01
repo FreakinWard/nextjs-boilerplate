@@ -13,5 +13,7 @@ cypress/reports/
 html-report
 node_modules
 out
+package.json
 package-lock.json
 *.bicep
+*.feature
