@@ -1,5 +1,7 @@
 import { defineConfig } from 'cypress';
 
+import packageJson from './package.json';
+
 export default defineConfig({
   reporter: 'cypress-multi-reporters',
   reporterOptions: {
@@ -16,12 +18,13 @@ export default defineConfig({
     },
   },
   env: {
-    CI_BUILD_NUMBER: 'not-set',
+    ciBuildNumber: packageJson.buildNumber,
   },
   e2e: {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
     setupNodeEvents(on, config) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       return require('./cypress/plugins/index.js')(on, config);
     },
     // baseUrl: 'http://nextjs-template-dev-east-staging.azurewebsites.net',
