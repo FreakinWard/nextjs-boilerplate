@@ -1,4 +1,10 @@
+import { randomBytes } from 'crypto';
+
 export default {
+  csrfToken: {
+    ok: true,
+    csrfToken: randomBytes(32).toString('hex'),
+  },
   providers: {
     ok: true,
     gitub: {
@@ -17,5 +23,15 @@ export default {
       email: 'mocked-user@email.com',
     },
     expires: 8675309,
+  },
+  signInResponse: {
+    ok: true,
+    status: 200,
+    url: process.env.WELL_KNOWN,
+  },
+  signOutResponse: {
+    ok: true,
+    status: 200,
+    url: 'https://path/to/signout/url',
   },
 };
