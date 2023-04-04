@@ -97,7 +97,7 @@ jobs:
                     api_location: '' # Api source code path - optional
                     output_location: '.next' # Built app content directory - optional
                   env:
-                    CUSTOM_BUILD_COMMAND: export CYPRESS_INSTALL_BINARY=0 && npm install
+                    #                    CUSTOM_BUILD_COMMAND: export CYPRESS_INSTALL_BINARY=0 && npm install
                     CYPRESS_INSTALL_BINARY: 0
 
                 - template: smokeTest.yml
