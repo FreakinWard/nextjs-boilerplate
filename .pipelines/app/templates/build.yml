@@ -50,8 +50,6 @@ jobs:
       #          tabName: 'Integration Tests'
 
       - script: |
-          npm pkg set scripts.install="echo skip-install"
-          npm uninstall cypress @testing-library/cypress eslint-plugin-cypress cypress-mochawesome-reporter cypress-multi-reporters
           mv .pipelines/app/.artifactignore ./
           mv .pipelines/app/.deployment ./
         displayName: Prepare artifact
