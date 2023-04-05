@@ -16,6 +16,6 @@ resource staticSiteConfig 'Microsoft.Web/staticSites/config@2022-03-01' = {
   name: 'appsettings'
   parent: staticSite
   properties: {
-    APPINSIGHTS_INSTRUMENTATIONKEY: connectionString
+    APPLICATIONINSIGHTS_CONNECTION_STRING: connectionString
   }
 }

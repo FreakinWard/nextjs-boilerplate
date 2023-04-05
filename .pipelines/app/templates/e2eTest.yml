@@ -15,17 +15,18 @@ parameters:
     type: string
 
 steps:
+  - template: keyVaultVariables.yml
+
   - task: PowerShell@2
     displayName: Cypress Env
     inputs:
       targetType: 'inline'
       script: |
         $json = '{
-          "USER_NAME": "$(USER--NAME)",
-          "USER_PASSWORD": "$(USER--PASSWORD)",
-          "NEXTAUTH_SECRET": "$(NEXTAUTH--SECRET)",
-          "CLIENT_ID": "$(CLIENT--ID)",
-          "AUTH_TOKEN_URL": "$(AUTH--TOKEN--URL)",
+          "USER_NAME": "$(e2eUserName)",
+          "USER_PASSWORD": "$(e2eUserPassword)",
+          "NEXTAUTH_SECRET": "$(nextAuthSecret)",
+          "CLIENT_ID": "$(githubClientId)$(githubClientId)",
           "CI_BUILD_NUMBER": "${{ parameters.ciBuildNumber }}"
         }'
 

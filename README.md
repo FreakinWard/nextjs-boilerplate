@@ -29,6 +29,10 @@ First, create an `.env` file with the following:
 #NEXT_PUBLIC_API_MOCKING=enabled
 NEXT_PUBLIC_API_MOCKING=disabled
 
+# setup NextAuth - https://next-auth.js.org/configuration/options#secret
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=hUZffSRxfqTsXF/08mFxO/T1p0pq2c5pXuZQ82CkSAU=
+
 GITHUB_ID=visit-https://github.com/settings/applications/1778388
 GITHUB_SECRET=visit-https://github.com/settings/applications/1778388
 ```

@@ -58,6 +58,8 @@ jobs:
                   displayName: Set BuildNumber
                   workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
 
+                - template: keyVaultVariables.yml
+
                 - task: AzureCLI@2
                   displayName: Azure App References
                   name: taskAzureApp
@@ -90,15 +92,18 @@ jobs:
                 - task: AzureStaticWebApp@0
                   displayName: Azure Deploy
                   inputs:
-                    #                    deployment_environment: ${{ parameters.slotName }}
                     workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
                     azure_static_web_apps_api_token: $(apiKey)
                     app_location: '/' # App source code path
                     api_location: '' # Api source code path - optional
                     output_location: '.next' # Built app content directory - optional
                   env:
-                    #                    CUSTOM_BUILD_COMMAND: export CYPRESS_INSTALL_BINARY=0 && npm install
+                    APPLICATIONINSIGHTS_CONNECTION_STRING: $(appInsightsConnectionString)
                     CYPRESS_INSTALL_BINARY: 0
+                    GITHUB_ID: $(githubClientId)
+                    GITHUB_SECRET: $(githubSecret)
+                    NEXTAUTH_SECRET: $(nextAuthSecret)
+                    NEXTAUTH_URL: $(taskAzureApp.deployedAppUrl)
 
                 - template: smokeTest.yml
                   parameters:
@@ -123,7 +128,6 @@ jobs:
 
           - template: e2eTest.yml
             parameters:
-              #              slotName: ${{ parameters.slotName }}
               region: ${{ region }}
               deployedAppUrl: $(deployedAppUrl)
               ciBuildNumber: $(deployedBuildNumber)

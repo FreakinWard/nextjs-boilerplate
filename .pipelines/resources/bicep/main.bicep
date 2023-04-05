@@ -26,14 +26,14 @@ module keyVault './keyVault.bicep' = {
   }
 }
 
-
+// TODO: implement when using appService
 // module appServicePlan './appService.bicep' = {
 //   name: 'appServicePlan'
 //   scope: resourceGroup()
 //   params: {
 //     webAppName: webAppName
 //     location: location
-//     instrumentationKey: appInsights.outputs.InstrumentationKey
+//     connectionString: appInsights.outputs.ConnectionString
 //   }
 // }
 
