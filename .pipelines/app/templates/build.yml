@@ -12,6 +12,9 @@ jobs:
 
       - template: npmInstall.yml
 
+      - script: npm run lint
+        displayName: App Lint
+
       - script: npm run build
         displayName: App Build
 
