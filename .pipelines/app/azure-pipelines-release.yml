@@ -52,7 +52,7 @@ stages:
       - template: templates/deployStaticSite.yml
         parameters:
           environmentType: Dev
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           regions:
             - East
 
@@ -60,14 +60,14 @@ stages:
   #      - template: templates/deployAppService.yml
   #        parameters:
   #          environmentType: Dev
-  #          serviceConnection: $(azureSubscription)
+  #          serviceConnection: $(serviceConnection)
   #          regions:
   #            - East
   #
   #      - template: templates/swapSlot.yml
   #        parameters:
   #          environmentType: Dev
-  #          serviceConnection: $(azureSubscription)
+  #          serviceConnection: $(serviceConnection)
   #          regions:
   #            - East
 
@@ -80,7 +80,7 @@ stages:
       - template: templates/deployAppService.yml
         parameters:
           environmentType: QA
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           slotName: staging
           regions:
             - East
@@ -88,7 +88,7 @@ stages:
       - template: templates/swapSlot.yml
         parameters:
           environmentType: QA
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           regions:
             - East
 
@@ -99,7 +99,7 @@ stages:
       - template: templates/deployAppService.yml
         parameters:
           environmentType: Prod
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           slotName: staging
           regions:
             - East
@@ -112,6 +112,6 @@ stages:
         parameters:
           environmentType: Prod
           dependsOnDeployJob: false
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           regions:
             - East

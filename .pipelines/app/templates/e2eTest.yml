@@ -15,8 +15,6 @@ parameters:
     type: string
 
 steps:
-  - template: keyVaultVariables.yml
-
   - task: PowerShell@2
     displayName: Cypress Env
     inputs:
