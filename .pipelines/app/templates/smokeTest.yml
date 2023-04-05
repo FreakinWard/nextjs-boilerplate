@@ -8,7 +8,7 @@ parameters:
 steps:
   - task: PowerShell@2
     displayName: 'Smoke Test'
-    timeoutInMinutes: 10
+    timeoutInMinutes: 5
     env:
       ciBuildNumber: ${{ parameters.ciBuildNumber }}
       appUrl: ${{ parameters.appUrl }}/api/health
