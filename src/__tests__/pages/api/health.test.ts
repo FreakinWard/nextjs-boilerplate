@@ -14,9 +14,9 @@ describe('/api/health', () => {
       name: 'nameValue',
       version: 'versionValue',
       buildNumber: 'not-set',
-      appInsightsConnectionString: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
-      nextAuthUrl: process.env.NEXTAUTH_URL,
-      githubId: process.env.GITHUB_ID,
+      appInsightsConnectionString: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING || 'undefined',
+      nextAuthUrl: process.env.NEXTAUTH_URL || 'undefined',
+      githubId: process.env.GITHUB_ID || 'undefined',
       status: 'ok',
     };
 
