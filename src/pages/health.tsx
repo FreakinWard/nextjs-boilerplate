@@ -13,7 +13,16 @@ export default function Health() {
       {Object.keys(health)?.map(prop => {
         return (
           <div key={prop}>
-            <span>{`${pascalCase(prop)}: ${health[prop]}`}</span>
+            <span
+              style={{
+                width: 50,
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                display: 'inline-block',
+              }}
+            >
+              {`${pascalCase(prop)}:  ${health[prop]}`}
+            </span>
           </div>
         );
       })}
