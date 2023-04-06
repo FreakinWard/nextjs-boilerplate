@@ -118,7 +118,7 @@ jobs:
                   env:
                     APPLICATIONINSIGHTS_CONNECTION_STRING: $(appInsightsConnectionString)
                     CYPRESS_INSTALL_BINARY: 0
-                    GITHUB_ID: $(githubClientId)
+                    GITHUB_ID: 'githubIdValue'
                     GITHUB_SECRET: $(githubSecret)
                     NEXTAUTH_SECRET: $(nextAuthSecret)
                     NEXTAUTH_URL: $(taskAzureApp.deployedAppUrl)

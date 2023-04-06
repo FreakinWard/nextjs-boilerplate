@@ -13,6 +13,7 @@ module.exports = withBundleAnalyzer({
     appVersion: packageJson.version,
     ciBuildNumber: packageJson.buildNumber,
     APPLICATIONINSIGHTS_CONNECTION_STRING: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
+    GITHUB_ID: process.env.GITHUB_ID,
   },
   output: 'standalone',
   swcMinify: true,

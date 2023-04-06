@@ -22,6 +22,8 @@ describe('/api/health', () => {
 
     process.env.appName = expected.name;
     process.env.appVersion = expected.version;
+    process.env.APPLICATIONINSIGHTS_CONNECTION_STRING = expected.appInsightsConnectionString;
+    process.env.GITHUB_ID = expected.githubId;
 
     await testApiHandler<HealthTypes>({
       handler,
