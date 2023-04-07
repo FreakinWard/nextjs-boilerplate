@@ -7,6 +7,17 @@ export default function Health() {
 
   if (!health) return null;
 
+  const json = {
+    name: 'John Doe',
+    age: 32,
+    email: 'johndoe@example.com',
+    appName: process.env.appName,
+    appVersion: process.env.appVersion,
+    ciBuildNumber: process.env.ciBuildNumber,
+    APPLICATIONINSIGHTS_CONNECTION_STRING: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+    GITHUB_ID: process.env.GITHUB_ID,
+  };
   return (
     <div>
       <h2>Health Check</h2>
@@ -26,6 +37,18 @@ export default function Health() {
           </div>
         );
       })}
+
+      <div
+        style={{
+          width: 50,
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          display: 'inline-block',
+        }}
+      >
+        <h3>Environment Variables</h3>
+        <pre>{JSON.stringify(json, null, 2)}</pre>
+      </div>
     </div>
   );
 }
