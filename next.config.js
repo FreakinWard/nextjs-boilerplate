@@ -12,8 +12,7 @@ module.exports = withBundleAnalyzer({
     appName: packageJson.name,
     appVersion: packageJson.version,
     ciBuildNumber: packageJson.buildNumber,
-    APPLICATIONINSIGHTS_CONNECTION_STRING:
-      process.env.APPLICATIONINSIGHTS_CONNECTION_STRING || 'undefined',
+    APPLICATIONINSIGHTS_CONNECTION_STRING: process.env.APPLICATIONINSIGHTS_CONNECTION_STRING,
     NEXT_PUBLIC_API_MOCKING: process.env.NEXT_PUBLIC_API_MOCKING || 'undefined',
     NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'undefined',
     GITHUB_ID: process.env.GITHUB_ID || 'undefined',
