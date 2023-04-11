@@ -8,9 +8,6 @@ export default function Health() {
   if (!health) return null;
 
   const json = {
-    name: 'John Doe',
-    age: 32,
-    email: 'johndoe@example.com',
     appName: process.env.appName,
     appVersion: process.env.appVersion,
     ciBuildNumber: process.env.ciBuildNumber,

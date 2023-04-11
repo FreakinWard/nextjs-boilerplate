@@ -1,0 +1,63 @@
+name: Azure Static Web Apps CI/CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - deploy-static-webapp-v2
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - deploy-static-webapp-v2
+
+jobs:
+  build_and_deploy_job:
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
+    runs-on: ubuntu-latest
+    env:
+      APPLICATIONINSIGHTS_CONNECTION_STRING: ${{ vars.appInsightsConnectionString }}
+      GITHUB_ID: ${{ vars.githubId }}
+      GITHUB_SECRET: ${{ secrets.githubSecret }}
+      NEXTAUTH_SECRET: ${{ secrets.nextAuthSecret }}
+      NEXTAUTH_URL: ${{ vars.nextAuthUrl }}
+    name: Build and Deploy Job
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - name: Show environment variables
+        run: env | sort
+
+      - name: Build And Deploy
+        id: builddeploy
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_BRAVE_TREE_02E03330F }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
+          action: "upload"
+          ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
+          # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
+          app_location: "/" # App source code path
+          api_location: "" # Api source code path - optional
+          output_location: ".next" # Built app content directory - optional
+          ###### End of Repository/Build Configurations ######
+        env:
+          APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=792a34de-8ad0-42f6-b335-d77858aec8e1;IngestionEndpoint=https://eastus2-0.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus2.livediagnostics.monitor.azure.com/"
+          CYPRESS_INSTALL_BINARY: 0
+          GITHUB_ID: "70b59b730fc82e0c99ca"
+          GITHUB_SECRET: ${{ secrets.githubSecret }}
+          NEXTAUTH_SECRET: ${{ secrets.nextAuthSecret }}
+          NEXTAUTH_URL: "https://nextjs-github.awardedsolutions.com"
+
+  close_pull_request_job:
+    if: github.event_name == 'pull_request' && github.event.action == 'closed'
+    runs-on: ubuntu-latest
+    name: Close Pull Request Job
+    steps:
+      - name: Close Pull Request
+        id: closepullrequest
+        uses: Azure/static-web-apps-deploy@v1
+        with:
+          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_BRAVE_TREE_02E03330F }}
+          action: "close"
