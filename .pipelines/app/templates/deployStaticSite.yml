@@ -116,9 +116,9 @@ jobs:
                     output_location: '.next' # Built app content directory - optional
                     deployment_environment: $(appSlotName)
                   env:
-                    APPLICATIONINSIGHTS_CONNECTION_STRING: 'appInsightsConnectionString'
+                    APPLICATIONINSIGHTS_CONNECTION_STRING: $(appInsightsConnectionString)
                     CYPRESS_INSTALL_BINARY: 0
-                    GITHUB_ID: 'githubIdValue'
+                    GITHUB_ID: $(githubClientId)
                     GITHUB_SECRET: $(githubSecret)
                     NEXTAUTH_SECRET: $(nextAuthSecret)
                     NEXTAUTH_URL: $(taskAzureApp.deployedAppUrl)
