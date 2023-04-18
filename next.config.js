@@ -17,6 +17,9 @@ module.exports = withBundleAnalyzer({
     NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'undefined',
     GITHUB_ID: process.env.GITHUB_ID || 'undefined',
   },
+  experimental: {
+    appDir: true,
+  },
   output: 'standalone',
   swcMinify: true,
   eslint: {
