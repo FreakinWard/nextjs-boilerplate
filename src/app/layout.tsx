@@ -2,8 +2,8 @@
 
 import { ReactNode } from 'react';
 
-import Layout from '../../components/Layout';
-import AppStateApp from '../../context/AppStateApp';
+import Layout from '../components/Layout';
+import AppStateApp from '../context/AppStateApp';
 
 export const metadata = {
   title: 'Health Check',

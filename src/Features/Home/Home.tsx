@@ -1,15 +1,10 @@
-import { Post } from '../../pages/api/posts';
 import NextInfo from './components/NextInfo';
 import RenderExamples from './components/RenderExamples';
 
-interface Props {
-  posts: Post[];
-}
-
-export default function Home({ posts }: Props) {
+export default function Home() {
   return (
     <>
-      <RenderExamples posts={posts} />
+      <RenderExamples />
       <NextInfo />
     </>
   );

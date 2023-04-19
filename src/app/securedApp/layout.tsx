@@ -4,7 +4,6 @@ import { headers } from 'next/headers';
 import { Session } from 'next-auth';
 import { ReactNode } from 'react';
 
-import Layout from '../../components/Layout';
 import AuthContext from '../../context/AuthContext';
 
 export const metadata = {
@@ -25,16 +24,7 @@ async function getSession(cookie: string): Promise<Session> {
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const avoidChromeExtensionWarning = true;
   const session = await getSession(headers().get('cookie') ?? '');
 
-  return (
-    <html lang="en">
-      <body suppressHydrationWarning={avoidChromeExtensionWarning}>
-        <AuthContext session={session}>
-          <Layout>{children}</Layout>
-        </AuthContext>
-      </body>
-    </html>
-  );
+  return <AuthContext session={session}>{children}</AuthContext>;
 }
