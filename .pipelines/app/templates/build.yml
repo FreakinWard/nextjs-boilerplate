@@ -6,6 +6,9 @@ jobs:
       - name: NEXT_PUBLIC_API_MOCKING
         value: enabled
 
+      - name: NEXTAUTH_URL
+        value: 'http://localhost:3000'
+
     steps:
       - script: env | sort
         displayName: Pipeline Environment
