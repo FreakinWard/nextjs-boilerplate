@@ -16,13 +16,13 @@ export default function RenderExamples() {
       </div>
 
       <InformationBlock
-        url="/healthApp"
+        url="/health"
         title="Health Check"
         description="Access application health data"
       />
 
       <InformationBlock
-        url="/securedApp"
+        url="/secured"
         title="Authentication"
         description="Secure a page using Next-Auth"
       />
