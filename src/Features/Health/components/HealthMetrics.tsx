@@ -2,7 +2,7 @@
 
 'use client';
 
-import useHealth from '../../../hooks/useHealth';
+import useHealth from '../hooks/useHealth';
 import HealthMetricItem from './HealthMetricItem';
 
 export default function HealthMetrics() {

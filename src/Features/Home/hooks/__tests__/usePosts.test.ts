@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 
-import seedPosts from '../../core/msw/seed/seedPosts';
-import { AppWrapper as wrapper, mswMock } from '../../core/test.utils';
+import seedPosts from '../../../../core/msw/seed/seedPosts';
+import { AppWrapper as wrapper, mswMock } from '../../../../core/test.utils';
 import usePosts from '../usePosts';
 
 describe('usePosts', () => {

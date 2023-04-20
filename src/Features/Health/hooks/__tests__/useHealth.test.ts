@@ -1,7 +1,7 @@
 import { renderHook, waitFor } from '@testing-library/react';
 
-import seedHealth from '../../core/msw/seed/seedHealth';
-import { AppWrapper as wrapper, mswMock } from '../../core/test.utils';
+import seedHealth from '../../../../core/msw/seed/seedHealth';
+import { AppWrapper as wrapper, mswMock } from '../../../../core/test.utils';
 import useHealth from '../useHealth';
 
 describe('useHealth', () => {
