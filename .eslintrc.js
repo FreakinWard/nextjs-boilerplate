@@ -24,7 +24,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['src/app/api/**/route.ts'],
+      files: ['src/app/api/**/route.ts', 'src/app/**/page.tsx'],
       rules: {
         'import/prefer-default-export': 'off',
       },

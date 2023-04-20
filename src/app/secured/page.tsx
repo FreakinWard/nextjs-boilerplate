@@ -1,20 +1,7 @@
 /* istanbul ignore file */
 
-import InformationBlock from './components/InformationBlock';
-import UserName from './components/UserName';
+import Secured from '../../Features/Secured/Secured';
 
-export default function Secured() {
-  return (
-    <>
-      <h1>
-        Welcome,
-        <UserName />
-      </h1>
-      <InformationBlock
-        url="https://next-auth.js.org/getting-started/introduction"
-        title="Authentication"
-        description="Authentication is enabled using next-auth."
-      />
-    </>
-  );
+export default function page() {
+  return <Secured />;
 }
