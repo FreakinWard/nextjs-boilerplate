@@ -1,15 +1,15 @@
 import { testApiHandler } from 'next-test-api-route-handler';
 
-import { mockEnv } from '../../../core/test.utils';
-import health, { HealthTypes } from '../../../pages/api/health';
+import { mockEnv } from '../../../../core/test.utils';
+import { GET as handler, HealthTypes } from '../route';
 
-describe('/api/health', () => {
+// TODO: waiting for next-test-api-route-handler to support next 13 app routes
+// https://github.com/Xunnamius/next-test-api-route-handler/issues/773
+describe.skip('/api/health', () => {
   mockEnv();
 
   it('should render expected health data', async () => {
     // arrange
-    const handler = health;
-
     const expected = {
       name: 'nameValue',
       version: 'versionValue',
@@ -40,8 +40,6 @@ describe('/api/health', () => {
 
   it('should return expected "not-set" given ciBuildNumber is undefined', async () => {
     // arrange
-    const handler = health;
-
     delete process.env.ciBuildNumber;
 
     await testApiHandler<HealthTypes>({

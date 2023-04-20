@@ -1,11 +1,16 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 
 export interface HealthTypes {
+  name: string;
   version: string;
+  buildNumber: string;
+  appInsightsConnectionString: string;
+  nextAuthUrl: string;
+  githubId: string;
   status: string;
 }
 
-export default function health(req: NextApiRequest, res: NextApiResponse<HealthTypes>) {
+export async function GET() {
   const healthData = {
     name: process.env.appName,
     version: process.env.appVersion,
@@ -16,5 +21,5 @@ export default function health(req: NextApiRequest, res: NextApiResponse<HealthT
     status: 'ok',
   };
 
-  res.status(200).json(healthData);
+  return NextResponse.json(healthData);
 }

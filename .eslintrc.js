@@ -22,4 +22,12 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
   },
+  overrides: [
+    {
+      files: ['src/app/api/**/route.ts'],
+      rules: {
+        'import/prefer-default-export': 'off',
+      },
+    },
+  ],
 };
