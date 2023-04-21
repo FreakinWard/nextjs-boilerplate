@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 
-import { AppWrapper as wrapper, getByTextContent, mswMock } from '../../core/test.utils';
-import Secured from '../../pages/secured';
+import { AppWrapper as wrapper, getByTextContent, mswMock } from '../../../core/test.utils';
+import Secured from '../Secured';
 
 describe('index', () => {
   mswMock();

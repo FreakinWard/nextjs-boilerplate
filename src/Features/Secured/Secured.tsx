@@ -5,7 +5,6 @@ export default function Secured() {
   return (
     <>
       <h1>
-        Welcome,
         <UserName />
       </h1>
       <InformationBlock
