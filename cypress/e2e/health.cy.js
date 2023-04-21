@@ -1,30 +1,22 @@
 describe('health', () => {
   beforeEach(() => {
+    cy.intercept('**/api/health').as('health');
+
     cy.visit('/health');
+
+    cy.wait(['@health'])
+      .its('response.statusCode')
+      .should('contains', /200|304/g);
   });
 
-  it('should render', () => {
+  it('should render heath metrics', () => {
     // arrange
-    // act
-    // assert
-    cy.findByText('Health Check');
-  });
-
-  it.skip('should set ciBuildNumber environment variable', () => {
-    // arrange
-    const buildNumber = process.env.CI_BUILD_NUMBER ?? 'not-set';
+    const buildNumber = process.env.CI_BUILD_NUMBER ?? 'set-in-ci-pipeline';
 
     // act
     // assert
     expect(Cypress.env('CI_BUILD_NUMBER')).to.equal(buildNumber);
-  });
-
-  it.skip('should show expected build number', () => {
-    // arrange
-    const buildNumber = process.env.CI_BUILD_NUMBER ?? 'not-set';
-
-    // act
-    // assert
+    cy.findByText('Health Check');
     cy.findByText(`BuildNumber: ${buildNumber}`);
   });
 });

@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react';
 
-import seedHealth from '../../core/msw/seed/seedHealth';
-import { AppWrapper as wrapper, mswMock } from '../../core/test.utils';
-import Health from '../../pages/health';
+import seedHealth from '../../../core/msw/seed/seedHealth';
+import { AppWrapper as wrapper, mswMock } from '../../../core/test.utils';
+import Health from '../Health';
 
 describe('health', () => {
   mswMock();
