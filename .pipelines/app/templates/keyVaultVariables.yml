@@ -6,10 +6,13 @@ parameters:
       - QA
       - Prod
 
+  - name: serviceConnection
+    type: string
+
 steps:
   - task: AzureKeyVault@2
     inputs:
-      connectedServiceName: $(serviceConnection)
+      connectedServiceName: ${{ parameters.serviceConnection }}
       keyVaultName: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}
       secretsFilter: 'appInsightsConnectionString, e2eUserName, e2eUserPassword, nextAuthSecret, githubClientId, githubSecret'
       runsAsPreJob: false

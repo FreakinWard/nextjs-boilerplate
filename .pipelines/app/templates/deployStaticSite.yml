@@ -64,6 +64,7 @@ jobs:
                 - template: keyVaultVariables.yml
                   parameters:
                     environmentType: ${{ parameters.environmentType }}
+                    serviceConnection: ${{ parameters.serviceConnection }}
 
                 - task: AzureCLI@2
                   displayName: Azure App References
