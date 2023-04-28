@@ -1,17 +1,17 @@
-import { Post } from '../../../../pages/api/posts';
+import { PostType } from '../../../../app/api/posts/route';
 
 interface Props {
   title: string;
-  posts: Post[];
+  posts: PostType[];
 }
 
 export default function Posts({ title, posts = [] }: Props) {
-  const PostRecord = ({ post }: { post: Post }) => <div>{`${post.id} - ${post.title}`}</div>;
+  const PostRecord = ({ post }: { post: PostType }) => <div>{`${post.id} - ${post.title}`}</div>;
 
   return (
     <div>
       <h2>{title}</h2>
-      {posts.map((post: Post) => (
+      {posts.map((post: PostType) => (
         <PostRecord key={post.id} post={post} />
       ))}
       <hr />
