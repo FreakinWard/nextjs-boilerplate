@@ -13,6 +13,7 @@
     "postinstall": "next build",
     "dev": "next dev",
     "build": "next build",
+    "build:analyze": "cross-env ANALYZE=true next build",
     "start": "next start",
     "start:prod": "node --require ./load-appInsights.js node_modules/next/dist/bin/next start",
     "start:insights": "node --require ./load-appinsights.js node_modules/next/dist/bin/next start",
@@ -33,7 +34,6 @@
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "pre-commit": "validate-branch-name && lint-staged",
-    "analyze": "cross-env ANALYZE=true next build",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook -o docs-build"
   },
