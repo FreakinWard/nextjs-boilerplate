@@ -76,6 +76,7 @@
     "babel-jest": "^29.5.0",
     "babel-loader": "^9.1.2",
     "cypress": "^12.7.0",
+    "encoding": "^0.1.13",
     "eslint-config-next": "13.2.3",
     "eslint-config-prettier": "^8.7.0",
     "eslint-formatter-table": "^7.32.1",

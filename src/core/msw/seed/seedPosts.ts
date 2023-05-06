@@ -1,6 +1,6 @@
 export default {
-  clientUrl: 'https://my-json-server.typicode.com/typicode/demo/posts',
-  serverUrl: '*/api/posts',
+  clientUrl: '*/api/posts',
+  serverUrl: 'https://my-json-server.typicode.com/typicode/demo/posts',
   data: [
     {
       id: 1,
