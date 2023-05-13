@@ -8,7 +8,7 @@ parameters:
 
   - name: slotName
     type: string
-    default: Production
+    default: ''
 
   - name: regions
     type: object
@@ -43,8 +43,24 @@ jobs:
         ${{ if parameters.manualApproval }}:
           dependsOn: jobManualApproval
         variables:
-          ciBuildNumber: $(Build.BuildNumber)x$(System.JobAttempt)
-          resourceGroupName: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}
+          - name: ciBuildNumber
+            value: $(Build.BuildNumber)x$(System.JobAttempt)
+
+          - name: resourceGroupName
+            value: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}
+
+          - name: appSlotName
+            ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+              value: '' # Production environment
+            ${{ else }}:
+              value: ${{ split(variables['Build.SourceBranchName'], '-')[0] }} # will take 98990 given branchName is 98990-deployment
+
+          - name: environmentBuildId
+            ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+              value: 'default' # Production environment
+            ${{ else }}:
+              value: ${{ split(lower(variables['Build.SourceBranchName']), '-')[0] }} # will take 98990 given branchName is 98990-deployment
+
         pool:
           vmImage: ubuntu-latest
         strategy:
@@ -75,17 +91,11 @@ jobs:
                     scriptLocation: inlineScript
                     inlineScript: |
                       APIKEY=$(az staticwebapp secrets list --resource-group $(resourceGroupName) --name $(resourceGroupName)-site | jq -r '.properties.apiKey')
-                      deployedAppUrl=$(az staticwebapp show --name $(resourceGroupName)-site | jq -r '.defaultHostname')
+                      deployedAppUrl=$(az staticwebapp environment list --name $(resourceGroupName)-site | jq -r 'map(select(.buildId =="$(environmentBuildId)"))[0] | .hostname')
 
                       if test -z "$APIKEY" 
                       then
                         echo "##vso[task.logissue type=error]Unable to locate azure resource"
-                        exit 1
-                      fi
-
-                      if test -z "$deployedAppUrl" 
-                      then
-                        echo "##vso[task.logissue type=error]Unable to locate deployed app url"
                         exit 1
                       fi
 
@@ -104,6 +114,7 @@ jobs:
                     app_location: '/' # App source code path
                     api_location: '' # Api source code path - optional
                     output_location: '.next' # Built app content directory - optional
+                    deployment_environment: $(appSlotName)
                   env:
                     APPLICATIONINSIGHTS_CONNECTION_STRING: $(appInsightsConnectionString)
                     CYPRESS_INSTALL_BINARY: 0
@@ -112,20 +123,33 @@ jobs:
                     NEXTAUTH_SECRET: $(nextAuthSecret)
                     NEXTAUTH_URL: $(taskAzureApp.deployedAppUrl)
 
-                - template: smokeTest.yml
-                  parameters:
-                    appUrl: $(taskAzureApp.deployedAppUrl)
-                    ciBuildNumber: $(ciBuildNumber)
+                - task: AzureCLI@2
+                  name: setDeploymentResults
+                  displayName: Set Deployed App References
+                  inputs:
+                    azureSubscription: ${{ parameters.serviceConnection }}
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      deployedAppUrl=$(az staticwebapp environment list --name $(resourceGroupName)-site | jq -r 'map(select(.buildId =="$(environmentBuildId)"))[0] | .hostname')
+
+                      echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]https://$deployedAppUrl"
+                      echo "##vso[task.setvariable variable=deployedBuildNumber;isOutput=true;]$(ciBuildNumber)"
 
                 - script: env | sort
                   displayName: Pipeline Environment
+
+                - template: smokeTest.yml
+                  parameters:
+                    appUrl: $(setDeploymentResults.deployedAppUrl)
+                    ciBuildNumber: $(ciBuildNumber)
 
       - job: jobDeployValidation${{ region }}
         displayName: E2E ${{ region }}-${{ parameters.slotName }}
         dependsOn: jobDeploy${{ region }}
         condition: and(succeeded(), eq('false', variables.skipE2eTests))
         variables:
-          deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.taskAzureApp.deployedAppUrl'] ]
+          deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedAppUrl'] ]
           deployedBuildNumber: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedBuildNumber'] ]
         steps:
           - script: env | sort
