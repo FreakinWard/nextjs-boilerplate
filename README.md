@@ -1,4 +1,4 @@
-[![Build Status](https://aaronward.visualstudio.com/nextjs-typescript-example/_apis/build/status/FreakinWard.nextjs-boilerplate?branchName=main)](https://aaronward.visualstudio.com/nextjs-typescript-example/_build/latest?definitionId=8&branchName=main)
+[![Build Status](https://dev.azure.com/aaronward/nextjs-boilerplate/_apis/build/status%2Fnextjs-boilerplate-release?branchName=main)](https://dev.azure.com/aaronward/nextjs-boilerplate/_build/latest?definitionId=27&branchName=main)
 [![codecov](https://codecov.io/gh/FreakinWard/nextjs-boilerplate/branch/main/graph/badge.svg?token=XL8EYC1YZP)](https://codecov.io/gh/FreakinWard/nextjs-boilerplate)
 [![CodeFactor](https://www.codefactor.io/repository/github/freakinward/nextjs-boilerplate/badge)](https://www.codefactor.io/repository/github/freakinward/nextjs-boilerplate)
 [![Maintainability](https://api.codeclimate.com/v1/badges/25a53970d9a620abcaf8/maintainability)](https://codeclimate.com/github/FreakinWard/nextjs-boilerplate/maintainability)
