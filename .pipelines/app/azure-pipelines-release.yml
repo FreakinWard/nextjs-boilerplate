@@ -49,20 +49,27 @@ stages:
     dependsOn: stageBuild
     condition: and(succeeded(), or(eq(variables.isCI, 'True'), eq(variables.isDevOnly, 'True'), eq(variables.isFullCI, 'True') ))
     jobs:
-      - template: templates/deploy.yml
+      - template: templates/deployStaticSite.yml
         parameters:
           environmentType: Dev
-          serviceConnection: $(azureSubscription)
-          slotName: staging
+          serviceConnection: $(serviceConnection)
           regions:
             - East
 
-      - template: templates/swapSlot.yml
-        parameters:
-          environmentType: Dev
-          serviceConnection: $(azureSubscription)
-          regions:
-            - East
+      # TODO: implement when using appService
+  #      - template: templates/deployAppService.yml
+  #        parameters:
+  #          environmentType: Dev
+  #          serviceConnection: $(serviceConnection)
+  #          regions:
+  #            - East
+  #
+  #      - template: templates/swapSlot.yml
+  #        parameters:
+  #          environmentType: Dev
+  #          serviceConnection: $(serviceConnection)
+  #          regions:
+  #            - East
 
   - stage: stageDeployQA
     displayName: QA
@@ -70,10 +77,10 @@ stages:
     #    condition: and(succeeded(), or(eq(variables.isCI, 'True'), eq(variables.isFullCI, 'True') ))
     condition: false #TODO: unmock
     jobs:
-      - template: templates/deploy.yml
+      - template: templates/deployAppService.yml
         parameters:
           environmentType: QA
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           slotName: staging
           regions:
             - East
@@ -81,7 +88,7 @@ stages:
       - template: templates/swapSlot.yml
         parameters:
           environmentType: QA
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           regions:
             - East
 
@@ -89,10 +96,10 @@ stages:
     displayName: Staging Prod
     dependsOn: stageDeployQA
     jobs:
-      - template: templates/deploy.yml
+      - template: templates/deployAppService.yml
         parameters:
           environmentType: Prod
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           slotName: staging
           regions:
             - East
@@ -105,6 +112,6 @@ stages:
         parameters:
           environmentType: Prod
           dependsOnDeployJob: false
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           regions:
             - East

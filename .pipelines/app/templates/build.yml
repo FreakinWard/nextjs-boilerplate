@@ -12,7 +12,10 @@ jobs:
 
       - template: npmInstall.yml
 
-      - script: npm run build
+      - script: npm run lint
+        displayName: App Lint
+
+      - script: npm run build:analyze
         displayName: App Build
 
       - script: npm run test:cover
@@ -40,7 +43,35 @@ jobs:
         condition: succeededOrFailed()
         inputs:
           reportDir: 'html-report/report.html'
-          tabName: Unit Tests
+          tabName: 'Unit Tests'
+
+      - task: PublishHtmlReport@1
+        displayName: Publish Integration Test Report
+        condition: succeededOrFailed()
+        inputs:
+          reportDir: 'cypress/reports/index.html'
+          tabName: 'Integration Tests'
+
+      - task: PublishHtmlReport@1
+        displayName: Publish Build Analysis - nodejs
+        condition: succeededOrFailed()
+        inputs:
+          reportDir: '.next/analyze/nodejs.html'
+          tabName: 'Build Analysis - nodejs'
+
+      - task: PublishHtmlReport@1
+        displayName: Publish Build Analysis - edge
+        condition: succeededOrFailed()
+        inputs:
+          reportDir: '.next/analyze/edge.html'
+          tabName: 'Build Analysis - edge'
+
+      - task: PublishHtmlReport@1
+        displayName: Publish Build Analysis - client
+        condition: succeededOrFailed()
+        inputs:
+          reportDir: '.next/analyze/client.html'
+          tabName: 'Build Analysis - client'
 
       - script: |
           mv .pipelines/app/.artifactignore ./
@@ -53,10 +84,3 @@ jobs:
           targetPath: $(System.DefaultWorkingDirectory)
           artifactType: 'pipeline'
           artifactName: $(buildPackageName)
-
-      - task: PublishHtmlReport@1
-        displayName: Publish Integration Test Report
-        condition: succeededOrFailed()
-        inputs:
-          reportDir: 'cypress/reports/index.html'
-          tabName: 'Integration Tests'

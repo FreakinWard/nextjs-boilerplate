@@ -37,7 +37,7 @@ stages:
     jobs:
       - template: templates/validate.yml
         parameters:
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           environmentTypes:
             - Dev
           regions:
@@ -45,7 +45,7 @@ stages:
 
       - template: templates/validate.yml
         parameters:
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           environmentTypes:
             - QA
           regions:
@@ -54,7 +54,7 @@ stages:
 
       - template: templates/validate.yml
         parameters:
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           environmentTypes:
             - Prod
           regions:
@@ -67,7 +67,7 @@ stages:
     jobs:
       - template: templates/deploy.yml
         parameters:
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           environmentTypes:
             - Dev
           regions:
@@ -81,7 +81,7 @@ stages:
     jobs:
       - template: templates/deploy.yml
         parameters:
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           environmentTypes:
             - QA
           regions:
@@ -94,7 +94,7 @@ stages:
     jobs:
       - template: templates/deploy.yml
         parameters:
-          serviceConnection: $(azureSubscription)
+          serviceConnection: $(serviceConnection)
           environmentTypes:
             - Prod
           regions:

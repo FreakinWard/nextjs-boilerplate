@@ -5,14 +5,15 @@
   "private": true,
   "description": "This repo serves at a boilerplate to help stand up a new nextjs app",
   "engines": {
-    "node": "~16",
-    "npm": "~8"
+    "node": "=16",
+    "npm": "=8"
   },
   "scripts": {
     "prepare": "husky install",
     "postinstall": "next build",
     "dev": "next dev",
     "build": "next build",
+    "build:analyze": "cross-env ANALYZE=true next build",
     "start": "next start",
     "start:prod": "node --require ./load-appInsights.js node_modules/next/dist/bin/next start",
     "start:insights": "node --require ./load-appinsights.js node_modules/next/dist/bin/next start",
@@ -33,7 +34,6 @@
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
     "pre-commit": "validate-branch-name && lint-staged",
-    "analyze": "cross-env ANALYZE=true next build",
     "storybook": "start-storybook -p 6006",
     "storybook:build": "build-storybook -o docs-build"
   },
@@ -41,11 +41,6 @@
     "@microsoft/applicationinsights-react-js": "^3.4.1",
     "@microsoft/applicationinsights-web": "^2.8.10",
     "@next/bundle-analyzer": "^13.2.3",
-    "@storybook/addon-actions": "^6.5.16",
-    "@storybook/addon-essentials": "^6.5.16",
-    "@storybook/addon-links": "^6.5.16",
-    "@storybook/react": "^6.5.16",
-    "@storybook/storybook-deployer": "^2.8.16",
     "@types/react": "^18.0.28",
     "applicationinsights": "^2.5.0",
     "cross-env": "^7.0.3",
@@ -66,6 +61,11 @@
   "devDependencies": {
     "@babel/core": "^7.21.0",
     "@next/eslint-plugin-next": "^13.2.3",
+    "@storybook/addon-actions": "^6.5.16",
+    "@storybook/addon-essentials": "^6.5.16",
+    "@storybook/addon-links": "^6.5.16",
+    "@storybook/react": "^6.5.16",
+    "@storybook/storybook-deployer": "^2.8.16",
     "@testing-library/cypress": "^9.0.0",
     "@testing-library/dom": "^9.0.0",
     "@testing-library/jest-dom": "^5.16.5",

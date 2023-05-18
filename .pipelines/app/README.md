@@ -44,14 +44,9 @@ Once the artifact has been deployed to Azure App Service, NPM modules are then i
 - runs unit tests, code coverage and publishes reports
 - runs mocked e2e tests
 
-[`deploy.yml`](/.pipelines/app/templates/deploy.yml)
+[`deployStaticSite.yml`](/.pipelines/app/templates/deployStaticSite.yml)
 
-- deploys the artifact to specified regions and/or slots
-- runs e2e tests against the instance
-
-[`swapSlot.yml`](/.pipelines/app/templates/swapSlot.yml)
-
-- swaps staging slot to production
+- deploys the artifact to a static site
 - runs e2e tests against the instance
 
 [`smokeTest.yml`](/.pipelines/app/templates/smokeTest.yml)
@@ -59,6 +54,18 @@ Once the artifact has been deployed to Azure App Service, NPM modules are then i
 - tests the deployed instance
 - validates the specific release is responding
 - expects `/api/system/health` to respond with the `ciBuildNumber`: ex: `20220204x1`
+
+### AppService specific templates
+
+[`deployAppService.yml`](/.pipelines/app/templates/deployAppService.yml)
+
+- deploys the artifact to specified appService regions and/or slots
+- runs e2e tests against the instance
+
+[`swapSlot.yml`](/.pipelines/app/templates/swapSlot.yml)
+
+- swaps staging slot to production
+- runs e2e tests against the instance
 
 ## Troubleshooting
 

@@ -11,6 +11,7 @@ html-report
 cypress/videos
 cypress/screenshots
 cypress/reports
+cypress.env.json
 
 # next.js
 /.next/

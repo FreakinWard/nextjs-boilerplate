@@ -1,0 +1,164 @@
+parameters:
+  - name: environmentType
+    type: string
+    values:
+      - Dev
+      - QA
+      - Prod
+
+  - name: slotName
+    type: string
+    default: ''
+
+  - name: regions
+    type: object
+    default:
+      - East
+
+  - name: serviceConnection
+    type: string
+
+  - name: manualApproval
+    type: boolean
+    default: false
+
+jobs:
+  - ${{ if parameters.manualApproval }}:
+      - job: jobManualApproval
+        displayName: Manual Approval
+        pool: server
+        steps:
+          - task: ManualValidation@0
+            timeoutInMinutes: 1
+            inputs:
+              instructions: |
+                ✅ Acceptance criteria is met
+                ✅ Regressions pass
+              onTimeout: 'reject'
+
+  - ${{ each region in parameters.regions }}:
+      - deployment: jobDeploy${{ region }}
+        displayName: Deploy ${{ region }}-${{ parameters.slotName }}
+        environment: ${{ parameters.environmentType }}
+        ${{ if parameters.manualApproval }}:
+          dependsOn: jobManualApproval
+        variables:
+          - name: ciBuildNumber
+            value: $(Build.BuildNumber)x$(System.JobAttempt)
+
+          - name: resourceGroupName
+            value: $(resourceGroupPrefix)-$(appName)-${{ parameters.environmentType }}-${{ region }}
+
+          - name: appSlotName
+            ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+              value: '' # Production environment
+            ${{ else }}:
+              value: ${{ split(variables['Build.SourceBranchName'], '-')[0] }} # will take 98990 given branchName is 98990-deployment
+
+          - name: environmentBuildId
+            ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+              value: 'default' # Production environment
+            ${{ else }}:
+              value: ${{ split(lower(variables['Build.SourceBranchName']), '-')[0] }} # will take 98990 given branchName is 98990-deployment
+
+        pool:
+          vmImage: ubuntu-latest
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: env | sort
+                  displayName: Pipeline Environment
+
+                - download: current
+                  artifact: $(buildPackageName)
+
+                - script: npm pkg set buildNumber=$(ciBuildNumber)
+                  displayName: Set BuildNumber
+                  workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
+
+                - template: keyVaultVariables.yml
+                  parameters:
+                    environmentType: ${{ parameters.environmentType }}
+                    serviceConnection: ${{ parameters.serviceConnection }}
+
+                - task: AzureCLI@2
+                  displayName: Azure App References
+                  name: taskAzureApp
+                  inputs:
+                    azureSubscription: ${{ parameters.serviceConnection }}
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      APIKEY=$(az staticwebapp secrets list --resource-group $(resourceGroupName) --name $(resourceGroupName)-site | jq -r '.properties.apiKey')
+                      deployedAppUrl=$(az staticwebapp environment list --name $(resourceGroupName)-site | jq -r 'map(select(.buildId =="$(environmentBuildId)"))[0] | .hostname')
+
+                      if test -z "$APIKEY" 
+                      then
+                        echo "##vso[task.logissue type=error]Unable to locate azure resource"
+                        exit 1
+                      fi
+
+                      echo "##vso[task.setvariable variable=apiKey;issecret=true]$APIKEY"
+                      echo "##vso[task.setvariable variable=deployedBuildNumber;isOutput=true;]$(ciBuildNumber)"
+                      echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]https://$deployedAppUrl"
+
+                - script: env | sort
+                  displayName: Pipeline Environment
+
+                - task: AzureStaticWebApp@0
+                  displayName: Azure Deploy
+                  inputs:
+                    workingDirectory: $(Pipeline.Workspace)/$(buildPackageName)
+                    azure_static_web_apps_api_token: $(apiKey)
+                    app_location: '/' # App source code path
+                    api_location: '' # Api source code path - optional
+                    output_location: '.next' # Built app content directory - optional
+                    deployment_environment: $(appSlotName)
+                  env:
+                    APPLICATIONINSIGHTS_CONNECTION_STRING: $(appInsightsConnectionString)
+                    CYPRESS_INSTALL_BINARY: 0
+                    GITHUB_ID: $(githubClientId)
+                    GITHUB_SECRET: $(githubSecret)
+                    NEXTAUTH_SECRET: $(nextAuthSecret)
+                    NEXTAUTH_URL: $(taskAzureApp.deployedAppUrl)
+
+                - task: AzureCLI@2
+                  name: setDeploymentResults
+                  displayName: Set Deployed App References
+                  inputs:
+                    azureSubscription: ${{ parameters.serviceConnection }}
+                    scriptType: bash
+                    scriptLocation: inlineScript
+                    inlineScript: |
+                      deployedAppUrl=$(az staticwebapp environment list --name $(resourceGroupName)-site | jq -r 'map(select(.buildId =="$(environmentBuildId)"))[0] | .hostname')
+
+                      echo "##vso[task.setvariable variable=deployedAppUrl;isOutput=true;]https://$deployedAppUrl"
+                      echo "##vso[task.setvariable variable=deployedBuildNumber;isOutput=true;]$(ciBuildNumber)"
+
+                - script: env | sort
+                  displayName: Pipeline Environment
+
+                - template: smokeTest.yml
+                  parameters:
+                    appUrl: $(setDeploymentResults.deployedAppUrl)
+                    ciBuildNumber: $(ciBuildNumber)
+
+      - job: jobDeployValidation${{ region }}
+        displayName: E2E ${{ region }}-${{ parameters.slotName }}
+        dependsOn: jobDeploy${{ region }}
+        condition: and(succeeded(), eq('false', variables.skipE2eTests))
+        variables:
+          deployedAppUrl: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedAppUrl'] ]
+          deployedBuildNumber: $[ dependencies.jobDeploy${{ region }}.outputs['jobDeploy${{ region }}.setDeploymentResults.deployedBuildNumber'] ]
+        steps:
+          - script: env | sort
+            displayName: Pipeline Environment
+
+          - template: npmInstall.yml
+
+          - template: e2eTest.yml
+            parameters:
+              region: ${{ region }}
+              deployedAppUrl: $(deployedAppUrl)
+              ciBuildNumber: $(deployedBuildNumber)
