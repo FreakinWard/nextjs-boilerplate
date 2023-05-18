@@ -1,5 +1,6 @@
 .artifactignore
 .deployment
+.editconfig
 .github
 .gitignore
 .husky
