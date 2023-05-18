@@ -60,7 +60,7 @@ jobs:
           tabName: 'Build Analysis - nodejs'
 
       - task: PublishHtmlReport@1
-        displayName: Publish Build Analysis - nodejs
+        displayName: Publish Build Analysis - edge
         condition: succeededOrFailed()
         inputs:
           reportDir: '.next/analyze/edge.html'
