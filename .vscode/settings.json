@@ -1,5 +1,4 @@
 {
-  "window.zoomLevel": 1,
   "workbench.iconTheme": "vscode-icons",
   "editor.codeActionsOnSave": {
     "source.fixAll": true
