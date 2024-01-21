@@ -5,8 +5,8 @@
   "private": true,
   "description": "This repo serves at a boilerplate to help stand up a new nextjs app",
   "engines": {
-    "node": "=16",
-    "npm": "=8"
+    "node": "=18",
+    "npm": "=9"
   },
   "scripts": {
     "prepare": "husky install",
