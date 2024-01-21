@@ -8,6 +8,9 @@
       <excludeFolder url="file://$MODULE_DIR$/out" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/.scannerwork" />
+      <excludeFolder url="file://$MODULE_DIR$/.swc" />
+      <excludeFolder url="file://$MODULE_DIR$/html-report" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

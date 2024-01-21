@@ -124,6 +124,18 @@ Tests are configured for both unit and integration tests. Unit tests are perform
 | [lint-staged](https://www.npmjs.com/package/lint-staged)                   | Ensure code is linted before committing to branch            |
 | [validate-branch-name](https://www.npmjs.com/package/validate-branch-name) | Ensures a branch is created before committing to master/main |
 
+## Library updates
+
+To more-easily update packages, use:
+
+```bash
+# first, install
+npm install -g npm-check-updates
+
+# use ncu
+ncu --interactive --format group
+```
+
 # Scripts
 
 ## Unit tests
