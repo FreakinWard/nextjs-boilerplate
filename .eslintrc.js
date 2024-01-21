@@ -3,9 +3,9 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: 'module',
-    project: './tsconfig.json'
+    project: './tsconfig.json',
   },
-  plugins: ['@typescript-eslint', 'simple-import-sort', 'prettier'],
+  plugins: ['@typescript-eslint', 'simple-import-sort', 'prettier', 'jest-formatting'],
   extends: [
     'plugin:deprecation/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
@@ -14,6 +14,7 @@ module.exports = {
     'next/core-web-vitals',
     'plugin:cypress/recommended',
     'plugin:prettier/recommended',
+    'plugin:jest-formatting/strict',
   ],
   rules: {
     'prettier/prettier': 'error', // Use our prettier.config.js file as source

@@ -14,6 +14,7 @@ describe('usePosts', () => {
 
     // assert
     expect(result.current.data).toBeUndefined();
+
     await waitFor(() => {
       expect(result.current.data).toEqual(seedPosts.data);
     });

@@ -14,6 +14,7 @@ describe('useHealth', () => {
 
     // assert
     expect(result.current.data).toBeUndefined();
+
     await waitFor(() => {
       expect(result.current.data).toEqual(seedHealth.data);
     });
