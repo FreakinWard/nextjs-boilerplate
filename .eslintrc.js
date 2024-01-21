@@ -1,7 +1,13 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
+    project: './tsconfig.json'
+  },
   plugins: ['@typescript-eslint', 'simple-import-sort', 'prettier'],
   extends: [
+    'plugin:deprecation/recommended',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:import/recommended',

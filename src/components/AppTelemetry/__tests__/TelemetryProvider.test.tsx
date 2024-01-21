@@ -3,6 +3,7 @@ import * as appInsightsWeb from '@microsoft/applicationinsights-web';
 import { renderHook } from '@testing-library/react';
 import Router from 'next/router';
 import * as nextAuth from 'next-auth/react';
+import { ReactNode } from 'react';
 
 import { TelemetryProvider, useTelemetry } from '../TelemetryProvider';
 
@@ -15,7 +16,7 @@ jest.mock('@microsoft/applicationinsights-web');
 describe('TelemetryProvider', () => {
   const componentMock = { title: 'titleValue' };
 
-  const wrapper = ({ children }: { children: JSX.Element }) => (
+  const wrapper = ({ children }: { children: ReactNode }) => (
     <TelemetryProvider router={Router} pageTitle={componentMock.title}>
       {children}
     </TelemetryProvider>

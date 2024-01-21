@@ -72,6 +72,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-formatter-table": "^7.32.1",
     "eslint-plugin-cypress": "^2.15.1",
+    "eslint-plugin-deprecation": "^2.0.0",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jest": "^27.6.3",
     "eslint-plugin-jsx-a11y": "^6.8.0",

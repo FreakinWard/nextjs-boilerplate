@@ -6,3 +6,5 @@ out
 
 # test
 coverage
+
+.eslintrc.js

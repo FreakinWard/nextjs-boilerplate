@@ -1,11 +1,12 @@
 import { render } from '@testing-library/react';
+import { ReactNode } from 'react';
 
 import AppHead from '../index';
 
 jest.mock('next/head', () => {
   return {
     __esModule: true,
-    default: ({ children }: { children: Array<JSX.Element> }) => {
+    default: ({ children }: { children: Array<ReactNode> }) => {
       return <>{children}</>;
     },
   };

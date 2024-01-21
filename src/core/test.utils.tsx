@@ -2,6 +2,7 @@ import { screen } from '@testing-library/react';
 import Router from 'next/router';
 import { Session } from 'next-auth';
 import * as nextAuth from 'next-auth/react';
+import { ReactNode } from 'react';
 
 import AppState from '../context/AppState';
 import { resetMswHandlers, setupMsw } from './msw';
@@ -25,7 +26,7 @@ export const AppWrapper = ({
   session = sessionMock,
   sessionStatus = 'authenticated',
 }: {
-  children: JSX.Element;
+  children: ReactNode;
   requireAuth?: boolean;
   sessionStatus?: string;
   session?: Session;
