@@ -38,11 +38,11 @@
     "storybook:build": "build-storybook -o docs-build"
   },
   "dependencies": {
-    "@microsoft/applicationinsights-react-js": "^17.0.2",
-    "@microsoft/applicationinsights-web": "^3.0.5",
+    "@microsoft/applicationinsights-react-js": "^17.0.3",
+    "@microsoft/applicationinsights-web": "^3.0.7",
     "@next/bundle-analyzer": "^13.5.6",
-    "@types/react": "^18.2.37",
-    "applicationinsights": "^2.9.0",
+    "@types/react": "^18.2.48",
+    "applicationinsights": "^2.9.2",
     "cross-env": "^7.0.3",
     "cypress-mochawesome-reporter": "^3.8.0",
     "cypress-multi-reporters": "^1.6.4",
