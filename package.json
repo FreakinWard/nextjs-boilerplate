@@ -33,9 +33,7 @@
     "test:e2e:docker": "docker run -it -v $PWD:/e2e -w /e2e cypress/included:9.2.0",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "pre-commit": "validate-branch-name && lint-staged",
-    "storybook": "start-storybook -p 6006",
-    "storybook:build": "build-storybook -o docs-build"
+    "pre-commit": "validate-branch-name && lint-staged"
   },
   "dependencies": {
     "@microsoft/applicationinsights-react-js": "^17.0.3",
@@ -61,11 +59,6 @@
   "devDependencies": {
     "@babel/core": "^7.23.7",
     "@next/eslint-plugin-next": "^14.1.0",
-    "@storybook/addon-actions": "^6.5.16",
-    "@storybook/addon-essentials": "^6.5.16",
-    "@storybook/addon-links": "^6.5.16",
-    "@storybook/react": "^6.5.16",
-    "@storybook/storybook-deployer": "^2.8.16",
     "@testing-library/cypress": "^9.0.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -117,11 +110,6 @@
     "singleQuote": true,
     "trailingComma": "es5",
     "arrowParens": "avoid"
-  },
-  "storybook-deployer": {
-    "gitUsername": "freakinward",
-    "gitEmail": "aaron.l.ward@gmail.com",
-    "commitMessage": "Deploy Storybook [skip ci]"
   },
   "validate-branch-name": {
     "pattern": "^(?!([mM]aster)|([mM]ain)$).*$",

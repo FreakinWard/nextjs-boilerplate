@@ -18,7 +18,6 @@ The purpose of this repo is to accelerate startup time when creating a new [Next
 - [Scripts](#scripts)
 - [IDE Configurations](#ide-configuration)
 - [Committing Changes](#committing-changes)
-- [Storybook](#storybook)
 
 # Getting Started
 
@@ -275,14 +274,4 @@ Should the need arise to ignore the hook, manually commit using `--no-verify`
 ```shell
 # Example
 git commit -m "commit message" --no-verify
-```
-
-# Storybook
-
-[Storybook](https://storybook.js.org/docs/react/get-started/introduction) is used to document common components and is [published here](https://freakinward.github.io/nextjs-boilerplate)
-
-Run locally
-
-```shell
-npm run storybook
 ```
