@@ -12,24 +12,39 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.17.x]
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
+    - run: |
+        git fetch --no-tags --depth=1 origin main
+        git checkout -b main
+        git checkout ${{ github.event.pull_request.head.sha }}
 
-    - name: Set up Node.js ${{ matrix.node-version }}
+    - name: Set up Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 18.17
+
+    - name: Cache node modules
+      id: cache-npm
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-node-modules
+      with:
+        path: ~/.npm
+        key: "${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}"
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+
+    - uses: jongwooo/next-cache@v1
+      name: Cache App Build
 
     - name: Install dependencies
-      run: npm ci
+      run: npm install
 
     - name: Run the tests
-      run: npm run test:cover
+      run: npm run test:cover:changed
 
 #    - name: Upload coverage to Codecov
 #      uses: codecov/codecov-action@v1
@@ -37,11 +52,28 @@ jobs:
 #        token: ${{ secrets.CODECOV_TOKEN }}
 #        fail_ci_if_error: true
 
-    - name: Upload coverage to Code Climate
-      if: always()
-      uses: paambaati/codeclimate-action@v2.7.5
-      env:
-        CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
-      with:
-        coverageLocations: ./coverage/lcov.info:lcov
+#    - name: Upload coverage to Code Climate
+#      if: always()
+#      uses: paambaati/codeclimate-action@v2.7.5
+#      env:
+#        CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
+#      with:
+#        coverageLocations: ./coverage/lcov.info:lcov
 
+    - name: Code Coverage Summary Report
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: './coverage/cobertura-coverage.xml'
+        badge: true
+        format: 'markdown'
+        output: 'both'
+
+    - name: Add Coverage PR Comment
+      uses: marocchino/sticky-pull-request-comment@v2
+      if: github.event_name == 'pull_request'
+      with:
+        recreate: true
+        path: code-coverage-results.md
+
+    - name: Write to Job Summary
+      run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
