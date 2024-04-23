@@ -12,18 +12,14 @@ jobs:
 
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [18.17.x]
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Set up Node.js ${{ matrix.node-version }}
+    - name: Set up Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: 18.17
 
     - name: Cache node modules
       id: cache-npm
@@ -38,18 +34,8 @@ jobs:
           ${{ runner.os }}-build-
           ${{ runner.os }}-
 
-    - name: Cache App Build
-      id: cache-nextjs-build
-      uses: actions/cache@v3
-      env:
-        cache-name: cache-node-modules
-      with:
-        path: ~/.next/cache
-        key: "${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}"
-        restore-keys: |
-          ${{ runner.os }}-build-${{ env.cache-name }}-
-          ${{ runner.os }}-build-
-          ${{ runner.os }}-
+    - uses: jongwooo/next-cache@v1
+      name: Cache App Build
 
     - name: Install dependencies
       run: npm install
