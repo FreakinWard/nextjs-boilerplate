@@ -37,11 +37,28 @@ jobs:
 #        token: ${{ secrets.CODECOV_TOKEN }}
 #        fail_ci_if_error: true
 
-    - name: Upload coverage to Code Climate
-      if: always()
-      uses: paambaati/codeclimate-action@v2.7.5
-      env:
-        CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
-      with:
-        coverageLocations: ./coverage/lcov.info:lcov
+#    - name: Upload coverage to Code Climate
+#      if: always()
+#      uses: paambaati/codeclimate-action@v2.7.5
+#      env:
+#        CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_TOKEN }}
+#      with:
+#        coverageLocations: ./coverage/lcov.info:lcov
 
+    - name: Code Coverage Summary Report
+      uses: irongut/CodeCoverageSummary@v1.3.0
+      with:
+        filename: './coverage/cobertura-coverage.xml'
+        badge: true
+        format: 'markdown'
+        output: 'both'
+
+    - name: Add Coverage PR Comment
+      uses: marocchino/sticky-pull-request-comment@v2
+      if: github.event_name == 'pull_request'
+      with:
+        recreate: true
+        path: code-coverage-results.md
+
+    - name: Write to Job Summary
+      run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
