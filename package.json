@@ -23,6 +23,7 @@
     "test": "jest",
     "test:report": "open html-report/report.html",
     "test:cover": "jest --coverage",
+    "test:cover:changed": "jest --coverage --changedSince=main",
     "test:cover:report": "open coverage/lcov-report/index.html",
     "test:e2e": "cypress run",
     "test:e2e:open": "cypress open",

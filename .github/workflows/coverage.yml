@@ -16,6 +16,12 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    - name: Git main Branch
+      run: |
+        git fetch --no-tags --depth=1 origin main
+        git checkout -b main
+        git checkout ${{ github.event.pull_request.head.sha }}
+
     - name: Set up Node.js
       uses: actions/setup-node@v1
       with:
@@ -41,7 +47,7 @@ jobs:
       run: npm install
 
     - name: Run the tests
-      run: npm run test:cover -- --changedSince=main
+      run: npm run test:cover:changed
 
 #    - name: Upload coverage to Codecov
 #      uses: codecov/codecov-action@v1
