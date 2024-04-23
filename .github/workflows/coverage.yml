@@ -15,12 +15,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-
-    - name: Git main Branch
-      run: |
-        git fetch --no-tags --depth=1 origin main
-        git checkout -b main
-        git checkout ${{ github.event.pull_request.head.sha }}
+    - run: git fetch --no-tags --depth=1 origin main
 
     - name: Set up Node.js
       uses: actions/setup-node@v1
