@@ -1,7 +1,7 @@
 {
   "workbench.iconTheme": "vscode-icons",
   "editor.codeActionsOnSave": {
-    "source.fixAll": true
+    "source.fixAll": "explicit"
   },
   "eslint.validate": [
     "typescript",
