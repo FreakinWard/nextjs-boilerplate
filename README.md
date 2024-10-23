@@ -21,6 +21,10 @@ The purpose of this repo is to accelerate startup time when creating a new [Next
 
 # Getting Started
 
+> NOTE: this project locks node to a specific version in support of [azure static web apps](https://learn.microsoft.com/en-us/azure/static-web-apps/languages-runtimes#api).
+>
+> Consider using [nvm](https://collabnix.com/how-to-install-and-configure-nvm-on-mac-os/) to help manage multiple versions of node.
+
 First, create an `.env` file with the following:
 
 ```dotenv
