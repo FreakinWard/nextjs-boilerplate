@@ -37,7 +37,6 @@ const setupMswServer = () => {
  *    });
  *  });
  *
- * @returns {void}
  */
 export default function mswSetupJest() {
   beforeAll(() => setupMswServer());
