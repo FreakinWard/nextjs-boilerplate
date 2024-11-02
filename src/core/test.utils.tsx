@@ -2,9 +2,9 @@ import { screen } from '@testing-library/react';
 import Router from 'next/router';
 import { Session } from 'next-auth';
 import * as nextAuth from 'next-auth/react';
+import { ReactNode } from 'react';
 
 import AppState from '../context/AppState';
-import { resetMswHandlers, setupMsw } from './msw';
 
 jest.mock('next/router', () => require('next-router-mock'));
 
@@ -25,7 +25,7 @@ export const AppWrapper = ({
   session = sessionMock,
   sessionStatus = 'authenticated',
 }: {
-  children: JSX.Element;
+  children: ReactNode;
   requireAuth?: boolean;
   sessionStatus?: string;
   session?: Session;
@@ -55,19 +55,6 @@ export const mockEnv = () => {
 
   afterAll(() => {
     process.env = OLD_ENV;
-  });
-};
-export const mswMock = () => {
-  let mswCleanup;
-
-  beforeAll(async () => {
-    mswCleanup = await setupMsw();
-  });
-
-  afterEach(() => resetMswHandlers());
-
-  afterAll(() => {
-    mswCleanup();
   });
 };
 

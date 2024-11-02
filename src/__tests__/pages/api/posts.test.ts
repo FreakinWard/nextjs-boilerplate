@@ -1,11 +1,11 @@
 import { testApiHandler } from 'next-test-api-route-handler';
 
+import mswSetupJest from '../../../core/msw/mswSetupJest';
 import seedPosts from '../../../core/msw/seed/seedPosts';
-import { mswMock } from '../../../core/test.utils';
 import posts, { PostsTypes } from '../../../pages/api/posts';
 
 describe('/api/posts', () => {
-  mswMock();
+  mswSetupJest();
 
   it('should render expected health data', async () => {
     // arrange

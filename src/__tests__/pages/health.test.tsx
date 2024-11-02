@@ -1,11 +1,12 @@
 import { render, screen } from '@testing-library/react';
 
+import mswSetupJest from '../../core/msw/mswSetupJest';
 import seedHealth from '../../core/msw/seed/seedHealth';
-import { AppWrapper as wrapper, mswMock } from '../../core/test.utils';
+import { AppWrapper as wrapper } from '../../core/test.utils';
 import Health from '../../pages/health';
 
 describe('health', () => {
-  mswMock();
+  mswSetupJest();
 
   it('should render expected health values', async () => {
     // arrange

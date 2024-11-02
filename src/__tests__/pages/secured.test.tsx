@@ -1,10 +1,11 @@
 import { render } from '@testing-library/react';
 
-import { AppWrapper as wrapper, getByTextContent, mswMock } from '../../core/test.utils';
+import mswSetupJest from '../../core/msw/mswSetupJest';
+import { AppWrapper as wrapper, getByTextContent } from '../../core/test.utils';
 import Secured from '../../pages/secured';
 
 describe('index', () => {
-  mswMock();
+  mswSetupJest();
 
   const tree = <Secured />;
 

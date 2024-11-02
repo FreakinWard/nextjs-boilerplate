@@ -1,11 +1,12 @@
 import { renderHook, waitFor } from '@testing-library/react';
 
+import mswSetupJest from '../../core/msw/mswSetupJest';
 import seedHealth from '../../core/msw/seed/seedHealth';
-import { AppWrapper as wrapper, mswMock } from '../../core/test.utils';
+import { AppWrapper as wrapper } from '../../core/test.utils';
 import useHealth from '../useHealth';
 
 describe('useHealth', () => {
-  mswMock();
+  mswSetupJest();
 
   it('should do return seeded posts', async () => {
     // arrange

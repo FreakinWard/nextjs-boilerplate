@@ -1,12 +1,13 @@
 import { render, screen } from '@testing-library/react';
 
+import mswSetupJest from '../../core/msw/mswSetupJest';
 import seedPosts from '../../core/msw/seed/seedPosts';
-import { AppWrapper as wrapper, mswMock } from '../../core/test.utils';
+import { AppWrapper as wrapper } from '../../core/test.utils';
 import Home, { getStaticProps } from '../../pages';
 import { Post } from '../../pages/api/posts';
 
 describe('index', () => {
-  mswMock();
+  mswSetupJest();
 
   const posts: Post[] = [
     {
