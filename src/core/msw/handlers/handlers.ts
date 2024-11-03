@@ -1,8 +1,8 @@
 import { rest } from 'msw';
 
-import seedAuth from './seed/seedAuth';
-import seedHealth from './seed/seedHealth';
-import seedPosts from './seed/seedPosts';
+import seedAuth from '../seed/seedAuth';
+import seedHealth from '../seed/seedHealth';
+import seedPosts from '../seed/seedPosts';
 
 const mockHandler = (statusText = null, statusCode = 200) => {
   return async (req, res, ctx) => {
