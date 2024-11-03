@@ -1,6 +1,6 @@
-import { handleRestGet, handleRestGetError, handleRestPost } from '../handlers/util/restHandlers';
+import { handleRestError, handleRestGet, handleRestPost } from '../handlers/util/restHandlers';
 import { server } from '../server';
-import { SeedRest } from '../types';
+import { HandleErrorOptions, SeedRest } from '../types';
 
 export const genericError = {
   message: '400: Bad Request - mockGraphqlError',
@@ -76,23 +76,35 @@ export const mockRestPost = (seed: SeedRest<unknown>) => {
 };
 
 /**
- * This method is used to mock graphql query errors within tests.
+ * This method is used to mock rest request errors within tests.
  *
  * @param url
- * @param error
+ * @param options
  *
  * @example With generic error
- *  mockGraphqlQueryError(seedEntity.queryName);
+ *  mockRestError(url);
  *
  * @example With custom error
- *  const customError = { message: 'custom error message' };
- *  mockGraphqlQueryError(seedEntity.queryName, customError);
+ * const customError = { message: 'custom error message' };
+ *
+ * const errorOptions = {
+ *    method: 'POST',
+ *    error: customError,
+ * };
+ *
+ * mockRestError(url, errorOptions);
  *
  * @example Within a test
  * it('should return expected error when request fails', () => {
  *    // arrange
  *    const customError = { message: 'custom error message' };
- *    mockGraphqlQueryError(seedEntity.queryName, customError);
+ *
+ *    const errorOptions = {
+ *      method: 'POST',
+ *      error: customError,
+ *    };
+ *
+ *    mockRestError(url, errorOptions);
  *
  *    // act
  *    const result = renderHook(() => useMyEntity());
@@ -102,46 +114,18 @@ export const mockRestPost = (seed: SeedRest<unknown>) => {
  *  });
  *
  */
-export const mockRestGetError = (url: string, error?: object) => {
+export const mockRestError = (url: string, options: HandleErrorOptions) => {
   // hide the expected console error when the http request fails
   jest.spyOn(console, 'error').mockImplementation();
 
-  const mockErrors = [error ?? genericError];
+  const mockErrors = [options.error ?? genericError];
+  const method = options.method ?? 'GET';
+  const statusCode = options.statusCode ?? 400;
 
-  server.use(handleRestGetError(url, mockErrors));
-};
-/**
- * This method is used to mock graphql query errors within tests.
- *
- * @param url
- * @param error
- *
- * @example With generic error
- *  mockGraphqlQueryError(seedEntity.queryName);
- *
- * @example With custom error
- *  const customError = { message: 'custom error message' };
- *  mockGraphqlQueryError(seedEntity.queryName, customError);
- *
- * @example Within a test
- * it('should return expected error when request fails', () => {
- *    // arrange
- *    const customError = { message: 'custom error message' };
- *    mockGraphqlQueryError(seedEntity.queryName, customError);
- *
- *    // act
- *    const result = renderHook(() => useMyEntity());
- *
- *    // assert
- *    expect(result.error).toEqual(customError);
- *  });
- *
- */
-export const mockRestPostError = (url: string, error?: object) => {
-  // hide the expected console error when the http request fails
-  jest.spyOn(console, 'error').mockImplementation();
+  const errorOptions = {
+    method,
+    statusCode,
+  };
 
-  const mockErrors = [error ?? genericError];
-
-  server.use(handleRestGetError(url, mockErrors));
+  server.use(handleRestError(url, mockErrors, errorOptions));
 };

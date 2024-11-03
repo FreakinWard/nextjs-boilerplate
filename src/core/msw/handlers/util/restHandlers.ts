@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 
-import { SeedData, SeedRest } from '../../types';
+import { HandleErrorOptions, SeedData, SeedRest } from '../../types';
 
 const createRestDataResolver = (data: SeedData, statusCode = 200) => {
   return async (_req, res, ctx) => {
@@ -100,39 +100,40 @@ export const handleRestPatch = <T>({ url, data }: SeedRest<T>, statusCode = 200)
 export const mockPassThroughPost = (url: string) => rest.post(url, req => req.passthrough());
 
 /**
- * Returns a msw handler for a REST GET error request
+ * Returns a msw handler for a REST error request.
+ *
+ * NOTE: Use `mockRestError` to mock errors within tests.
+ *
  *
  * [msw docs: Response Resolver](https://v1.mswjs.io/docs/basics/response-resolver#examples)
  *
+ *
  * @param url - A seed containing the url and data for the failed request.
  * @param mockErrors - The errors to mock for the failed request.
- * @param statusCode - The status code to return for the failed request.
+ * @param options - Options to configure the request.
  *
  * @returns A msw handler to mock a GET error request.
  *
- * @example
- * handleRestGetError(seedEntity);
  */
-export const handleRestGetError = (url: string, mockErrors: object[], statusCode = 400) => {
-  return rest.get(url, createErrorResolver(mockErrors, statusCode));
-};
+export const handleRestError = (
+  url: string,
+  mockErrors: object[],
+  options?: HandleErrorOptions
+) => {
+  const statusCode = options?.statusCode ?? 400;
 
-/**
- * Returns a msw handler for a REST POST error request.
- *
- * NOTE: Use `mockRestPostError` to mock errors within tests.
- *
- *
- * [msw docs: Response Resolver](https://v1.mswjs.io/docs/basics/response-resolver#examples)
- *
- *
- * @param url - A seed containing the url and data for the failed request.
- * @param mockErrors - The errors to mock for the failed request.
- * @param statusCode - The status code to return for the failed request.
- *
- * @returns A msw handler to mock a GET error request.
- *
- */
-export const handleRestPostError = (url: string, mockErrors: object[], statusCode = 400) => {
-  return rest.post(url, createErrorResolver(mockErrors, statusCode));
+  const resolver = createErrorResolver(mockErrors, statusCode);
+
+  switch (options?.method) {
+    case 'GET':
+      return rest.get(url, resolver);
+    case 'POST':
+      return rest.post(url, resolver);
+    case 'PUT':
+      return rest.put(url, resolver);
+    case 'PATCH':
+      return rest.patch(url, resolver);
+    default:
+      return rest.get(url, resolver);
+  }
 };

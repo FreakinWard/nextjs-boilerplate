@@ -5,10 +5,9 @@ import { Post } from '../../../pages/api/posts';
 import { renderHookQuery } from '../../testMethods/hookMethods';
 import {
   genericError,
+  mockRestError,
   mockRestGet,
-  mockRestGetError,
   mockRestPost,
-  mockRestPostError,
 } from '../mockRequests/mockRestRequests';
 import mswSetupJest from '../mswSetupJest';
 import { seedPostsEmpty, seedPostsSingle } from '../seed/seedPosts';
@@ -26,7 +25,7 @@ describe('msw', () => {
 
   const usePostHook = () => useTestHarness('POST');
 
-  const methodTheories = [{ method: 'GET' }, { method: 'POST' }];
+  const methodTheories: { method: Method }[] = [{ method: 'GET' }, { method: 'POST' }];
 
   const executeHookMethod = async (method: string) => {
     switch (method) {
@@ -81,22 +80,14 @@ describe('msw', () => {
         { expected: 'custom error', when: 'custom error is provided', error: customError },
       ];
 
-      const mockRestMethod = (method: string, error?: object) => {
-        const url = '*/posts';
-
-        switch (method) {
-          case 'GET':
-            mockRestGetError(url, error);
-            break;
-          case 'POST':
-            mockRestPostError(url, error);
-            break;
-        }
-      };
-
-      it.each(errorTheories)('should return $expected when $when', async () => {
+      it.each(errorTheories)('should return $expected when $when', async errorTheory => {
         // arrange
-        mockRestMethod(methodTheory.method);
+        const errorOptions = {
+          method: methodTheory.method,
+          error: errorTheory.error,
+        };
+
+        mockRestError(url, errorOptions);
 
         // act
         const { result } = await executeHookMethod(methodTheory.method);
