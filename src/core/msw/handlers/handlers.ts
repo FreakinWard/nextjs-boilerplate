@@ -3,10 +3,10 @@ import { rest } from 'msw';
 import seedAuth from '../seed/seedAuth';
 import seedHealth from '../seed/seedHealth';
 import seedPosts from '../seed/seedPosts';
-import { handleRestGet } from './util/restHandlers';
+import { handleRestGet, handleRestPost } from './util/restHandlers';
 
 const mockHandler = (statusText = null, statusCode = 200) => {
-  return async (req, res, ctx) => {
+  return async (_req, res, ctx) => {
     return res(ctx.status(statusCode, statusText), ctx.json(statusText));
   };
 };
@@ -33,7 +33,6 @@ export default [
 
   // app
   handleRestGet(seedPosts),
-  // mockRequestGet(seedPosts.clientUrl, seedPosts.data),
-  // mockRequestGet(seedPosts.serverUrl, seedPosts.data),
+  handleRestPost(seedPosts),
   mockRequestGet(seedHealth.clientUrl, seedHealth.data),
 ];
