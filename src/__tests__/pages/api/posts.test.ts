@@ -7,7 +7,7 @@ import posts, { PostsTypes } from '../../../pages/api/posts';
 describe('/api/posts', () => {
   mswSetupJest();
 
-  it('should render expected health data', async () => {
+  it('should render expected posts data', async () => {
     // arrange
     const handler = posts;
     const expected = seedPosts.data;

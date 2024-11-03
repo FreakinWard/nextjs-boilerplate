@@ -3,6 +3,7 @@ import { rest } from 'msw';
 import seedAuth from '../seed/seedAuth';
 import seedHealth from '../seed/seedHealth';
 import seedPosts from '../seed/seedPosts';
+import { handleRestGet } from './util/restHandlers';
 
 const mockHandler = (statusText = null, statusCode = 200) => {
   return async (req, res, ctx) => {
@@ -31,7 +32,8 @@ export default [
   mockRequestGet('*/api/auth/providers', seedAuth.providers),
 
   // app
-  mockRequestGet(seedPosts.clientUrl, seedPosts.data),
-  mockRequestGet(seedPosts.serverUrl, seedPosts.data),
+  handleRestGet(seedPosts),
+  // mockRequestGet(seedPosts.clientUrl, seedPosts.data),
+  // mockRequestGet(seedPosts.serverUrl, seedPosts.data),
   mockRequestGet(seedHealth.clientUrl, seedHealth.data),
 ];
