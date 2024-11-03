@@ -1,38 +1,32 @@
-import { rest } from 'msw';
-
-import seedAuth from '../seed/seedAuth';
+import { seedAuthProviders, seedAuthSession } from '../seed/seedAuth';
 import seedHealth from '../seed/seedHealth';
+import seedMswDemo from '../seed/seedMswDemo';
 import seedPosts from '../seed/seedPosts';
-import { handleRestGet, handleRestPost } from './util/restHandlers';
-
-const mockHandler = (statusText = null, statusCode = 200) => {
-  return async (_req, res, ctx) => {
-    return res(ctx.status(statusCode, statusText), ctx.json(statusText));
-  };
-};
-
-const mockRequestGet = (url, responseData, statusCode = 200) => {
-  return rest.get(url, mockHandler(responseData, statusCode));
-};
-
-export const mockPassThroughPost = (url: string) => rest.post(url, req => req.passthrough());
-export const mockPassThroughGet = (url: string) => rest.get(url, req => req.passthrough());
+import {
+  handlePassThroughGet,
+  handlePassThroughPost,
+  handleRestGet,
+  handleRestPost,
+} from './util/restHandlers';
 
 export default [
   // app - expected pass through
-  mockPassThroughPost('*/track'),
-  mockPassThroughPost('*/QuickPulseService.svc/post'),
+  handlePassThroughPost('*/track'),
+  handlePassThroughPost('*/QuickPulseService.svc/post'),
 
-  mockPassThroughGet('*.svg'),
-  mockPassThroughGet('*.ico'),
-  mockPassThroughGet('/_next/*'),
+  handlePassThroughGet('*.svg'),
+  handlePassThroughGet('*.ico'),
+  handlePassThroughGet('/_next/*'),
 
   // auth
-  mockRequestGet('*/api/auth/session', seedAuth.session),
-  mockRequestGet('*/api/auth/providers', seedAuth.providers),
+  handleRestGet(seedAuthSession),
+  handleRestGet(seedAuthProviders),
 
   // app
   handleRestGet(seedPosts),
-  handleRestPost(seedPosts),
-  mockRequestGet(seedHealth.clientUrl, seedHealth.data),
+  handleRestGet(seedHealth),
+
+  // msw tests
+  handleRestGet(seedMswDemo),
+  handleRestPost(seedMswDemo),
 ];

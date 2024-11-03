@@ -50,38 +50,20 @@ export const handleRestPost = <T>({ url, data }: SeedRest<T>, statusCode = 200) 
 };
 
 /**
- * Returns a msw handler for a REST Put request
+ * Returns a msw handler for an expected pass through request
  *
- * [msw docs: Response Resolver](https://v1.mswjs.io/docs/basics/response-resolver#examples)
+ * Use this when msw should not intercept a request
  *
- * @param seed - A seed containing the url and data for the mocked request.
- * @param statusCode - The status code to return for the mocked request.
- * @returns A msw handler to mock a Post request.
+ * [msw docs: Pass Through](https://v1.mswjs.io/docs/basics/response-resolver#conditional-response)
  *
  * @example
- * handleRestPut(seedEntity);
+ *  handlePassThroughGet('*.svg')
+ *  handlePassThroughGet('/_next/*')
+ *
+ * @returns A msw handler to allow a request to resolve without mocking.
  *
  */
-export const handleRestPut = <T>({ url, data }: SeedRest<T>, statusCode = 200) => {
-  return rest.put(url, createRestDataResolver(data, statusCode));
-};
-
-/**
- * Returns a msw handler for a REST Patch request
- *
- * [msw docs: Response Resolver](https://v1.mswjs.io/docs/basics/response-resolver#examples)
- *
- * @param seed - A seed containing the url and data for the mocked request.
- * @param statusCode - The status code to return for the mocked request.
- * @returns A msw handler to mock a Post request.
- *
- * @example
- * handleRestPatch(seedEntity);
- *
- */
-export const handleRestPatch = <T>({ url, data }: SeedRest<T>, statusCode = 200) => {
-  return rest.put(url, createRestDataResolver(data, statusCode));
-};
+export const handlePassThroughGet = (url: string) => rest.post(url, req => req.passthrough());
 
 /**
  * Returns a msw handler for an expected pass through request
@@ -91,13 +73,12 @@ export const handleRestPatch = <T>({ url, data }: SeedRest<T>, statusCode = 200)
  * [msw docs: Pass Through](https://v1.mswjs.io/docs/basics/response-resolver#conditional-response)
  *
  * @example
- *  mockPassThroughPost('*.svg')
- *  mockPassThroughGet('/_next/*')
+ *  handlePassThroughPost('/track/*')
  *
  * @returns A msw handler to allow a request to resolve without mocking.
  *
  */
-export const mockPassThroughPost = (url: string) => rest.post(url, req => req.passthrough());
+export const handlePassThroughPost = (url: string) => rest.post(url, req => req.passthrough());
 
 /**
  * Returns a msw handler for a REST error request.
