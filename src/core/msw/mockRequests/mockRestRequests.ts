@@ -1,7 +1,6 @@
-import { handleGraphqlQuery } from '../handlers/util/graphqlHandlers';
-import { handleRestGet, handleRestGetError } from '../handlers/util/restHandlers';
+import { handleRestGet, handleRestGetError, handleRestPost } from '../handlers/util/restHandlers';
 import { server } from '../server';
-import { SeedGraphQL, SeedRest } from '../types';
+import { SeedRest } from '../types';
 
 export const genericError = {
   message: '400: Bad Request - mockGraphqlError',
@@ -72,8 +71,8 @@ export const mockRestGet = (seed: SeedRest<unknown>) => {
  *  });
  *
  */
-export const mockRestPost = (seed: SeedGraphQL<unknown, unknown>) => {
-  server.use(handleGraphqlQuery(seed));
+export const mockRestPost = (seed: SeedRest<unknown>) => {
+  server.use(handleRestPost(seed));
 };
 
 /**
