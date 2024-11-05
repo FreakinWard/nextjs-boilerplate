@@ -1,7 +1,9 @@
 import { seedAuthProviders, seedAuthSession } from '../seed/seedAuth';
 import seedHealth from '../seed/seedHealth';
+import seedLaunches from '../seed/seedLaunches';
 import seedMswDemo from '../seed/seedMswDemo';
 import seedPosts from '../seed/seedPosts';
+import { handleGraphqlQuery } from './util/graphqlHandlers';
 import {
   handlePassThroughGet,
   handlePassThroughPost,
@@ -25,6 +27,7 @@ export default [
   // app
   handleRestGet(seedPosts),
   handleRestGet(seedHealth),
+  handleGraphqlQuery(seedLaunches),
 
   // msw tests
   handleRestGet(seedMswDemo),
