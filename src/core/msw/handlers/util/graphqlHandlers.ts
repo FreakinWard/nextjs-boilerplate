@@ -5,14 +5,11 @@ import { SeedGraphQL, SeedGraphQLDynamic, SeedGraphQLMutation } from '../../type
 
 type GraphqlHandler = GraphQLHandler<GraphQLRequest<GraphQLVariables>>;
 
-// NOTE: This assumes we communicate with a single graphql resource.
 export const graphqlUrl = '*/graphql';
 
 const createGraphqlDataResolver = async (seed: SeedGraphQL) => {
-  const responseData = seed.graphQLResponse;
-
   return (_req, res, ctx) => {
-    return res(ctx.data(responseData));
+    return res(ctx.data(seed.graphQLResponse));
   };
 };
 
