@@ -2,6 +2,7 @@ import styles from '../../../../styles/Home.module.css';
 import usePosts from '../../../hooks/usePosts';
 import { Post } from '../../../pages/api/posts';
 import InformationBlock from './InformationBlock';
+import Launches from './Launches';
 import Posts from './Posts';
 
 interface Props {
@@ -19,6 +20,10 @@ export default function RenderExamples({ posts }: Props) {
 
       <div className={styles.card}>
         <Posts title="Client render" posts={clientPosts} />
+      </div>
+
+      <div className={styles.card}>
+        <Launches title="Launches" />
       </div>
 
       <InformationBlock

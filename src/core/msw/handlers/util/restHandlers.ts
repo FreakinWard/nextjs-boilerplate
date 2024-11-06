@@ -63,7 +63,7 @@ export const handleRestPost = <T>({ url, data }: SeedRest<T>, statusCode = 200) 
  * @returns A msw handler to allow a request to resolve without mocking.
  *
  */
-export const handlePassThroughGet = (url: string) => rest.post(url, req => req.passthrough());
+export const handlePassThroughGet = (url: string) => rest.get(url, req => req.passthrough());
 
 /**
  * Returns a msw handler for an expected pass through request

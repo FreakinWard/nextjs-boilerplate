@@ -4,13 +4,13 @@ import { QueryKey, useQuery, UseQueryOptions, UseQueryResult } from 'react-query
 import graphQLRequest from '../core/utils/graphqlRequest';
 import useEnvVar from './useEnvVar';
 
-interface Props extends UseQueryOptions {
+interface Props<T> extends UseQueryOptions {
   queryKey: QueryKey;
   url?: string;
   graphQuery: string;
   enabled?: boolean;
   variables?: Variables;
-  select?: (data: unknown) => unknown;
+  select?: (data: T) => unknown;
 }
 
 export default function useGraphQl<T>({
@@ -20,14 +20,16 @@ export default function useGraphQl<T>({
   select,
   variables,
   ...rest
-}: Props) {
+}: Props<T>) {
   const { spaceXUrl } = useEnvVar();
+  const url = `${spaceXUrl}/graphql`;
 
   const queryObject = {
     queryKey,
     enabled,
     select,
-    queryFn: () => graphQLRequest(spaceXUrl, graphQuery, variables),
+    queryFn: () => graphQLRequest(url, graphQuery, variables),
+    // queryFn: () => graphqlRequestFetch<T>(spaceXUrl, graphQuery, variables),
     ...rest,
   };
 

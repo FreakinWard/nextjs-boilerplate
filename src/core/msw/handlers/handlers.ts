@@ -13,6 +13,7 @@ import {
 
 export default [
   // app - expected pass through
+  handlePassThroughPost('*fonts.gstatic.com/*'),
   handlePassThroughPost('*/track'),
   handlePassThroughPost('*/QuickPulseService.svc/post'),
 
@@ -27,6 +28,7 @@ export default [
   // app
   handleRestGet(seedPosts),
   handleRestGet(seedHealth),
+
   handleGraphqlQuery(seedLaunches),
 
   // msw tests

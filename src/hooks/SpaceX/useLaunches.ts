@@ -21,16 +21,19 @@ const graphQuery = gql`
   }
 `;
 
+export const adapter = (data: LaunchQuery) => data.launches;
+
 export default function useLaunches() {
   const limit = 2;
   const offset = 0;
 
-  return useGraphQl({
+  return useGraphQl<Launch[]>({
     queryKey: ['launches'],
     graphQuery,
     variables: {
       limit,
       offset,
     },
+    select: adapter,
   });
 }
