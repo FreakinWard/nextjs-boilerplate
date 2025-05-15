@@ -1,0 +1,37 @@
+services:
+  # Development service
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: deps
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=development
+    #      - NEXT_PUBLIC_API_MOCKING=enabled // NOTE: enable this to mock api requests using msw
+    command: npm run dev
+    restart: unless-stopped
+
+  # Production service
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      - NODE_ENV=production
+      # - NEXT_PUBLIC_API_MOCKING=enabled // NOTE: enable this to mock api requests using msw
+      # - APPLICATIONINSIGHTS_CONNECTION_STRING=your_connection_string // NOTE: add this to enable app insights
+    restart: unless-stopped
+    # Uncomment and adjust if you need a healthcheck
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://0.0.0.0:3000']
+      interval: 30s
+      timeout: 10s
+      retries: 3

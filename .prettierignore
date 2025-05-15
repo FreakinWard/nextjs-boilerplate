@@ -1,6 +1,8 @@
 .artifactignore
 .deployment
 .editconfig
+.eslintignore
+.dockerignore
 .github
 .gitignore
 .husky
@@ -12,6 +14,7 @@
 .vscode
 coverage
 cypress/reports/
+Dockerfile
 html-report
 node_modules
 out
