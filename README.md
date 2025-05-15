@@ -12,6 +12,8 @@ The purpose of this repo is to accelerate startup time when creating a new [Next
 ## Contents
 
 - [Getting Started](#getting-started)
+  - [Local Development](#local-development)
+  - [Docker Development](#docker-development)
 - [Directory Structure](#directory-structure)
 - [Features](#features)
 - [Libraries](#libraries)
@@ -24,6 +26,60 @@ The purpose of this repo is to accelerate startup time when creating a new [Next
 > NOTE: this project locks node to a specific version in support of [azure static web apps](https://learn.microsoft.com/en-us/azure/static-web-apps/languages-runtimes#api).
 >
 > Consider using [nvm](https://collabnix.com/how-to-install-and-configure-nvm-on-mac-os/) to help manage multiple versions of node.
+
+## Local Development
+
+### Prerequisites
+
+This project requires Node.js 18.17.x and npm 9.x as specified in the package.json. You can manage these requirements using either Volta or nvm:
+
+#### Using Volta
+
+[Volta](https://volta.sh/) is a JavaScript tool manager that automatically uses the right versions of Node.js and npm for each project.
+
+1. Install Volta:
+
+   ```bash
+   # macOS and Linux
+   curl https://get.volta.sh | bash
+
+   # Windows
+   # Download and run the installer from https://volta.sh
+   ```
+
+2. Install Node.js and npm through Volta:
+
+   ```bash
+   volta install node@18.17
+   ```
+
+3. Navigate to the project directory, and Volta will automatically use the correct versions.
+
+#### Using nvm
+
+[nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) allows you to install and switch between multiple versions of Node.js.
+
+1. Install nvm:
+
+   ```bash
+   # macOS and Linux
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+
+   # Or using Homebrew on macOS
+   brew install nvm
+   ```
+
+2. Install and use the required Node.js version:
+
+   ```bash
+   nvm install 18.17
+   nvm use 18.17
+   ```
+
+3. Install the required npm version:
+   ```bash
+   npm install -g npm@9
+   ```
 
 First, create an `.env` file with the following:
 
@@ -53,6 +109,25 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to start.
+
+## Docker Development
+
+This project includes Docker configuration for both development and production environments.
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
+### Development Environment
+
+To start the development environment with Docker:
+
+```bash
+docker compose up dev
+```
+
+For more detailed information about Docker setup, see [DOCKER.md](./DOCKER.md).
 
 # Directory Structure
 
