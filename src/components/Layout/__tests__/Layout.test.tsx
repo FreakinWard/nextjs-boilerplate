@@ -1,4 +1,6 @@
 import { render, screen } from '@testing-library/react';
+import { SessionProvider } from 'next-auth/react';
+import React from 'react';
 
 import Layout from '../index';
 
@@ -7,26 +9,29 @@ describe('Layout', () => {
     // arrange
     const Component = () => <>child-component</>;
     const tree = (
-      <Layout>
-        <Component />
-      </Layout>
+      <SessionProvider session={null}>
+        <Layout>
+          <Component />
+        </Layout>
+      </SessionProvider>
     );
 
     // act
     render(tree);
 
     // assert
-    screen.getByText('Welcome to');
-    screen.getByText('Next.js!');
+    screen.getByText('NextJs');
   });
 
   it('should render Footer', () => {
     // arrange
     const Component = () => <>child-component</>;
     const tree = (
-      <Layout>
-        <Component />
-      </Layout>
+      <SessionProvider session={null}>
+        <Layout>
+          <Component />
+        </Layout>
+      </SessionProvider>
     );
 
     // act

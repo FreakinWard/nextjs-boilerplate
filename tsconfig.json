@@ -14,8 +14,9 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": false,
-    "target": "es2017"
+    "target": "es2017",
+    "types": ["jest", "@testing-library/jest-dom"],
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules", "cypress.config.ts"]
+  "exclude": ["node_modules", "cypress.config.ts"],
 }
