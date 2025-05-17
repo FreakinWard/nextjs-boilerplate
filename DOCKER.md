@@ -43,13 +43,13 @@ To build and push the Docker image to Digital Ocean Container Registry:
 1. Build the production image:
 
    ```bash
-   docker build -t registry.digitalocean.com/your-registry/nextjs-boilerplate:latest .
+   docker build -t registry.digitalocean.com/your-registry/hey-margot-ui:latest .
    ```
 
 2. Push the image to Digital Ocean:
 
    ```bash
-   docker push registry.digitalocean.com/your-registry/nextjs-boilerplate:latest
+   docker push registry.digitalocean.com/your-registry/hey-margot-ui:latest
    ```
 
 3. Deploy using the Digital Ocean App Platform or Kubernetes.

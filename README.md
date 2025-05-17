@@ -1,11 +1,6 @@
-[![Build Status](https://dev.azure.com/aaronward/nextjs-boilerplate/_apis/build/status%2Fnextjs-boilerplate-release?branchName=main)](https://dev.azure.com/aaronward/nextjs-boilerplate/_build/latest?definitionId=27&branchName=main)
-[![codecov](https://codecov.io/gh/FreakinWard/nextjs-boilerplate/branch/main/graph/badge.svg?token=XL8EYC1YZP)](https://codecov.io/gh/FreakinWard/nextjs-boilerplate)
-[![CodeFactor](https://www.codefactor.io/repository/github/freakinward/nextjs-boilerplate/badge)](https://www.codefactor.io/repository/github/freakinward/nextjs-boilerplate)
-[![Maintainability](https://api.codeclimate.com/v1/badges/25a53970d9a620abcaf8/maintainability)](https://codeclimate.com/github/FreakinWard/nextjs-boilerplate/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/25a53970d9a620abcaf8/test_coverage)](https://codeclimate.com/github/FreakinWard/nextjs-boilerplate/test_coverage)
-[![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/FreakinWard/nextjs-boilerplate?color=F1CE0C&style=plastic)](https://codeclimate.com/github/FreakinWard/nextjs-boilerplate/issues)
+[![Build](https://github.com/110true/hey-margot-ui/actions/workflows/build.yml/badge.svg)](https://github.com/110true/hey-margot-ui/actions/workflows/build.yml)
 
-# NextJs Boilerplate
+# Hey Margot UI
 
 The purpose of this repo is to accelerate startup time when creating a new [NextJs](https://nextjs.org/docs) app.
 
@@ -356,7 +351,6 @@ The `.idea` directory is checked into this repo and serves to share common [run 
 
 Husky pre-commit is configured to run the npm task `pre-commit` which does the following:
 
-- Avoid commits to master/main
 - Format staged code
 - Lint staged code
 

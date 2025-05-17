@@ -7,7 +7,7 @@ export default defineConfig({
     cypressMochawesomeReporterReporterOptions: {
       reportDir: 'cypress/reports',
       charts: true,
-      reportPageTitle: 'E2E - nextjs-boilerplate',
+      reportPageTitle: 'E2E - hey-margot-ui',
       embeddedScreenshots: true,
       inlineAssets: true,
     },

@@ -11,6 +11,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.scannerwork" />
       <excludeFolder url="file://$MODULE_DIR$/.swc" />
       <excludeFolder url="file://$MODULE_DIR$/html-report" />
+      <excludeFolder url="file://$MODULE_DIR$/cypress/reports" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
