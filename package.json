@@ -45,6 +45,7 @@
     "@mui/material": "^7.1.0",
     "@mui/material-nextjs": "^7.1.0",
     "@next/bundle-analyzer": "^14.1.0",
+    "@testing-library/user-event": "^14.6.1",
     "applicationinsights": "^2.9.2",
     "next": "^14.1.0",
     "next-auth": "^4.24.5",

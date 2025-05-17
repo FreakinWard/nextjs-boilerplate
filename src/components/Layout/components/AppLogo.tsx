@@ -2,9 +2,9 @@ import AdbIcon from '@mui/icons-material/Adb';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 
-export default function AppMenu() {
+export default function AppLogo() {
   return (
-    <>
+    <div aria-label="application logo">
       <AdbIcon sx={{ color: 'white', display: { xs: 'none', md: 'flex' }, mr: 1 }} />
       <Link href="/" passHref>
         <Typography
@@ -21,6 +21,6 @@ export default function AppMenu() {
           LOGO
         </Typography>
       </Link>
-    </>
+    </div>
   );
 }

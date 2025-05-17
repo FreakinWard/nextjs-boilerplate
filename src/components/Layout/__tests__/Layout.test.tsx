@@ -1,6 +1,5 @@
 import { render, screen } from '@testing-library/react';
 import { SessionProvider } from 'next-auth/react';
-import React from 'react';
 
 import Layout from '../index';
 

@@ -2,7 +2,13 @@ const nextJest = require('next/jest');
 const packageJson = require('./package.json');
 
 // Providing the path to your Next.js app which will enable loading next.config.js and .env files
-const createJestConfig = nextJest({ dir: '.' });
+const createJestConfig = nextJest({
+  dir: '.',
+  // Explicitly tell Next.js to use Babel instead of SWC for tests
+  transformOptions: {
+    swc: false,
+  },
+});
 
 // Any custom config you want to pass to Jest
 const customJestConfig = {
@@ -11,6 +17,11 @@ const customJestConfig = {
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(test).[jt]s?(x)'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
+  },
+  globals: {
+    'ts-jest': {
+      tsconfig: 'tsconfig.jest.json',
+    },
   },
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.[jt]s?(x)', '!src/**/*.stories.[jt]s?(x)'],

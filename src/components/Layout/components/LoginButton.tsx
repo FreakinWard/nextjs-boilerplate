@@ -32,6 +32,8 @@ export default function LoginButton() {
       </>
     );
   } else {
+    // console.log('test', { signIn });
+
     return (
       <Button sx={{ color: 'white' }} size="large" onClick={() => signIn()}>
         Sign In

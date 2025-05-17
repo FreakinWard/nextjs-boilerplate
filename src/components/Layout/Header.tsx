@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Toolbar from '@mui/material/Toolbar';
 
-import AppMenu from './components/AppMenu';
+import AppLogo from './components/AppLogo';
 import AppTitle from './components/AppTitle';
 import LoginButton from './components/LoginButton';
 
@@ -13,7 +13,7 @@ export default function Header() {
       <AppBar data-testid="header">
         <Container maxWidth="lg">
           <Toolbar variant="dense">
-            <AppMenu />
+            <AppLogo />
             <AppTitle />
             <LoginButton />
           </Toolbar>
