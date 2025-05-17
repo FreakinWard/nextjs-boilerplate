@@ -22,4 +22,12 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': 'off',
     '@typescript-eslint/no-explicit-any': 'error',
   },
+  overrides: [
+    {
+      files: ['cypress.config.ts'], // NOTE: cypress.config.ts is not respecting the eslint-disable-line
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
+      },
+    },
+  ],
 };
