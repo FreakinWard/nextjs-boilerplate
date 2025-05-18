@@ -3,6 +3,7 @@ import { rest } from 'msw';
 import seedAuth from './seed/seedAuth';
 import seedHealth from './seed/seedHealth';
 import seedPosts from './seed/seedPosts';
+import seedUserUpdate from './seed/seedUserUpdate';
 
 const mockHandler = (statusText = null, statusCode = 200) => {
   return async (req, res, ctx) => {
@@ -14,6 +15,10 @@ const mockRequestGet = (url, responseData, statusCode = 200) => {
   return rest.get(url, mockHandler(responseData, statusCode));
 };
 
+const mockRequestPut = (url, responseData, statusCode = 200) => {
+  return rest.put(url, mockHandler(responseData, statusCode));
+};
+
 export default [
   // auth
   mockRequestGet('*/api/auth/session', seedAuth.session),
@@ -23,4 +28,7 @@ export default [
   mockRequestGet(seedPosts.clientUrl, seedPosts.data),
   mockRequestGet(seedPosts.serverUrl, seedPosts.data),
   mockRequestGet(seedHealth.clientUrl, seedHealth.data),
+
+  // user updates
+  mockRequestPut(seedUserUpdate.serverUrl, seedUserUpdate.responseData),
 ];
