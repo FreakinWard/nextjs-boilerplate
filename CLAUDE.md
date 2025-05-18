@@ -2,6 +2,24 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Project Margot Overview
+
+Project Margot is an AI-powered client information management system specifically designed for real estate agents. The system enables agents to capture, organize, and utilize client information through voice dictation, transforming unstructured voice input into structured, searchable data.
+
+### Key Features
+- **Voice-to-Text Transcription**: Dictate client information through natural speech
+- **Intelligent Information Extraction**: Automatically identifies and extracts client details
+- **Client Profile Management**: Connects new information with existing client profiles
+- **Contextual Summarization**: Provides summaries after each session
+- **Search Functionality**: Quickly locate specific information across client data
+
+### System Components
+- **Frontend Interface**: Web application for real estate agents to interact with Margot
+- **Speech to Text**: Captures and converts voice input to text transcriptions
+- **Backend Orchestration**: Manages flow of information between components
+- **LLM Processing**: Handles information extraction, client matching, and summarization
+- **Database Persistence**: Maintains transcript history and structured client information
+
 ## Build and Run Commands
 
 ### Setup and Installation
