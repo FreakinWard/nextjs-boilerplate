@@ -19,7 +19,7 @@ describe('Layout', () => {
     render(tree);
 
     // assert
-    screen.getByText('NextJs');
+    screen.getByText('Hey, Margot!');
   });
 
   it('should render Footer', () => {

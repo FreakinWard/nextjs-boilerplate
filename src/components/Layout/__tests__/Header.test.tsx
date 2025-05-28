@@ -83,7 +83,7 @@ describe('Header', () => {
 
   it('should render App Title', () => {
     // arrange
-    const expected = 'NextJs';
+    const expected = 'Hey, Margot!';
 
     // act
     renderComponent();

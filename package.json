@@ -49,6 +49,7 @@
     "applicationinsights": "^2.9.2",
     "next": "^14.1.0",
     "next-auth": "^4.24.5",
+    "openai": "^4.103.0",
     "pascalcase": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -5,7 +5,7 @@ export default function AppTitle() {
     <>
       <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}></Typography>
       <Typography variant="h5" sx={{ flexGrow: 1, justifyContent: 'center' }}>
-        NextJs
+        Hey, Margot!
       </Typography>
     </>
   );

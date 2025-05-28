@@ -20,6 +20,13 @@ export default function Home({ posts }: Props) {
           <a style={{ color: '#0070f3' }}> Next.js!</a>
         </Link>
       </h1>
+      <ul>
+        <li>
+          <Link href="/record-voice" legacyBehavior>
+            <a style={{ color: '#0070f3' }}>Record Voice Memo</a>
+          </Link>
+        </li>
+      </ul>
       <RenderExamples posts={posts} />
       <NextInfo />
     </>
