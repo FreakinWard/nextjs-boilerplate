@@ -1,364 +1,226 @@
-[![Build](https://github.com/110true/hey-margot-ui/actions/workflows/build.yml/badge.svg)](https://github.com/110true/hey-margot-ui/actions/workflows/build.yml)
+# Hey Margot
 
-# Hey Margot UI
+This repository contains a full-stack application with a Next.js frontend and a FastAPI backend, configured to run with DDEV for local development.
 
-The purpose of this repo is to accelerate startup time when creating a new [NextJs](https://nextjs.org/docs) app.
+## Project Overview
 
-## Contents
+The project consists of two main components:
 
-- [Getting Started](#getting-started)
-  - [Local Development](#local-development)
-  - [Docker Development](#docker-development)
-- [Directory Structure](#directory-structure)
-- [Features](#features)
-- [Libraries](#libraries)
-- [Scripts](#scripts)
-- [IDE Configurations](#ide-configuration)
-- [Committing Changes](#committing-changes)
+1. **Frontend**: A Next.js application located in the `frontend/` directory
+2. **Backend**: A FastAPI application located in the `backend/` directory
 
-# Getting Started
+Both components are configured to run together using DDEV, which provides a consistent development environment.
 
-> NOTE: this project locks node to a specific version in support of [azure static web apps](https://learn.microsoft.com/en-us/azure/static-web-apps/languages-runtimes#api).
->
-> Consider using [nvm](https://collabnix.com/how-to-install-and-configure-nvm-on-mac-os/) to help manage multiple versions of node.
+## Prerequisites
 
-## Local Development
+Before you begin, ensure you have the following installed:
 
-### Prerequisites
+- [DDEV](https://ddev.readthedocs.io/en/stable/) (latest version)
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- [Git](https://git-scm.com/downloads)
 
-This project requires Node.js 18.17.x and npm 9.x as specified in the package.json. You can manage these requirements using either Volta or nvm:
+## DDEV Setup
 
-#### Using Volta
-
-[Volta](https://volta.sh/) is a JavaScript tool manager that automatically uses the right versions of Node.js and npm for each project.
-
-1. Install Volta:
-
-   ```bash
-   # macOS and Linux
-   curl https://get.volta.sh | bash
-
-   # Windows
-   # Download and run the installer from https://volta.sh
-   ```
-
-2. Install Node.js and npm through Volta:
-
-   ```bash
-   volta install node@18.17
-   ```
-
-3. Navigate to the project directory, and Volta will automatically use the correct versions.
-
-#### Using nvm
-
-[nvm](https://github.com/nvm-sh/nvm) (Node Version Manager) allows you to install and switch between multiple versions of Node.js.
-
-1. Install nvm:
-
-   ```bash
-   # macOS and Linux
-   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
-
-   # Or using Homebrew on macOS
-   brew install nvm
-   ```
-
-2. Install and use the required Node.js version:
-
-   ```bash
-   nvm install 18.17
-   nvm use 18.17
-   ```
-
-3. Install the required npm version:
-   ```bash
-   npm install -g npm@9
-   ```
-
-First, create an `.env` file with the following:
-
-```dotenv
-#APPLICATIONINSIGHTS_CONNECTION_STRING=visit-azure-portal
-#NEXT_PUBLIC_API_MOCKING=enabled
-NEXT_PUBLIC_API_MOCKING=disabled
-
-# setup NextAuth - https://next-auth.js.org/configuration/options#secret
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=hUZffSRxfqTsXF/08mFxO/T1p0pq2c5pXuZQ82CkSAU=
-
-GITHUB_ID=visit-https://github.com/settings/applications/1778388
-GITHUB_SECRET=visit-https://github.com/settings/applications/1778388
-
-OPENAI_API_KEY=generate-openai-api-key
-```
-
-Next, install packages:
+### 1. Clone the Repository
 
 ```bash
-npm install
+git clone https://github.com/your-organization/hey-margot-ui.git
+cd hey-margot-ui
 ```
 
-Finally, run the development server:
+### 2. Start DDEV
 
 ```bash
-npm run dev
+ddev start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to start.
+This command will:
+- Set up the DDEV environment based on the configuration in `.ddev/config.yaml`
+- Create a Python virtual environment for the backend
+- Install backend dependencies from `requirements.txt`
+- Start both the frontend and backend services using PM2
 
-## Docker Development
+### 3. Access the Application
 
-This project includes Docker configuration for both development and production environments.
+Once DDEV has started, you can access the application at:
 
-### Prerequisites
+- Frontend: [https://app.margot.ddev.site](https://app.margot.ddev.site)
+- Backend API: [https://api.margot.ddev.site](https://api.margot.ddev.site)
 
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+## Project Structure
 
-### Development Environment
+```
+hey-margot-ui/
+├── .ddev/                  # DDEV configuration files
+├── backend/                # Python FastAPI backend
+│   ├── .venv/              # Python virtual environment (created by DDEV)
+│   ├── main.py             # Main FastAPI application
+│   ├── db.py               # Database configuration
+│   ├── requirements.txt    # Python dependencies
+│   └── Dockerfile          # Docker configuration for backend
+├── frontend/               # Next.js frontend
+│   ├── public/             # Static files
+│   ├── src/                # Source code
+│   ├── package.json        # Node.js dependencies
+│   └── Dockerfile          # Docker configuration for frontend
+└── apps.config.js          # PM2 configuration for running both services
+```
 
-To start the development environment with Docker:
+## Development Workflow
+
+### Running Commands in DDEV
+
+You can run commands in the DDEV environment using:
 
 ```bash
-docker compose up dev
+ddev exec <command>
 ```
 
-For more detailed information about Docker setup, see [DOCKER.md](./DOCKER.md).
+### Backend Development
 
-# Directory Structure
-
-```
-📦 src
-┣ 📂 __tests__               # tests for pages
-┃ ┗ 📜 index.test.tsx
-┣ 📂 components              # components used within the app
-┃ ┗ 📜 Posts.tsx
-┣ 📂 Features                # feature components
-┃ ┗ 📂 Home
-┃   ┣ 📜 Home.tsx
-┃   ┗ 📜 index.tsx
-┣ 📂 context                 # application context providers
-┃ ┗ 📜 AppState.tsx
-┣ 📂 core                    # non-feature related core services
-┃ ┣ 📂 msw                   # msw used for mocking http requests
-┃ ┃ ┣ 📂 seed
-┃ ┃ ┃ ┣ 📜 seedHealth.js
-┃ ┃ ┃ ┣ 📜 seedPosts.js
-┃ ┃ ┃ ┗ 📜 seedStyleMedia.js
-┃ ┃ ┣ 📜 handlers.js
-┃ ┃ ┗ 📜 browser.js
-┃ ┃ ┗ 📜 server.js
-┃ ┗ 📜 test.utils.tsx
-┣ 📂 hooks                   # hooks used within the app
-┃ ┣ 📂 __tests__
-┃ ┃ ┗ 📜 usePosts.test.ts
-┃ ┗ 📜 usePosts.ts
-┣ 📂 pages                   # pages directory - drives navigation
-┃ ┣ 📂 api
-┃ ┃ ┗ 📜 posts.ts
-┃ ┣ 📜 _app.tsx
-┃ ┗ 📜 index.tsx
-┗ 📂 services                # feature-related services
-┃ ┣ 📂 __tests__
-┃ ┃ ┗ 📜 postsService.test.ts
-┃ ┗ 📜 postsService.ts
-```
-
-# Features
-
-The setup and configuration includes a number of opinionated best-practices in attempt to keep the code clean, safe, and free of bugs.
-
-Code is formatted and linted with each save, if [configured](#ide-configuration), or at least before each commit with the help of husky.
-
-Tests are configured for both unit and integration tests. Unit tests are performed with jest where msw helps avoid mocking http requests, both server and client, which allows for easier integration tests.
-
-# Libraries
-
-| Application                                                   | Description           |
-| ------------------------------------------------------------- | --------------------- |
-| [react](https://reactjs.org/docs/getting-started.html)        | react framework       |
-| [nextJs](https://nextjs.org/docs)                             | nextjs framework      |
-| [typescript](https://github.com/typescript-cheatsheets/react) | Enabling typescript   |
-| [react-query](https://react-query.tanstack.com/overview)      | Data-fetching library |
-
-| Static-code Analysis                               | Description                |
-| -------------------------------------------------- | -------------------------- |
-| [eslint](https://www.npmjs.com/package/eslint)     | Helps identify code issues |
-| [prettier](https://www.npmjs.com/package/prettier) | code formatting tool       |
-
-| Testing                                                                       | Description                              |
-| ----------------------------------------------------------------------------- | ---------------------------------------- |
-| [jest-junit](https://www.npmjs.com/package/jest-junit)                        | Testing Library                          |
-| [msw](https://www.npmjs.com/package/msw)                                      | Used to intercept and mock http requests |
-| [testing-library-react](https://www.npmjs.com/package/@testing-library/react) | Helper for UI component tests            |
-| [jest-html-reporters](https://www.npmjs.com/package/jest-html-reporters)      | Test reporter for visualizing tests      |
-
-| Git Hooks                                                                  | Description                                                  |
-| -------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| [husky](https://www.npmjs.com/package/husky)                               | Creates sharable git-commit hooks                            |
-| [lint-staged](https://www.npmjs.com/package/lint-staged)                   | Ensure code is linted before committing to branch            |
-| [validate-branch-name](https://www.npmjs.com/package/validate-branch-name) | Ensures a branch is created before committing to master/main |
-
-## Library updates
-
-To more-easily update packages, use:
+To work on the backend:
 
 ```bash
-# first, install
-npm install -g npm-check-updates
-
-# use ncu
-ncu --interactive --format group
+ddev exec cd backend && ./.venv/bin/python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-# Scripts
+### Frontend Development
 
-## Unit tests
+To work on the frontend:
 
 ```bash
-npm run test    # runs all tests, creating test report
+ddev exec cd frontend && npm run dev
 ```
+
+### Database Access
+
+The PostgreSQL database is accessible at:
+
+- Host: `db`
+- Port: `5432`
+- Username: `db`
+- Password: `db`
+- Database: `db`
+
+You can connect to the database using:
 
 ```bash
-npm run test:open    # opens the test report
+ddev exec psql -h db -U db db
 ```
+
+## Stopping DDEV
+
+To stop the DDEV environment:
 
 ```bash
-npm run test:cover    # runs all tests, creating coverage report
+ddev stop
 ```
+
+## Additional Resources
+
+- [DDEV Documentation](https://ddev.readthedocs.io/en/stable/)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [FastAPI Documentation](https://fastapi.tiangolo.com/)
+
+## PM2 Commands
+
+PM2 is used to manage the frontend and backend processes within the DDEV environment. Here are some useful PM2 commands:
+
+### View Process Status
+
+To see the status of all running processes:
 
 ```bash
-npm run test:cover:open    # opens the coverage report
+ddev exec pm2 status
 ```
 
-## End-to-end (e2e)
+### Restart Services
+
+To restart all services:
 
 ```bash
-npm run test:e2e    # within the cli, runs end-to-end (e2e) tests
+ddev exec pm2 restart all
 ```
+
+To restart a specific service:
 
 ```bash
-npm run test:e2e:open    # visualize end-to-end (e2e) tests
+ddev pm2 restart Frontend  # Restart only the frontend
+ddev pm2 restart Backend   # Restart only the backend
 ```
+
+### View Logs
+
+To view logs for all services:
 
 ```bash
-npm run test:e2e:verify    # validates end-to-end (e2e) tests ability to run
+ddev pm2 logs
 ```
+
+To view logs for a specific service:
 
 ```bash
-npm run test:e2e:ci    # runs end-to-end (e2e) tests for continuous integration (ci) pipeline
+ddev pm2 logs Frontend  # View only frontend logs
+ddev pm2 logs Backend   # View only backend logs
 ```
+
+To view logs with timestamp:
 
 ```bash
-npm run test:e2e:report    # opens html report from end-to-end (e2e) test results
+ddev pm2 logs --timestamp
 ```
 
-## Static code analysis
+### Stop and Start Services
+
+To stop all services:
 
 ```bash
-npm run lint    # runs lint check, produces report
+ddev pm2 stop all
 ```
+
+To start all services:
 
 ```bash
-npm run lint:fix    # runs lint and fixes, produces report
+ddev pm2 start all
 ```
 
-## Utility scripts
+To stop or start a specific service:
 
 ```bash
-npm run prepare   # installs husky hook - this lints the app before each commit
+ddev pm2 stop Frontend    # Stop frontend
+ddev pm2 start Frontend   # Start frontend
 ```
+
+### Monitor Resources
+
+To monitor CPU and memory usage in real-time:
 
 ```bash
-npm run format   # run code format check
+ddev pm2 monit
 ```
+
+## Environment Variables
+
+### Frontend Environment Variables
+
+The frontend application uses environment variables to configure various aspects of the application, including the connection to the backend API. These variables can be set in a `.env` file in the `frontend/` directory.
+
+#### Available Environment Variables
+
+- `NEXT_PUBLIC_API_URL`: The URL of the backend API. Default: `https://api.margot.ddev.site`
+
+#### Setting Environment Variables
+
+For local development, you can create a `.env` file in the `frontend/` directory with the following content:
 
 ```bash
-npm run format:fix   # run fix code formatting
+NEXT_PUBLIC_API_URL=https://api.margot.ddev.site
 ```
 
-```bash
-npm run pre-commit   # this is ran prior to a git commit - runs lint and checks branch name
-```
+For different environments (staging, production, etc.), you can set these environment variables accordingly.
 
-# IDE-configuration
+## Troubleshooting
 
-## VS Code
+### Port Conflicts
 
-The `.vscode` directory is checked into this repo and serves to share common settings and defaults.
-
-[Recommended Extensions](https://code.visualstudio.com/docs/editor/extension-marketplace#_recommended-extensions) are configured, be sure to install.
-
-| Setting                  | Description                                                       |
-| ------------------------ | ----------------------------------------------------------------- |
-| eslint.validate          | Validate and fixes eslint errors. This also fixes prettier issues |
-| typescript.suggest.paths | Turned off to enable correct usage within auto-rename-tag         |
-
-| Extension          | Description                             |
-| ------------------ | --------------------------------------- |
-| code-spell-checker | checks spelling errors withing the code |
-| vscode-icons       | Directory icons                         |
-| vscode-jest        | Helps renaming tags                     |
-| auto-rename-tag    | Helps renaming tags                     |
-| vscode-eslint      | Integrate with lint rules               |
-
-### Snippets
-
-```javascript
-// entering: desc
-describe('', () => {});
-```
-
-```javascript
-// entering: it
-it('should ', () => {
-  // arrange
-  // act
-  // assert
-});
-```
-
-```javascript
-// entering: ita
-it('should ', async () => {
-  // arrange
-  // act
-  // assert
-});
-```
-
-```javascript
-// entering: func
-export default function () {}
-```
-
-```javascript
-// entering: hook
-export default function use() {}
-```
-
-## Webstorm
-
-The `.idea` directory is checked into this repo and serves to share common [run configurations](https://www.jetbrains.com/help/webstorm/run-debug-configuration.html)
-
-| Setting   | Description                 |
-| --------- | --------------------------- |
-| All Tests | Execute and watch all tests |
-| Dev       | Run application             |
-
-# Committing Changes
-
-[Husky](https://typicode.github.io/husky/) makes [git hooks](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks) sharable within a project while also ensuring code conventions are enforced. The hook is installed during `npm install` and should require no further setup.
-
-Husky pre-commit is configured to run the npm task `pre-commit` which does the following:
-
-- Format staged code
-- Lint staged code
-
-Should the need arise to ignore the hook, manually commit using `--no-verify`
-
-```shell
-# Example
-git commit -m "commit message" --no-verify
-```
+If you encounter port conflicts, you can modify the ports in `.ddev/config.yaml`.

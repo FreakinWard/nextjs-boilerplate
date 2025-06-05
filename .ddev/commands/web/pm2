@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+## Description: Run PM2 commands in the container
+## Usage: pm2
+## Example: "ddev pm2 monit"
+
+pm2 "$@"

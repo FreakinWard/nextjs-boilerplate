@@ -1,24 +1,24 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
+/frontend/node_modules
+/frontend/.pnp
+/frontend.pnp.js
 
 # testing
-coverage
-html-report
-cypress/videos
-cypress/screenshots
-cypress/reports
-cypress.env.json
+/frontend/coverage
+/frontend/html-report
+/frontend/cypress/videos
+/frontend/cypress/screenshots
+/frontend/cypress/reports
+/frontend/cypress.env.json
 
 # next.js
-/.next/
-/out/
+/frontend/.next/
+/frontend/out/
 
 # production
-/build
+/frontend/build
 
 # misc
 .DS_Store
@@ -33,11 +33,14 @@ yarn-error.log*
 .env*
 
 # vercel
-.vercel
+/frontend.vercel
 
 # story-book
 /storybook-static
 /docs-build
 
 # jetbrains
-.idea/sonarlint
+.idea/
+
+# Backend files
+backend/__pycache__
