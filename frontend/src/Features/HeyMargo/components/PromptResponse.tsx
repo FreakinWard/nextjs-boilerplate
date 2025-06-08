@@ -1,13 +1,13 @@
 import { Paper } from '@mui/material';
 
-import { usePrompt } from '@/hooks/useOpenAIVoice/PromptProvider';
+import useTranscribe from '@/hooks/useTranscribe';
 
 export default function PromptResponse() {
-  const { text } = usePrompt();
+  const { data } = useTranscribe('neo4j');
+
   return (
     <Paper elevation={3} sx={{ padding: 2, width: { xs: '75%', sm: '50%', md: '30%' } }}>
-      response 🚀
-      {text}
+      {`response: ${data}`}
     </Paper>
   );
 }

@@ -19,6 +19,7 @@
     "paths": {
       "@/hooks/*": ["hooks/*"],
       "@/Features/*": ["Features/*"],
+      "@/testUtils/*": ["core/test.utils/*"],
     },
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

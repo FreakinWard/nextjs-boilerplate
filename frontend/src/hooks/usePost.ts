@@ -4,9 +4,10 @@ interface RequestProps {
   cacheKey: string;
   url: string;
   body?: Record<string, unknown>;
+  enabled?: boolean;
 }
 
-export default function usePost({ cacheKey, url, body }: RequestProps) {
+export default function usePost({ cacheKey, enabled, url, body }: RequestProps) {
   async function fetchRequest() {
     const response = await fetch(url, {
       method: 'POST',
@@ -24,6 +25,7 @@ export default function usePost({ cacheKey, url, body }: RequestProps) {
   }
 
   const queryObject = {
+    enabled,
     queryKey: [cacheKey],
     queryFn: fetchRequest,
   };
