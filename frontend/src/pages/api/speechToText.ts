@@ -3,6 +3,7 @@
 import fs from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import OpenAI from 'openai';
+import path from 'path';
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -15,6 +16,11 @@ export default async function speechToText(req: NextApiRequest, res: NextApiResp
 
   // Convert the base64 audio data to a Buffer
   const audio = Buffer.from(base64Audio, 'base64');
+
+  const tmpDir = path.join(process.cwd(), 'tmp');
+  if (!fs.existsSync(tmpDir)) {
+    fs.mkdirSync(tmpDir, { recursive: true });
+  }
 
   // Define the file path for storing the temporary WAV file
   const filePath = 'tmp/input.wav';
