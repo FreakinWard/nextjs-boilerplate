@@ -2,14 +2,14 @@ import { Paper } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/system';
 
-import useTranscribe, { Strategy } from '@/hooks/useTranscribe';
+import usePromptForTranscribe, { Strategy } from '@/hooks/usePromptForTranscribe';
 
 interface PromptResponseProps {
   strategy: Strategy;
 }
 
-export default function PromptResponse({ strategy }: PromptResponseProps) {
-  const { data } = useTranscribe(strategy);
+export default function PromptTranscribe({ strategy }: PromptResponseProps) {
+  const { data } = usePromptForTranscribe(strategy);
 
   return (
     <Grid>

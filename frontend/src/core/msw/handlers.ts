@@ -1,5 +1,6 @@
 import { rest } from 'msw';
 
+import seedAsk from './seed/seedAsk';
 import seedAuth from './seed/seedAuth';
 import seedHealth from './seed/seedHealth';
 import seedPosts from './seed/seedPosts';
@@ -37,6 +38,7 @@ export default [
   mockRequestGet(seedPosts.serverUrl, seedPosts.data),
   mockRequestGet(seedHealth.clientUrl, seedHealth.data),
   mockRequestPost(seedTranscribe.clientUrl, seedTranscribe.data),
+  mockRequestPost(seedAsk.clientUrl, seedAsk.data),
 
   mockPassThroughPost('*/api/speechToText'),
   mockPassThroughPost('https://api.openai.com/v1/audio/transcriptions'),

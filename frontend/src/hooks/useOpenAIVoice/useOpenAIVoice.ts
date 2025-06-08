@@ -29,6 +29,10 @@ export default function useOpenAIVoice() {
     [setText]
   );
 
+  const clearText = useCallback(() => {
+    setText('');
+  }, [setText]);
+
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
@@ -74,5 +78,5 @@ export default function useOpenAIVoice() {
     }
   }, []);
 
-  return { isRecording, startRecording, stopRecording, text };
+  return { isRecording, startRecording, stopRecording, text, clearText };
 }
