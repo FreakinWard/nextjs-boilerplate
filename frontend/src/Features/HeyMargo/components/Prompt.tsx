@@ -1,12 +1,10 @@
-import { Paper } from '@mui/material';
-
+import CenteredQuote from '@/Features/HeyMargo/components/CenteredQuote';
 import { usePrompt } from '@/hooks/useOpenAIVoice/PromptProvider';
 
 export default function Prompt() {
   const { text } = usePrompt();
-  return (
-    <Paper elevation={3} sx={{ p: 2, m: 2, width: { xs: '75%', sm: '50%', md: '30%' } }}>
-      {`prompt: ${text}`}
-    </Paper>
-  );
+
+  if (!text) return null;
+
+  return <CenteredQuote>{text}</CenteredQuote>;
 }
