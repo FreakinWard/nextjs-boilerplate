@@ -1,9 +1,7 @@
 import { Button } from '@mui/material';
 import Image from 'next/image';
 
-import useOpenAIVoice from '@/hooks/useOpenAIVoice';
-
-import CapturedMemo from './CapturedMemo';
+import { usePrompt } from '@/hooks/useOpenAIVoice/PromptProvider';
 
 interface MicImageProps {
   src: string;
@@ -17,11 +15,10 @@ const MicImage = ({ src, alt }: MicImageProps) => (
 );
 
 export default function MicrophoneButton() {
-  const { isRecording, startRecording, stopRecording, text } = useOpenAIVoice();
+  const { isRecording, startRecording, stopRecording } = usePrompt();
 
   return (
     <>
-      <CapturedMemo value={text} />
       <Button
         aria-label="microphone"
         onMouseDown={startRecording} // Start recording when mouse is pressed
