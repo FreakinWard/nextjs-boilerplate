@@ -1,7 +1,8 @@
 /* istanbul ignore file */ // TODO: determine a way to test
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { blobToBase64 } from '../utils/audio';
+// import { blobToBase64 } from '@/Features/RecordVoice/utils/audio';
+import { blobToBase64 } from './utils/audio';
 
 export default function useOpenAIVoice() {
   const [text, setText] = useState('');

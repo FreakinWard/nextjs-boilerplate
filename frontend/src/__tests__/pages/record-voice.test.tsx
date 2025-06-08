@@ -2,10 +2,10 @@ import { render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 
 import { AppWrapper as wrapper, mswMock } from '../../core/test.utils';
-import * as useOpenAIVoice from '../../Features/RecordVoice/hooks/useOpenAIVoice';
+import * as useOpenAIVoice from '../../hooks/useOpenAIVoice/useOpenAIVoice';
 import RecordVoicePage from '../../pages/record-voice';
 
-jest.mock('../../Features/RecordVoice/hooks/useOpenAIVoice', () => ({
+jest.mock('../../hooks/useOpenAIVoice', () => ({
   __esModule: true,
   default: jest.fn(),
 }));

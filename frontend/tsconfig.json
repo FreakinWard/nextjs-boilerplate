@@ -16,6 +16,10 @@
     "strict": false,
     "target": "es2017",
     "types": ["node", "jest", "@testing-library/jest-dom"],
+    "paths": {
+      "@/hooks/*": ["hooks/*"],
+      "@/Features/*": ["Features/*"],
+    },
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules", "cypress.config.ts"],

@@ -1,7 +1,8 @@
 import { Button } from '@mui/material';
 import Image from 'next/image';
 
-import useOpenAIVoice from '../hooks/useOpenAIVoice';
+import useOpenAIVoice from '@/hooks/useOpenAIVoice';
+
 import CapturedMemo from './CapturedMemo';
 
 interface MicImageProps {

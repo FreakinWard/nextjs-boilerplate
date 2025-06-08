@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
 
-import * as useOpenAIVoice from '../hooks/useOpenAIVoice';
+import * as useOpenAIVoice from '../../../hooks/useOpenAIVoice';
 import RecordVoice from '../RecordVoice';
 
-jest.mock('../hooks/useOpenAIVoice', () => ({
+jest.mock('../../../hooks/useOpenAIVoice', () => ({
   __esModule: true,
   default: jest.fn(),
 }));
